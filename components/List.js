@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View, StyleSheet } from 'react-native';
-//import { Accordion, AccordionSummary, AccordionDetails, Stack, IconButton, Box, Typography } from "@mui/material";
+import { Stack, Flex } from "native-base";
 import { Appbar, List, FAB, IconButton, MD3Elevation, Text } from 'react-native-paper';
-//import { MenuIcon, AddIcon } from '@expo/vector-icons/MaterialIcons';
-//import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-//import { Edit, Delete } from '@mui/icons-material';
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 
@@ -107,16 +105,15 @@ export default function Main({ navigation, route }) {
             //aria-controls="panel1a-content"
             // id='panel1a-header'
             title={
-              <View style={Styles.stackRow}>
+              <Stack direction="row" space={1} justifyContent={"space-between"} >
                 <Text style={Styles.item} variant='headlineLarge'>{item.date}</Text>
 
-
-                <View style={Styles.stackRow}>
+                <Stack direction="row"  space={3}>
                   <Text style={Styles.item} variant='headlineLarge'>Доход</Text>
                   <Text style={Styles.item} variant='headlineLarge'>{item.profit}</Text>
-                </View>
+                </Stack>
 
-              </View>}
+              </Stack>}
           >
             <List.Item
               style={  { backgroundColor: 'green', ...Styles.accordion}}
