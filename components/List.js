@@ -108,7 +108,7 @@ export default function Main({ navigation, route }) {
               <Stack direction="row" space={1} justifyContent={"space-between"} >
                 <Text style={Styles.item} variant='headlineLarge'>{item.date}</Text>
 
-                <Stack direction="row"  space={3}>
+                <Stack direction="row" space={3}>
                   <Text style={Styles.item} variant='headlineLarge'>Доход</Text>
                   <Text style={Styles.item} variant='headlineLarge'>{item.profit}</Text>
                 </Stack>
