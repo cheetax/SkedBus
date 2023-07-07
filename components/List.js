@@ -1,11 +1,10 @@
-import React, { useState, useEffect, StyleSheet } from "react";
-import { FlatList } from 'react-native';
-import { Accordion, AccordionSummary, AccordionDetails, Stack, IconButton, Box, Typography } from "@mui/material";
-import { AppBar, Toolbar, Fab } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Edit, Delete } from '@mui/icons-material';
+import React, { useState, useEffect } from "react";
+import { FlatList, View, StyleSheet } from 'react-native';
+//import { Accordion, AccordionSummary, AccordionDetails, Stack, IconButton, Box, Typography } from "@mui/material";
+import { Appbar, List, FAB, IconButton, MD3Elevation, Text } from 'react-native-paper';
+//import { MenuIcon, AddIcon } from '@expo/vector-icons/MaterialIcons';
+//import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+//import { Edit, Delete } from '@mui/icons-material';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 
@@ -51,10 +50,10 @@ export default function Main({ navigation, route }) {
     date: dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
     averageFuel: settings.averageFuel,
-    proceeds: 0, //выручка
+    proceeds: 3000, //выручка
     odometerStart: 0, //спидометр старт
     odometerFinish: 0, //спидометр финиш
-    profit: 0,
+    profit: 2000,
     odometer: 0,     //пробег
     expenses: 0,     //затраты
     key: keyGenerator()
@@ -74,121 +73,173 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  const [listOfItems, setListOfItems] = useState([]);
+  const [listOfItems, setListOfItems] = useState([{ ...item }]);
+
 
   return (
-    <Box>
-      <Fab
-        style={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16
-        }}
-        color="primary"
-        aria-label="add"
-        onClick={() => {
+    <View style={Styles.main} >
+      <FAB
+        style={Styles.fab}
+        color="white"
+        icon="plus"
+        size="large"
+        onPress={() => {
+          console.log(1)
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
-        <AddIcon />
-      </Fab>
-      <AppBar position='fixed'>
-        <Toolbar>
-          <IconButton edge='start' color='inherit' aria-label='menu' sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" >Учет работы таксиста</Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar/>
+      </FAB>
+      <Appbar.Header
+        elevated={true}
+        dark={true}
+        style={{
+          backgroundColor: '#1976d2',
+
+        }}
+      >
+        <Appbar.Action icon='menu' onPress={() => { }} color='white' />
+        <Appbar.Content title='Учет работы таксиста' color='white' />
+      </Appbar.Header>
       <FlatList data={listOfItems} renderItem={({ item }) =>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id='panel1a-header'
+        <List.Section>
+          <List.Accordion
+            style={Styles.accordion}
+            //expandIcon={<ExpandMoreIcon />}
+            //aria-controls="panel1a-content"
+            // id='panel1a-header'
+            title={
+              <View style={Styles.stackRow}>
+                <Text style={Styles.item} variant='headlineLarge'>{item.date}</Text>
+
+
+                <View style={Styles.stackRow}>
+                  <Text style={Styles.item} variant='headlineLarge'>Доход</Text>
+                  <Text style={Styles.item} variant='headlineLarge'>{item.profit}</Text>
+                </View>
+
+              </View>}
           >
-            <Stack direction='row' spacing={2} sx={{ ml: 1 }}>
-              <Typography variant='subtitle1'>{item.date}</Typography>
-              <Stack direction='row' spacing={1}>
-                <Typography variant='subtitle1'>Выручка</Typography>
-                <Typography variant='subtitle1'>{item.proceeds}</Typography>
-              </Stack>
+            <List.Item
+              style={  { backgroundColor: 'green', ...Styles.accordion}}
+              title={
+                <View style={{ backgroundColor: 'red', ...Styles.accordionDetail}}>
+                  <View style={{ backgroundColor: 'blue', ...Styles.accordionDetail}} >
+                    <View style={Styles.stackRow}>
+                      <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
+                      <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
+                    </View>
+                    <View style={Styles.stackRow} >
+                      <Text variant='headlineSmall'>Цена топлива</Text>
+                      <Text variant='headlineSmall'>{item.priceFuel}</Text>
+                    </View>
 
-              <Stack direction='row' spacing={1}>
-                <Typography variant='subtitle1'>Доход</Typography>
-                <Typography variant='subtitle1'>{item.profit}</Typography>
-              </Stack>
+                    <View style={Styles.stackRow}>
+                      <Text variant='headlineSmall'>Средний расход</Text>
+                      <Text variant='headlineSmall'>{item.averageFuel}</Text>
+                    </View>
+                  </View>
 
-            </Stack>
+                  <View style={Styles.stackRow}>
+                    <Text variant='headlineSmall'>Пробег</Text>
+                    <Text variant='headlineSmall'>{item.odometer}</Text>
+                  </View>
 
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing={1}>
-              <Stack direction='row' spacing={2}>
-                <Stack direction='row' spacing={1}>
-                  <Typography variant='subtitle1'>Цена топлива</Typography>
-                  <Typography variant='subtitle1'>{item.priceFuel}</Typography>
-                </Stack>
-
-                <Stack direction='row' spacing={1}>
-                  <Typography variant='subtitle1'>Средний расход</Typography>
-                  <Typography variant='subtitle1'>{item.averageFuel}</Typography>
-                </Stack>
-
-              </Stack>
-              <Stack direction='row' spacing={1}>
-                <Typography variant='subtitle1'>Пробег</Typography>
-                <Typography variant='subtitle1'>{item.odometer}</Typography>
-              </Stack>
-
-              <Stack direction='row' spacing={1}>
-                <Typography variant='subtitle1'>Расходы</Typography>
-                <Typography variant='subtitle1'>{item.expenses}</Typography>
-              </Stack>
+                  <View style={Styles.stackRow}>
+                    <Text variant='headlineSmall'>Расходы</Text>
+                    <Text variant='headlineSmall'>{item.expenses}</Text>
+                  </View>
 
 
-              <Stack direction='row-reverse' spacing={2}>
-                <IconButton
-                  edge='start'
-                  color='inherit'
-                  aria-label='menu'
-                  onClick={() => {
-                    red = red + 1;
-                    setListOfItems((list) => [
-                      ...list.filter(listOfItems => listOfItems.key != item.key)
-                    ])
-                  }}
-                  sx={{ mr: 1 }}>
-                  <Delete />
-                </IconButton>
-                <IconButton
-                  edge='start'
-                  color='inherit'
-                  aria-label='menu'
-                  sx={{ mr: 1 }}
-                  onClick={() => {
-                    navigation.navigate('Form', { item: JSON.stringify(item) })
-                  }}>
-                  <Edit />
-                </IconButton>
+                  {/*  <View style={Styles.stackRow}>
+                    <IconButton
+                      edge='start'
+                      color='inherit'
+                      aria-label='menu'
+                      onClick={() => {
+                        red = red + 1;
+                        setListOfItems((list) => [
+                          ...list.filter(listOfItems => listOfItems.key != item.key)
+                        ])
+                      }}
+                      sx={{ mr: 1 }}>
+                      <Delete />
+                    </IconButton>
+                    <IconButton
+                      edge='start'
+                      color='inherit'
+                      aria-label='menu'
+                      sx={{ mr: 1 }}
+                      onClick={() => {
+                        navigation.navigate('Form', { item: JSON.stringify(item) })
+                      }}>
+                      <Edit />
+                    </IconButton>
 
-              </Stack>
-            </Stack>
+                  </View> */}
+                </View>
 
-          </AccordionDetails>
-        </Accordion>
+              }
+            >
+
+
+            </List.Item>
+          </List.Accordion>
+
+        </List.Section>
       } />
-    </Box>
+
+    </View>
   );
 }
 
-//const Styles = StyleSheet.create({
-  //   main: {
-  //     //flex: 1,
-  //     paddingTop: 0,
-  //     //height: 100,
-  //     //backgroundColor: 'silver',
-  //   },
+const Styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    zIndex: 1000,
+    alignSelf: 'flex-end',
+    bottom: 20,
+    borderRadius: 48,
+    right: 20,
+    backgroundColor: '#1976d2',
+  },
+  main: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  item: {
+    //flex: 1,
+    alignContent: 'space-between',
+    alignItems: 'stretch',
+    alignSelf: 'stretch',
+    paddingLeft: 8,
+  },
+  accordion: {
+    //flex: 1,
+    flexDirection: 'column',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+
+  accordionDetail: {
+    //flex: 1,
+    width: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+    alignItems: 'stretch',
+    alignSelf: 'stretch',
+  },
+
+  stackRow: {
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignContent: 'space-between',
+    alignItems: 'stretch',
+    alignSelf: 'stretch',
+    //alignContent: 'space-between',
+    //flex: 1
+  }
   //   detail: {
   //     fontSize: 18,
   //     textAlign: 'left',
@@ -217,7 +268,7 @@ export default function Main({ navigation, route }) {
   //   position: 'fixed',
   //   bottom: 16,
   //   right: 16,
-    //textAlign: 'center',
-    //marginVertical: 15
-//  }
-//})
+  //textAlign: 'center',
+  //marginVertical: 15
+  //  }
+})
