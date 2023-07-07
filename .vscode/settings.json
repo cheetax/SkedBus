@@ -1,3 +1,4 @@
 {
-    "liveServer.settings.multiRootWorkspaceName": "CalcCost"
+    "liveServer.settings.multiRootWorkspaceName": "CalcCost",
+    "git.ignoreLimitWarning": true
 }
