@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View, StyleSheet } from 'react-native';
-//import { Stack, Flex } from "native-base";
-import { AccordionList } from "react-native-accordion-list-view";
-import { Appbar, List, FAB, IconButton, MD3Elevation, Text } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
+import { Appbar, FAB, Text } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -72,7 +71,7 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  const [listOfItems, setListOfItems] = useState([{ ...item }, { ...item },{ ...item },{ ...item },]);
+  const [listOfItems, setListOfItems] = useState([{ ...item }, { ...item }, { ...item }, { ...item },]);
 
 
   return (
@@ -92,14 +91,15 @@ export default function Main({ navigation, route }) {
         dark={true}
         style={{
           backgroundColor: '#1976d2',
-
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
         <Appbar.Content title='Учет работы таксиста' color='white' />
       </Appbar.Header>
       <AccordionList
-        style={Styles.accordion}
+        //style={Styles.accordion}
+        containerItemStyle={Styles.accordion}
+        //contentContainerStyle={Styles.accordion}
         data={listOfItems}
         customTitle={item =>
           <View style={Styles.accordionTitle} >
@@ -115,27 +115,51 @@ export default function Main({ navigation, route }) {
         customBody={item =>
           <View style={Styles.accordionDetail}>
             <View style={Styles.stackRow}>
-              <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
-              <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
+              <Text  variant='headlineSmall'>Выручка</Text>
+              <Text  variant='headlineSmall'>{item.proceeds}</Text>
             </View>
-            <View style={Styles.stackRow} >
-              <Text variant='headlineSmall'>Цена топлива</Text>
-              <Text variant='headlineSmall'>{item.priceFuel}</Text>
-            </View>
+            <AccordionItem
+              containerStyle={Styles.accordionItem}
 
-            <View style={Styles.stackRow}>
-              <Text variant='headlineSmall'>Средний расход</Text>
-              <Text variant='headlineSmall'>{item.averageFuel}</Text>
-            </View>
+              customTitle={() =>
+                <View style={Styles.accordionItemTitle}>
+                  <Text variant='headlineSmall'>Расходы</Text>
+                  <Text variant='headlineSmall'>{item.expenses}</Text>
+                </View>}
+              customBody={() =>
+                <View >
+                  <View style={Styles.stackRow} >
+                    <Text variant='headlineSmall'>Цена топлива</Text>
+                    <Text variant='headlineSmall'>{item.priceFuel}</Text>
+                  </View>
 
-            <View style={Styles.stackRow}>
-              <Text variant='headlineSmall'>Пробег</Text>
-              <Text variant='headlineSmall'>{item.odometer}</Text>
-            </View>
-            <View style={Styles.stackRow}>
-              <Text variant='headlineSmall'>Расходы</Text>
-              <Text variant='headlineSmall'>{item.expenses}</Text>
-            </View>
+                  <View style={Styles.stackRow}>
+                    <Text variant='headlineSmall'>Средний расход</Text>
+                    <Text variant='headlineSmall'>{item.averageFuel}</Text>
+                  </View>
+                  <AccordionItem
+                    containerStyle={Styles.accordionItem}
+                    customTitle={() =>
+                      <View style={Styles.accordionItemTitle}>
+                        <Text variant='headlineSmall'>Пробег</Text>
+                        <Text variant='headlineSmall'>{item.odometer}</Text>
+                      </View>}
+                    customBody={() =>
+                      <View >
+                        <View style={Styles.stackRow}>
+                          <Text variant='headlineSmall'>Спидометр начало</Text>
+                          <Text variant='headlineSmall'>{item.odometerStart}</Text>
+                        </View>
+                        <View style={Styles.stackRow}>
+                          <Text variant='headlineSmall'>Спидометр конец</Text>
+                          <Text variant='headlineSmall'>{item.odometerFinish}</Text>
+                        </View>
+                      </View>
+                    }
+                  />
+                </View>
+              }
+            />
           </View>
         }
       />
@@ -161,20 +185,38 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   accordionTitle: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginVertical: 16,
+    paddingHorizontal: 0,
+    backgroundColor: 'red'
+  },
+
+  accordionItemTitle: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 16
   },
-  accordion: {    
-    marginHorizontal: 8
+
+  accordion: {
+    marginHorizontal: 8,
+  },
+
+  accordionItem: {
+    marginHorizontal: 8,
+    marginLeft: 0,
+    padding: 0,
+    paddingRight: 8
   },
 
   accordionDetail: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    margin: 8
+    marginVertical: 8,
+    marginRight: 8
   },
 
   stackRow: {
