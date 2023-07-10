@@ -11,7 +11,7 @@ const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 var red = 0;
 
 export default function Main({ navigation, route }) {
-a
+
   useEffect(() => {
     if (listOfItems.length !== 0) {
       setData({ listOfItems, settings });
@@ -72,7 +72,7 @@ a
     }
   }
 
-  const [listOfItems, setListOfItems] = useState([{ ...item }]);
+  const [listOfItems, setListOfItems] = useState([{ ...item }, { ...item },{ ...item },{ ...item },]);
 
 
   return (
@@ -99,38 +99,39 @@ a
         <Appbar.Content title='Учет работы таксиста' color='white' />
       </Appbar.Header>
       <AccordionList
+        style={Styles.accordion}
         data={listOfItems}
         customTitle={item =>
-          <View style={Styles.stackRow} >           
-
-              <Text style={Styles.item} variant='headlineMedium'>{item.date}</Text>
+          <View style={Styles.accordionTitle} >
+            <View style={Styles.stackRow} >
+              <View style={Styles.stackRow} >
+                <Text style={Styles.item} variant='headlineMedium'>{item.date}</Text>
+              </View>
               <Text style={Styles.item} variant='headlineMedium'>Доход</Text>
               <Text style={Styles.item} variant='headlineMedium'>{item.profit}</Text>
-           
-          </View>}
+            </View>
+          </View>
+        }
         customBody={item =>
           <View style={Styles.accordionDetail}>
-            <View style={Styles.accordionDetail} >
-              <View style={Styles.stackRow}>
-                <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
-                <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
-              </View>
-              <View style={Styles.stackRow} >
-                <Text variant='headlineSmall'>Цена топлива</Text>
-                <Text variant='headlineSmall'>{item.priceFuel}</Text>
-              </View>
+            <View style={Styles.stackRow}>
+              <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
+              <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
+            </View>
+            <View style={Styles.stackRow} >
+              <Text variant='headlineSmall'>Цена топлива</Text>
+              <Text variant='headlineSmall'>{item.priceFuel}</Text>
+            </View>
 
-              <View style={Styles.stackRow}>
-                <Text variant='headlineSmall'>Средний расход</Text>
-                <Text variant='headlineSmall'>{item.averageFuel}</Text>
-              </View>
+            <View style={Styles.stackRow}>
+              <Text variant='headlineSmall'>Средний расход</Text>
+              <Text variant='headlineSmall'>{item.averageFuel}</Text>
             </View>
 
             <View style={Styles.stackRow}>
               <Text variant='headlineSmall'>Пробег</Text>
               <Text variant='headlineSmall'>{item.odometer}</Text>
             </View>
-
             <View style={Styles.stackRow}>
               <Text variant='headlineSmall'>Расходы</Text>
               <Text variant='headlineSmall'>{item.expenses}</Text>
@@ -157,41 +158,29 @@ const Styles = StyleSheet.create({
     flexDirection: 'column'
   },
   item: {
-    //flex: 1,
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
-    paddingLeft: 8,
+    paddingHorizontal: 8,
   },
   accordionTitle: {
-    //flex: 1,
-    display: 'flex',
+    flex:1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
+    marginVertical: 16
+  },
+  accordion: {    
+    marginHorizontal: 8
   },
 
   accordionDetail: {
-    //flex: 1,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
+    margin: 8
   },
 
   stackRow: {
     flexDirection: 'row',
-    //display: 'flex',
     justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
-    //alignContent: 'space-between',
-    //flex: 1
+    flex: 1
   }
   //   detail: {
   //     fontSize: 18,
