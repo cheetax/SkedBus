@@ -3,10 +3,10 @@ import React from "react";
 import Main from "./components/List";
 //import Form from "./components/Form";
 
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function Navigate({}) {    
     return <NavigationContainer>         
