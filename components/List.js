@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View, StyleSheet } from 'react-native';
-import { Stack, Flex } from "native-base";
+//import { Stack, Flex } from "native-base";
+import { AccordionList } from "react-native-accordion-list-view";
 import { Appbar, List, FAB, IconButton, MD3Elevation, Text } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +11,7 @@ const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 var red = 0;
 
 export default function Main({ navigation, route }) {
-
+a
   useEffect(() => {
     if (listOfItems.length !== 0) {
       setData({ listOfItems, settings });
@@ -80,7 +81,7 @@ export default function Main({ navigation, route }) {
         style={Styles.fab}
         color="white"
         icon="plus"
-        size="large"
+        size="medium"
         onPress={() => {
           console.log(1)
           navigation.navigate('Form', { item: JSON.stringify(item) })
@@ -97,94 +98,47 @@ export default function Main({ navigation, route }) {
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
         <Appbar.Content title='Учет работы таксиста' color='white' />
       </Appbar.Header>
-      <FlatList data={listOfItems} renderItem={({ item }) =>
-        <List.Section>
-          <List.Accordion
-            style={Styles.accordion}
-            //expandIcon={<ExpandMoreIcon />}
-            //aria-controls="panel1a-content"
-            // id='panel1a-header'
-            title={
-              <Stack direction="row" space={1} justifyContent={"space-between"} >
-                <Text style={Styles.item} variant='headlineLarge'>{item.date}</Text>
+      <AccordionList
+        data={listOfItems}
+        customTitle={item =>
+          <View style={Styles.stackRow} >           
 
-                <Stack direction="row" space={3}>
-                  <Text style={Styles.item} variant='headlineLarge'>Доход</Text>
-                  <Text style={Styles.item} variant='headlineLarge'>{item.profit}</Text>
-                </Stack>
+              <Text style={Styles.item} variant='headlineMedium'>{item.date}</Text>
+              <Text style={Styles.item} variant='headlineMedium'>Доход</Text>
+              <Text style={Styles.item} variant='headlineMedium'>{item.profit}</Text>
+           
+          </View>}
+        customBody={item =>
+          <View style={Styles.accordionDetail}>
+            <View style={Styles.accordionDetail} >
+              <View style={Styles.stackRow}>
+                <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
+                <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
+              </View>
+              <View style={Styles.stackRow} >
+                <Text variant='headlineSmall'>Цена топлива</Text>
+                <Text variant='headlineSmall'>{item.priceFuel}</Text>
+              </View>
 
-              </Stack>}
-          >
-            <List.Item
-              style={  { backgroundColor: 'green', ...Styles.accordion}}
-              title={
-                <View style={{ backgroundColor: 'red', ...Styles.accordionDetail}}>
-                  <View style={{ backgroundColor: 'blue', ...Styles.accordionDetail}} >
-                    <View style={Styles.stackRow}>
-                      <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
-                      <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
-                    </View>
-                    <View style={Styles.stackRow} >
-                      <Text variant='headlineSmall'>Цена топлива</Text>
-                      <Text variant='headlineSmall'>{item.priceFuel}</Text>
-                    </View>
+              <View style={Styles.stackRow}>
+                <Text variant='headlineSmall'>Средний расход</Text>
+                <Text variant='headlineSmall'>{item.averageFuel}</Text>
+              </View>
+            </View>
 
-                    <View style={Styles.stackRow}>
-                      <Text variant='headlineSmall'>Средний расход</Text>
-                      <Text variant='headlineSmall'>{item.averageFuel}</Text>
-                    </View>
-                  </View>
+            <View style={Styles.stackRow}>
+              <Text variant='headlineSmall'>Пробег</Text>
+              <Text variant='headlineSmall'>{item.odometer}</Text>
+            </View>
 
-                  <View style={Styles.stackRow}>
-                    <Text variant='headlineSmall'>Пробег</Text>
-                    <Text variant='headlineSmall'>{item.odometer}</Text>
-                  </View>
-
-                  <View style={Styles.stackRow}>
-                    <Text variant='headlineSmall'>Расходы</Text>
-                    <Text variant='headlineSmall'>{item.expenses}</Text>
-                  </View>
-
-
-                  {/*  <View style={Styles.stackRow}>
-                    <IconButton
-                      edge='start'
-                      color='inherit'
-                      aria-label='menu'
-                      onClick={() => {
-                        red = red + 1;
-                        setListOfItems((list) => [
-                          ...list.filter(listOfItems => listOfItems.key != item.key)
-                        ])
-                      }}
-                      sx={{ mr: 1 }}>
-                      <Delete />
-                    </IconButton>
-                    <IconButton
-                      edge='start'
-                      color='inherit'
-                      aria-label='menu'
-                      sx={{ mr: 1 }}
-                      onClick={() => {
-                        navigation.navigate('Form', { item: JSON.stringify(item) })
-                      }}>
-                      <Edit />
-                    </IconButton>
-
-                  </View> */}
-                </View>
-
-              }
-            >
-
-
-            </List.Item>
-          </List.Accordion>
-
-        </List.Section>
-      } />
-
-    </View>
+            <View style={Styles.stackRow}>
+              <Text variant='headlineSmall'>Расходы</Text>
+              <Text variant='headlineSmall'>{item.expenses}</Text>
+            </View>
+          </View>
+        }
+      />
+    </View >
   );
 }
 
@@ -209,16 +163,18 @@ const Styles = StyleSheet.create({
     alignSelf: 'stretch',
     paddingLeft: 8,
   },
-  accordion: {
+  accordionTitle: {
     //flex: 1,
-    flexDirection: 'column',
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'space-between',
+    alignContent: 'space-between',
+    alignItems: 'stretch',
+    alignSelf: 'stretch',
   },
 
   accordionDetail: {
     //flex: 1,
-    width: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -229,7 +185,7 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    display: 'flex',
+    //display: 'flex',
     justifyContent: 'space-between',
     alignContent: 'space-between',
     alignItems: 'stretch',
