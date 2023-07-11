@@ -97,7 +97,7 @@ export default function Main({ navigation, route }) {
         <Appbar.Content title='Учет работы таксиста' color='white' />
       </Appbar.Header>
       <AccordionList
-        //style={Styles.accordion}
+        style={Styles.accordionMain}
         containerItemStyle={Styles.accordion}
         //contentContainerStyle={Styles.accordion}
         data={listOfItems}
@@ -127,7 +127,7 @@ export default function Main({ navigation, route }) {
                   <Text variant='headlineSmall'>{item.expenses}</Text>
                 </View>}
               customBody={() =>
-                <View >
+                <View style={Styles.item}>
                   <View style={Styles.stackRow} >
                     <Text variant='headlineSmall'>Цена топлива</Text>
                     <Text variant='headlineSmall'>{item.priceFuel}</Text>
@@ -173,7 +173,7 @@ const Styles = StyleSheet.create({
     zIndex: 1000,
     alignSelf: 'flex-end',
     bottom: 20,
-    borderRadius: 48,
+   // borderRadius: 48,
     right: 20,
     backgroundColor: '#1976d2',
   },
@@ -182,14 +182,16 @@ const Styles = StyleSheet.create({
     flexDirection: 'column'
   },
   item: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 0,
+    paddingRight: 8
   },
   accordionTitle: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginVertical: 16,
+    marginVertical: 0,
     paddingHorizontal: 0,
+    marginBottom: 0,
     backgroundColor: 'red'
   },
 
@@ -197,25 +199,37 @@ const Styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 16
+    marginVertical: 0,
   },
 
   accordion: {
-    marginHorizontal: 8,
+    marginHorizontal: 0,
+    backgroundColor: 'red',
+    marginBottom: 0,
+    borderRadius: 0
+  },
+
+  accordionMain: {
+    marginHorizontal: 0,
+    paddingRight: 0,
+    backgroundColor: 'blue'
   },
 
   accordionItem: {
-    marginHorizontal: 8,
+    marginHorizontal: 0,
     marginLeft: 0,
+    marginRight: 0,
     padding: 0,
-    paddingRight: 8
+    paddingRight: 0,
+    
+    backgroundColor: 'green'
   },
 
   accordionDetail: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    marginVertical: 8,
+    marginVertical: 0,
     marginRight: 8
   },
 
