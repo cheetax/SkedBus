@@ -1,12 +1,14 @@
 import React from "react";
+import { View, StyleSheet } from 'react-native';
 import { Formik, useField, useFormikContext } from "formik";
-import { Close, Done } from '@mui/icons-material';
-import { TextField, Box, AppBar, Toolbar, IconButton, Stack, Typography, } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+//import { Close, Done } from '@mui/icons-material';
+//import { TextField, Box, AppBar, Toolbar, IconButton, Stack, Typography, } from "@mui/material";
+import { Appbar, TextInput } from 'react-native-paper';
+//import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+//import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { ruRU } from '@mui/x-date-pickers/locales';
+//import { ruRU } from '@mui/x-date-pickers/locales';
 
 const ViewDataField = (props) => {
   const {

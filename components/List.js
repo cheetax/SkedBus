@@ -94,7 +94,7 @@ export default function Main({ navigation, route }) {
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-        <Appbar.Content title='Учет работы таксиста' color='white' />
+        <Appbar.Content  title={<Text style={{color: 'white'}} variant='headlineMedium'>Учет работы таксиста</Text>} color='white' />
       </Appbar.Header>
       <AccordionList
         style={Styles.accordionMain}
@@ -105,19 +105,23 @@ export default function Main({ navigation, route }) {
           <View style={Styles.accordionTitle} >
             <View style={Styles.stackRow} >
               <View style={Styles.stackRow} >
-                <Text style={Styles.item} variant='headlineMedium'>{item.date}</Text>
+                <Text style={Styles.text} variant='headlineMedium'>{item.date}</Text>
               </View>
-              <Text style={Styles.item} variant='headlineMedium'>Доход</Text>
-              <Text style={Styles.item} variant='headlineMedium'>{item.profit}</Text>
+              <Text style={Styles.text} variant='headlineMedium'>Доход</Text>
+              <Text variant='headlineMedium'>{item.profit}</Text>
             </View>
           </View>
         }
         customBody={item =>
           <View style={Styles.accordionDetail}>
-            <View style={Styles.stackRow}>
-              <Text  variant='headlineSmall'>Выручка</Text>
-              <Text  variant='headlineSmall'>{item.proceeds}</Text>
+            <View style={Styles.itemDetail} >
+              <View style={Styles.stackRow}>
+
+                <Text variant='headlineSmall'>Выручка</Text>
+                <Text variant='headlineSmall'>{item.proceeds}</Text>
+              </View>
             </View>
+
             <AccordionItem
               containerStyle={Styles.accordionItem}
 
@@ -127,15 +131,18 @@ export default function Main({ navigation, route }) {
                   <Text variant='headlineSmall'>{item.expenses}</Text>
                 </View>}
               customBody={() =>
-                <View style={Styles.item}>
-                  <View style={Styles.stackRow} >
-                    <Text variant='headlineSmall'>Цена топлива</Text>
-                    <Text variant='headlineSmall'>{item.priceFuel}</Text>
-                  </View>
+                <View>
+                  <View style={Styles.itemDetail}>
 
-                  <View style={Styles.stackRow}>
-                    <Text variant='headlineSmall'>Средний расход</Text>
-                    <Text variant='headlineSmall'>{item.averageFuel}</Text>
+                    <View style={Styles.stackRow} >
+                      <Text variant='headlineSmall'>Цена топлива</Text>
+                      <Text variant='headlineSmall'>{item.priceFuel}</Text>
+                    </View>
+
+                    <View style={Styles.stackRow}>
+                      <Text variant='headlineSmall'>Средний расход</Text>
+                      <Text variant='headlineSmall'>{item.averageFuel}</Text>
+                    </View>
                   </View>
                   <AccordionItem
                     containerStyle={Styles.accordionItem}
@@ -145,7 +152,7 @@ export default function Main({ navigation, route }) {
                         <Text variant='headlineSmall'>{item.odometer}</Text>
                       </View>}
                     customBody={() =>
-                      <View >
+                      <View style={Styles.itemDetail} >
                         <View style={Styles.stackRow}>
                           <Text variant='headlineSmall'>Спидометр начало</Text>
                           <Text variant='headlineSmall'>{item.odometerStart}</Text>
@@ -173,7 +180,7 @@ const Styles = StyleSheet.create({
     zIndex: 1000,
     alignSelf: 'flex-end',
     bottom: 20,
-   // borderRadius: 48,
+    // borderRadius: 48,
     right: 20,
     backgroundColor: '#1976d2',
   },
@@ -183,7 +190,15 @@ const Styles = StyleSheet.create({
   },
   item: {
     paddingHorizontal: 0,
-    paddingRight: 8
+    paddingRight: 0,
+  },
+  text: {
+    paddingHorizontal: 0,
+    paddingRight: 8,
+  },
+  itemDetail: {
+    paddingRight: 32,
+    paddingTop: 16
   },
   accordionTitle: {
     flex: 1,
@@ -192,7 +207,7 @@ const Styles = StyleSheet.create({
     marginVertical: 0,
     paddingHorizontal: 0,
     marginBottom: 0,
-    backgroundColor: 'red'
+    padding: 0,
   },
 
   accordionItemTitle: {
@@ -204,15 +219,18 @@ const Styles = StyleSheet.create({
 
   accordion: {
     marginHorizontal: 0,
-    backgroundColor: 'red',
     marginBottom: 0,
-    borderRadius: 0
+    borderRadius: 0,
+    borderBottomWidth: 1,
+    padding: 0,
+    paddingVertical: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
 
   accordionMain: {
     marginHorizontal: 0,
     paddingRight: 0,
-    backgroundColor: 'blue'
   },
 
   accordionItem: {
@@ -220,9 +238,10 @@ const Styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
     padding: 0,
+    paddingTop: 16,
     paddingRight: 0,
-    
-    backgroundColor: 'green'
+    marginBottom: 0,
+    borderRadius: 0,
   },
 
   accordionDetail: {
@@ -230,7 +249,8 @@ const Styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginVertical: 0,
-    marginRight: 8
+    marginRight: 0,
+    paddingVertical: 0
   },
 
   stackRow: {
