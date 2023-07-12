@@ -96,11 +96,11 @@ export default function Form({ route, navigation }) {
             </Appbar.Header>
             <View  >
 
-              {/* <DateTimePickerAndroid
-                value={dayjs(values.date, 'DD.MM.YY')}
+              <DateTimePickerAndroid
+                value='12/07/2023'
                 mode={'date'}
                 onChange={(event, value) => setFieldValue('date', value)}
-              /> */}
+              />
               <TextInput
                 value={values.priceFuel}
                 //type="number"
