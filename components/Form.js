@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from 'react-native';
-import { Formik, useFormikContext, useField  } from "formik";
+import { Formik, useFormikContext, useField } from "formik";
 //import { Close, Done } from '@mui/icons-material';
 //import { TextField, Box, AppBar, Toolbar, IconButton, Stack, Typography, } from "@mui/material";
 import { Appbar, IconButton, TextInput, Text } from 'react-native-paper';
@@ -42,6 +42,8 @@ const ViewDataField = (props) => {
     props.name
   ]);
 
+
+
   return (
     <View >
       <View style={Styles.stackRow} >
@@ -64,14 +66,50 @@ const ViewDataField = (props) => {
   )
 }
 
+const DatePicer = (props) => {
+  const d = new Date()
+  //console.log(props)
+  const {
+    values: { date },
+    setFieldValue
+  } = useFormikContext();
+  console.log(date)
+  const onChange = (event, selected) => {
+    //console.log(event);
+    console.log(dayjs(selected, 'DD.MM.YY').format('DD.MM.YY'))
+    setFieldValue('date', dayjs(selected, 'DD.MM.YY').format('DD.MM.YY'))
+  }
+
+  const showDatePicer = (d) =>{
+    //console.log(d)
+    DateTimePickerAndroid.open({
+      value: d,
+      mode: 'date',
+      onChange
+    });
+  }
+
+  return (
+    <TextInput
+      value={props.date}
+      //type="number"
+      //onChangeText={handleChange('date')}
+      label='Дата'
+      mode="outlined"
+      onFocus={() => showDatePicer} />
+  )
+}
+
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
-  console.log(item)
+  //console.log(item)
   return (
     <View >
+
       <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
+          console.log(values)
           values.date = dayjs(values.date, 'DD.MM.YY').format('DD.MM.YY');
           navigation.navigate({
             name: 'Main',
@@ -96,11 +134,7 @@ export default function Form({ route, navigation }) {
             </Appbar.Header>
             <View  >
 
-              <DateTimePickerAndroid
-                value='12/07/2023'
-                mode={'date'}
-                onChange={(event, value) => setFieldValue('date', value)}
-              />
+              <DatePicer date={values.date} />
               <TextInput
                 value={values.priceFuel}
                 //type="number"
