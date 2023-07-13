@@ -71,7 +71,7 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  const [listOfItems, setListOfItems] = useState([{ ...item }, { ...item }, { ...item }, { ...item },]);
+  const [listOfItems, setListOfItems] = useState([]);
 
 
   return (
