@@ -40,20 +40,20 @@ export default function Main({ navigation, route }) {
 
   const [settings, setSettings] = useState(
     {
-      priceFuel: 46,
-      averageFuel: 9.5
+      priceFuel: '46',
+      averageFuel: '9.5'
     }
   )
   const item = {
     date: dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
     averageFuel: settings.averageFuel,
-    proceeds: 3000, //выручка
-    odometerStart: 0, //спидометр старт
-    odometerFinish: 0, //спидометр финиш
-    profit: 2000,
-    odometer: 0,     //пробег
-    expenses: 0,     //затраты
+    proceeds: '3000', //выручка
+    odometerStart: '0', //спидометр старт
+    odometerFinish: '0', //спидометр финиш
+    profit: '2000',
+    odometer: '0',     //пробег
+    expenses: '0',     //затраты
     key: keyGenerator()
   };
 
@@ -258,4 +258,35 @@ const Styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1
   }
+  //   detail: {
+  //     fontSize: 18,
+  //     textAlign: 'left',
+  //     //marginLeft: 10,
+  //     paddingVertical: 5
+  //   },
+  //   header: {
+  //     fontSize: 21,
+  //     color: 'white'
+  //     //textAlign: 'center',
+  //     //paddingVertical: 20
+  //   },
+  //   profit: {
+  //     fontSize: 18,
+  //     //textAlign: 'left',
+  //     //paddingVertical: 15,
+  //     //backgroundColor: '#98FB98',
+  //     //paddingHorizontal: 10,
+  //   },
+  //   summary: {
+  //     fontSize: 18,
+  //     fontStyle: '400',
+  //     textAlign: 'left',
+  //   },
+  // iconAdd: {
+  //   position: 'fixed',
+  //   bottom: 16,
+  //   right: 16,
+  //textAlign: 'center',
+  //marginVertical: 15
+  //  }
 })

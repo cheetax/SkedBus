@@ -1,15 +1,13 @@
 import React from "react";
 import { View, StyleSheet } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
-//import { Close, Done } from '@mui/icons-material';
-//import { TextField, Box, AppBar, Toolbar, IconButton, Stack, Typography, } from "@mui/material";
-import { Appbar, IconButton, TextInput, Text } from 'react-native-paper';
+import { Appbar, IconButton, TextInput, Text} from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-//import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-//import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-//import { ruRU } from '@mui/x-date-pickers/locales';
+
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
 
 const ViewDataField = (props) => {
   const {
@@ -42,10 +40,8 @@ const ViewDataField = (props) => {
     props.name
   ]);
 
-
-
   return (
-    <View >
+    <View style={Styles.main} >
       <View style={Styles.stackRow} >
         <Text {...props} {...field}>Пробег:</Text>
         <Text {...props} {...field}>{odometer}</Text>
@@ -67,49 +63,38 @@ const ViewDataField = (props) => {
 }
 
 const DatePicer = (props) => {
-  const d = new Date()
-  //console.log(props)
   const {
     values: { date },
     setFieldValue
   } = useFormikContext();
-  console.log(date)
-  const onChange = (event, selected) => {
-    //console.log(event);
-    console.log(dayjs(selected, 'DD.MM.YY').format('DD.MM.YY'))
-    setFieldValue('date', dayjs(selected, 'DD.MM.YY').format('DD.MM.YY'))
-  }
+  const onChange = (event, selected) => setFieldValue('date', dayjs(selected).format('DD.MM.YY'))
 
-  const showDatePicer = (d) =>{
-    //console.log(d)
+  const showDatePicer = () => {
     DateTimePickerAndroid.open({
-      value: d,
+      value: dayjs(date, 'DD.MM.YY').toDate(),
       mode: 'date',
       onChange
     });
   }
-
   return (
     <TextInput
       value={props.date}
-      //type="number"
-      //onChangeText={handleChange('date')}
       label='Дата'
       mode="outlined"
-      onFocus={() => showDatePicer} />
+      editable={true}
+      onFocus={() => showDatePicer()} />
   )
 }
-
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
   //console.log(item)
   return (
-    <View >
+    <View style={Styles.main} >
 
-      <Formik
+      <Formik        
         initialValues={{ ...item }}
         onSubmit={(values) => {
-          console.log(values)
+          //console.log(values)
           values.date = dayjs(values.date, 'DD.MM.YY').format('DD.MM.YY');
           navigation.navigate({
             name: 'Main',
@@ -120,7 +105,8 @@ export default function Form({ route, navigation }) {
         onChange={(values) => { console.log(values) }}
       >
         {({ values, handleSubmit, handleChange, handleBlur, setFieldValue }) => (
-          <View >
+          <View style={Styles.main} >
+
             <Appbar.Header
               elevated={true}
               dark={true}
@@ -132,8 +118,7 @@ export default function Form({ route, navigation }) {
               <Appbar.Content title={<Text style={{ color: 'white' }} variant='headlineMedium'>Новая смена</Text>} color='white' />
               <Appbar.Action icon='menu' onPress={handleSubmit} color='white' />
             </Appbar.Header>
-            <View  >
-
+            <View style={Styles.main}  >
               <DatePicer date={values.date} />
               <TextInput
                 value={values.priceFuel}
@@ -167,13 +152,14 @@ export default function Form({ route, navigation }) {
                 onChangeText={handleChange('odometerFinish')}
                 label='Спидометр на конец'
                 mode="outlined" />
-              <ViewDataField name='viewData' variant='headlineMedium' />
 
+              <ViewDataField name='viewData' variant='headlineMedium' />
+              
             </View>
-          </View>
-        )
+          </View>)
         }
       </Formik >
+
 
     </View >
 
@@ -183,8 +169,9 @@ export default function Form({ route, navigation }) {
 const Styles = StyleSheet.create({
 
   main: {
-    flex: 1,
-    flexDirection: 'column'
+    flex: 0.85,
+    flexDirection: 'column',
+    display: 'flex'
   },
   text: {
     paddingHorizontal: 0,
