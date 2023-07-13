@@ -72,8 +72,7 @@ export default function Main({ navigation, route }) {
   }
 
   const [listOfItems, setListOfItems] = useState([]);
-
-
+  
   return (
     <View style={Styles.main} >
       <FAB
