@@ -127,7 +127,7 @@ export default function Form({ route, navigation }) {
                       color: 'white',
                       //alignSelf: 'center'
                     }}
-                    variant='headlineMedium'>Новая смена</Text>}
+                    variant='titleLarge'>Новая смена</Text>}
               />
               <Appbar.Action icon='check' onPress={handleSubmit} color='white' />
             </Appbar.Header>

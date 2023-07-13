@@ -94,7 +94,7 @@ export default function Main({ navigation, route }) {
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-        <Appbar.Content  title={<Text style={{color: 'white'}} variant='headlineMedium'>Учет работы таксиста</Text>} color='white' />
+        <Appbar.Content  title={<Text style={{color: 'white'}} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
       </Appbar.Header>
       <AccordionList
         style={Styles.accordionMain}
