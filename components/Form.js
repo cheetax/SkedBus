@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
-import { Appbar, IconButton, TextInput, Text} from 'react-native-paper';
+import { Appbar, IconButton, TextInput, Text } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
@@ -78,6 +78,7 @@ const DatePicer = (props) => {
   }
   return (
     <TextInput
+      {...props}
       value={props.date}
       label='Дата'
       mode="outlined"
@@ -90,8 +91,7 @@ export default function Form({ route, navigation }) {
   //console.log(item)
   return (
     <View style={Styles.main} >
-
-      <Formik        
+      <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
           //console.log(values)
@@ -112,33 +112,50 @@ export default function Form({ route, navigation }) {
               dark={true}
               style={{
                 backgroundColor: '#1976d2',
+                height: 56
               }}
             >
-              <Appbar.Action icon='menu' onPress={() => { navigation.goBack() }} color='white' />
-              <Appbar.Content title={<Text style={{ color: 'white' }} variant='headlineMedium'>Новая смена</Text>} color='white' />
-              <Appbar.Action icon='menu' onPress={handleSubmit} color='white' />
+              <Appbar.Action
+                //style={{marginHorizontal: 16}}
+                icon='close'
+                onPress={() => navigation.goBack()}
+                color='white' />
+              <Appbar.Content
+                title={
+                  <Text
+                    style={{
+                      color: 'white',
+                      //alignSelf: 'center'
+                    }}
+                    variant='headlineMedium'>Новая смена</Text>}
+              />
+              <Appbar.Action icon='check' onPress={handleSubmit} color='white' />
             </Appbar.Header>
-            <View style={Styles.main}  >
-              <DatePicer date={values.date} />
+            <View style={Styles.forma}  >
+              <DatePicer date={values.date} style={Styles.inputField} />
               <TextInput
+                style={Styles.inputField}
                 value={values.priceFuel}
                 //type="number"
                 onChangeText={handleChange('priceFuel')}
                 label='Стоимость топлива'
                 mode="outlined" />
               <TextInput
+                style={Styles.inputField}
                 value={values.averageFuel}
                 //type="number"
                 onChangeText={handleChange('averageFuel')}
                 label='Средний расход'
                 mode="outlined" />
               <TextInput
+                style={Styles.inputField}
                 value={values.proceeds}
                 //type="number"
                 onChangeText={handleChange('proceeds')}
                 label='Выручка'
                 mode="outlined" />
               <TextInput
+                style={Styles.inputField}
                 value={values.odometerStart}
                 //type="number"
                 minRows={0}
@@ -146,6 +163,7 @@ export default function Form({ route, navigation }) {
                 label='Спидометр на начало'
                 mode="outlined" />
               <TextInput
+                style={Styles.inputField}
                 value={values.odometerFinish}
                 //type="number"
                 //minRows={0}
@@ -154,7 +172,7 @@ export default function Form({ route, navigation }) {
                 mode="outlined" />
 
               <ViewDataField name='viewData' variant='headlineMedium' />
-              
+
             </View>
           </View>)
         }
@@ -171,13 +189,20 @@ const Styles = StyleSheet.create({
   main: {
     flex: 0.85,
     flexDirection: 'column',
-    display: 'flex'
+  },
+  forma: {
+    flex: 0.85,
+    flexDirection: 'column',
+    marginHorizontal: 24
   },
   text: {
     paddingHorizontal: 0,
     paddingRight: 8,
   },
-
+  inputField: {
+    marginTop: 12,
+    height: 56
+  },
   stackRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
