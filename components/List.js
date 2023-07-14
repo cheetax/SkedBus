@@ -72,7 +72,7 @@ export default function Main({ navigation, route }) {
   }
 
   const [listOfItems, setListOfItems] = useState([]);
-  
+
   return (
     <View style={Styles.main} >
       <FAB
@@ -93,7 +93,7 @@ export default function Main({ navigation, route }) {
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-        <Appbar.Content  title={<Text style={{color: 'white'}} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
+        <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
       </Appbar.Header>
       <AccordionList
         style={Styles.accordionMain}
@@ -102,12 +102,10 @@ export default function Main({ navigation, route }) {
         data={listOfItems}
         customTitle={item =>
           <View style={Styles.accordionTitle} >
-            <View style={Styles.stackRow} >
-              <View style={Styles.stackRow} >
-                <Text style={Styles.text} variant='headlineMedium'>{item.date}</Text>
-              </View>
-              <Text style={Styles.text} variant='headlineMedium'>Доход</Text>
-              <Text variant='headlineMedium'>{item.profit}</Text>
+            <Text style={Styles.text} variant='bodyLarge'>{item.date}</Text>
+            <View style={Styles.stackRow}>
+              <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
+              <Text variant='bodyMedium'>{item.profit}</Text>
             </View>
           </View>
         }
@@ -202,11 +200,15 @@ const Styles = StyleSheet.create({
   accordionTitle: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
+    //alignSelf: 'center',
+    //alignItems: 'center',
     marginVertical: 0,
     paddingHorizontal: 0,
     marginBottom: 0,
     padding: 0,
+    height: 56,
+    backgroundColor: 'red'
   },
 
   accordionItemTitle: {
@@ -214,21 +216,27 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 0,
+    
   },
 
   accordion: {
     marginHorizontal: 0,
-    marginBottom: 0,
-    borderRadius: 0,
-    borderBottomWidth: 1,
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 12,
+    //borderBottomWidth: 1,
+    
     padding: 0,
-    paddingVertical: 16,
+    paddingVertical: 8,
     paddingLeft: 16,
     paddingRight: 16,
+    
+
+    //justifyContent: 'space-between'
   },
 
   accordionMain: {
-    marginHorizontal: 0,
+    marginHorizontal: 24,
     paddingRight: 0,
   },
 
@@ -254,7 +262,7 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
     flex: 1
   }
   //   detail: {

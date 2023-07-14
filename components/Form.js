@@ -131,7 +131,7 @@ export default function Form({ route, navigation }) {
               />
               <Appbar.Action icon='check' onPress={handleSubmit} color='white' />
             </Appbar.Header>
-            <ScrollView >
+            <ScrollView style={Styles.forma} >
               <DatePicer date={values.date} style={Styles.inputField} />
               <TextInput
                 style={Styles.inputField}
@@ -187,11 +187,11 @@ export default function Form({ route, navigation }) {
 const Styles = StyleSheet.create({
 
   main: {
-    flex: 0.85,
+    flex: 1,
     flexDirection: 'column',
   },
   forma: {
-    flex: 0.85,
+    flex: 1,
     flexDirection: 'column',
     marginHorizontal: 24
   },
