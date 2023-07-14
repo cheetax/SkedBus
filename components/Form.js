@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
 import { Appbar, IconButton, TextInput, Text } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
@@ -131,7 +131,7 @@ export default function Form({ route, navigation }) {
               />
               <Appbar.Action icon='check' onPress={handleSubmit} color='white' />
             </Appbar.Header>
-            <View style={Styles.forma}  >
+            <ScrollView >
               <DatePicer date={values.date} style={Styles.inputField} />
               <TextInput
                 style={Styles.inputField}
@@ -173,7 +173,7 @@ export default function Form({ route, navigation }) {
 
               <ViewDataField name='viewData' variant='headlineMedium' />
 
-            </View>
+            </ScrollView>
           </View>)
         }
       </Formik >
