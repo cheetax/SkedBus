@@ -183,7 +183,8 @@ const Styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: 'green'
   },
   item: {
     paddingHorizontal: 0,
@@ -200,7 +201,7 @@ const Styles = StyleSheet.create({
   accordionTitle: {
     flex: 1,
     flexDirection: 'column',
-    //justifyContent: 'space-between',
+    justifyContent: 'space-between',
     //alignSelf: 'center',
     //alignItems: 'center',
     marginVertical: 0,
@@ -208,6 +209,7 @@ const Styles = StyleSheet.create({
     marginBottom: 0,
     padding: 0,
     height: 56,
+    margin: 0,
     backgroundColor: 'red'
   },
 

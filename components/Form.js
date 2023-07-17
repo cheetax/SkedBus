@@ -11,7 +11,16 @@ dayjs.extend(customParseFormat)
 
 const ViewDataField = (props) => {
   const {
-    values: { expenses, proceeds, profit, odometer, priceFuel, averageFuel, odometerFinish, odometerStart },
+    values: {
+      expenses,
+      proceeds,
+      profit,
+      odometer,
+      priceFuel,
+      averageFuel,
+      odometerFinish,
+      odometerStart 
+    },
     setFieldValue
   } = useFormikContext();
 
