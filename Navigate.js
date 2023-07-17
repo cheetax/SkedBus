@@ -2,6 +2,7 @@ import React from "react";
 //import { View, Text } from "react-native-web";
 import Main from "./components/List";
 import Form from "./components/Form";
+import { StatusBar } from "expo-status-bar";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -22,5 +23,10 @@ export default function Navigate({}) {
                     options={{headerShown: false}}
                 />
             </Stack.Navigator>
+            <StatusBar 
+            style="dark"
+            translucent={true}
+            hidden={false}
+            />
     </NavigationContainer>
 }
