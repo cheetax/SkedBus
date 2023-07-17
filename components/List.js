@@ -146,13 +146,20 @@ export default function Main({ navigation, route }) {
             <View style={{...Styles.stackRow, justifyContent: 'flex-end'}} >
             <IconButton
                 icon="pencil-outline"
-                size={20}
-                onPress={() => console.log('Pressed')}
+                //size={20}
+                onPress={() => {
+                  navigation.navigate('Form', { item: JSON.stringify(item) })
+                }}
               />
               <IconButton
                 icon="delete-outline"
-                size={20}
-                onPress={() => console.log('Pressed')}
+                //size={20}
+                onPress={() => {
+                  red = red + 1;
+                  setListOfItems((list) => [
+                    ...list.filter(listOfItems => listOfItems.key != item.key)
+                  ])
+                }}
               />
             </View>
           </View>
