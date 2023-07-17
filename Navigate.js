@@ -9,24 +9,24 @@ import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
 
-export default function Navigate({}) {    
-    return <NavigationContainer>         
-            <Stack.Navigator>
-                <Stack.Screen
-                   name="Main"
-                    component={Main} 
-                    options={{headerShown: false}}
-                />
-                <Stack.Screen
-                    name="Form"
-                    component={Form}
-                    options={{headerShown: false}}
-                />
-            </Stack.Navigator>
-            <StatusBar 
+export default function Navigate({ }) {
+    return <NavigationContainer>
+        <Stack.Navigator>
+            <Stack.Screen
+                name="Main"
+                component={Main}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Form"
+                component={Form}
+                options={{ headerShown: false }}
+            />
+        </Stack.Navigator>
+        <StatusBar
             style="dark"
             translucent={true}
             hidden={false}
-            />
+        />
     </NavigationContainer>
 }

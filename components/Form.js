@@ -15,6 +15,7 @@ const ViewDataField = (props) => {
       expenses,
       proceeds,
       profit,
+      profitPerOdometer,
       odometer,
       priceFuel,
       averageFuel,
@@ -32,14 +33,17 @@ const ViewDataField = (props) => {
     }
     if (odometerFinish && odometerStart) {
       setFieldValue('odometer', odometerFinish - odometerStart);
+      setFieldValue('profitPerOdometer', profit / odometer)
     }
     if (odometer && priceFuel && averageFuel) {
       setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
+    
     }
   }, [
     proceeds,
     expenses,
     profit,
+    profitPerOdometer,
     odometerFinish,
     odometerStart,
     odometer,
@@ -64,6 +68,10 @@ const ViewDataField = (props) => {
       <View style={Styles.stackRow} >
         <Text {...props} {...field}>Доход:</Text>
         <Text {...props} {...field}>{profit}</Text>
+      </View>
+      <View style={Styles.stackRow} >
+        <Text {...props} {...field}>Доход на пробег:</Text>
+        <Text {...props} {...field}>{profitPerOdometer}</Text>
       </View>
 
     </View>

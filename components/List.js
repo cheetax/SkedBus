@@ -51,7 +51,8 @@ export default function Main({ navigation, route }) {
     proceeds: '3000', //выручка
     odometerStart: '0', //спидометр старт
     odometerFinish: '0', //спидометр финиш
-    profit: '2000',
+    profit: '2000', //доход
+    profitPerOdometer: '0', //доход на километр
     odometer: '0',     //пробег
     expenses: '0',     //затраты
     key: keyGenerator()
@@ -184,7 +185,7 @@ const Styles = StyleSheet.create({
   main: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'green'
+    //backgroundColor: 'green'
   },
   item: {
     paddingHorizontal: 0,
