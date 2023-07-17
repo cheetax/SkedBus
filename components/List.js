@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
 import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
-import { Appbar, FAB, Text } from 'react-native-paper';
+import { Appbar, FAB, Text, Card, IconButton } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -106,65 +106,55 @@ export default function Main({ navigation, route }) {
             <Text style={Styles.text} variant='bodyLarge'>{item.date}</Text>
             <View style={Styles.stackRow}>
               <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
-              <Text variant='bodyMedium'>{item.profit}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{item.profit}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>Доход на пробег</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{item.profitPerOdometer}</Text>
             </View>
           </View>
         }
         customBody={item =>
-          <View style={Styles.accordionDetail}>
-            <View style={Styles.itemDetail} >
-              <View style={Styles.stackRow}>
+          <View>
+            <View style={Styles.stackRow}>
+              <Card
+                style={{ ...Styles.card, backgroundColor: '#90EE90' }}
+                contentStyle={Styles.contentCard}
+                mode='outlined' >
+                <Card.Title
+                  //titleStyle={Styles.contentCard}
+                  title={
+                    <View >
+                      <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
+                    </View>}
+                />
+                <Card.Content>
+                  <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
+                </Card.Content>
+              </Card>
+              <Card
+                style={{ ...Styles.card, backgroundColor: '#F08080' }}
+                contentStyle={Styles.contentCard}
+                mode='outlined' >
+                <Card.Title title={
+                  <Text variant='bodyLarge'>Расходы</Text>
+                } />
+                <Card.Content>
+                  <Text variant='titleLarge'>{item.expenses}</Text>
+                </Card.Content>
+              </Card>
 
-                <Text variant='headlineSmall'>Выручка</Text>
-                <Text variant='headlineSmall'>{item.proceeds}</Text>
-              </View>
             </View>
-
-            <AccordionItem
-              containerStyle={Styles.accordionItem}
-
-              customTitle={() =>
-                <View style={Styles.accordionItemTitle}>
-                  <Text variant='headlineSmall'>Расходы</Text>
-                  <Text variant='headlineSmall'>{item.expenses}</Text>
-                </View>}
-              customBody={() =>
-                <View>
-                  <View style={Styles.itemDetail}>
-
-                    <View style={Styles.stackRow} >
-                      <Text variant='headlineSmall'>Цена топлива</Text>
-                      <Text variant='headlineSmall'>{item.priceFuel}</Text>
-                    </View>
-
-                    <View style={Styles.stackRow}>
-                      <Text variant='headlineSmall'>Средний расход</Text>
-                      <Text variant='headlineSmall'>{item.averageFuel}</Text>
-                    </View>
-                  </View>
-                  <AccordionItem
-                    containerStyle={Styles.accordionItem}
-                    customTitle={() =>
-                      <View style={Styles.accordionItemTitle}>
-                        <Text variant='headlineSmall'>Пробег</Text>
-                        <Text variant='headlineSmall'>{item.odometer}</Text>
-                      </View>}
-                    customBody={() =>
-                      <View style={Styles.itemDetail} >
-                        <View style={Styles.stackRow}>
-                          <Text variant='headlineSmall'>Спидометр начало</Text>
-                          <Text variant='headlineSmall'>{item.odometerStart}</Text>
-                        </View>
-                        <View style={Styles.stackRow}>
-                          <Text variant='headlineSmall'>Спидометр конец</Text>
-                          <Text variant='headlineSmall'>{item.odometerFinish}</Text>
-                        </View>
-                      </View>
-                    }
-                  />
-                </View>
-              }
-            />
+            <View style={{...Styles.stackRow, justifyContent: 'flex-end'}} >
+            <IconButton
+                icon="pencil-outline"
+                size={20}
+                onPress={() => console.log('Pressed')}
+              />
+              <IconButton
+                icon="delete-outline"
+                size={20}
+                onPress={() => console.log('Pressed')}
+              />
+            </View>
           </View>
         }
       />
@@ -191,6 +181,23 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingRight: 0,
   },
+  card: {
+    // width: '50%', 
+    //paddingBottom: '50%', 
+    //height: 0,
+    flex: 1,
+    marginVertical: 8,
+    marginRight: 8,
+  },
+  contentCard: {
+    // width: '50%', 
+    //paddingBottom: '50%', 
+    //height: 0,
+    flex: 1,
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+
   text: {
     paddingHorizontal: 0,
     paddingRight: 8,
@@ -211,7 +218,7 @@ const Styles = StyleSheet.create({
     padding: 0,
     height: 56,
     margin: 0,
-    backgroundColor: 'red'
+    //backgroundColor: 'red'
   },
 
   accordionItemTitle: {
@@ -219,7 +226,7 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 0,
-    
+
   },
 
   accordion: {
@@ -228,12 +235,12 @@ const Styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 12,
     //borderBottomWidth: 1,
-    
+
     padding: 0,
     paddingVertical: 8,
     paddingLeft: 16,
     paddingRight: 16,
-    
+
 
     //justifyContent: 'space-between'
   },
@@ -265,7 +272,7 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    //justifyContent: 'space-between',
+    //justifyContent: 'space-around',
     flex: 1
   }
   //   detail: {
