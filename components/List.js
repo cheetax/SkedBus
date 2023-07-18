@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
-import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
+import { AccordionList } from "react-native-accordion-list-view";
 import { Appbar, FAB, Text, Card, IconButton } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -241,20 +241,24 @@ const Styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     borderRadius: 12,
-    //borderBottomWidth: 1,
-
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#D3D3D3',
     padding: 0,
     paddingVertical: 8,
     paddingLeft: 16,
     paddingRight: 16,
-
-
+    shadowColor: '#D3D3D3',
+    shadowOffset: {width: 1, height:2}, 
+    //shadowOpacity: 0.2,
+    //shadowRadius: 3
+    
     //justifyContent: 'space-between'
   },
 
   accordionMain: {
-    marginHorizontal: 24,
-    paddingRight: 0,
+    marginHorizontal: 22,
+    paddingRight: 2,
   },
 
   accordionItem: {
