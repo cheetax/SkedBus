@@ -91,6 +91,10 @@ export default function Main({ navigation, route }) {
         dark={true}
         style={{
           backgroundColor: '#1976d2',
+          shadowColor: '#D3D3D3',
+          //shadowOffset: {width: 0, height:4}, 
+          //shadowOpacity: 0.2,
+          elevation: 10
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
@@ -182,7 +186,7 @@ const Styles = StyleSheet.create({
   main: {
     flex: 1,
     flexDirection: 'column',
-    //backgroundColor: 'green'
+    backgroundColor: '#f2f2f2',
   },
   item: {
     paddingHorizontal: 0,

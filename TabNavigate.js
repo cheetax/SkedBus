@@ -1,23 +1,53 @@
 import React from "react";
 import Main from "./components/List";
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
+import { Easing } from "react-native";
+import { BottomNavigation, useTheme } from 'react-native-paper';
 
 
-const Tab = createMaterialBottomTabNavigator();
 
-export default function TabNavigate() {
+export default function TabNavigate({ navigation, route }) {
+
+    const [index, setIndex] = React.useState(0);
+    const { isV3 } = useTheme();
+    //const [sceneAnimation, setSceneAnimation] = React.useState('shifting');
+    const [routes] = React.useState([
+        {
+            key: 'home',
+            title: 'Смены',
+            focusedIcon: 'home',
+            ...(isV3
+                ? { unfocusedIcon: 'home-outline' }
+                : {
+                    color: '#2962ff',
+                }),
+        },
+        {
+            key: 'statistic',
+            title: 'Статистика',
+            focusedIcon: 'chart-bar',
+            ...(isV3
+                ? {  }
+                : {
+                    color: '#2962ff',
+                }),
+        },
+
+    ]);
+
     return (
-        <Tab.Navigator>
-            <Tab.Screen
-                name="Смены"
-                tabBarIcon='home-outline'
-                
-                component={Main}
-            />
-            {/* <Tab.Screen
-                name="Stat"
-                component={Stat}
-                options={{ headerShown: false }}
-            /> */}
-        </Tab.Navigator>);
+        <BottomNavigation
+            style={{backgroundColor: 'f2f2f2'}}
+            //safeAreaInsets={{ bottom: insets.bottom }}
+            navigationState={{ index, routes }}
+            onIndexChange={setIndex}
+            labelMaxFontSizeMultiplier={2}
+            renderScene={BottomNavigation.SceneMap({
+                home: Main,
+                statistic: Main,
+            })}
+        //sceneAnimationEnabled={sceneAnimation !== undefined}
+        //sceneAnimationType={sceneAnimation}
+        //sceneAnimationEasing={Easing.bounce}
+        />
+    );
 }

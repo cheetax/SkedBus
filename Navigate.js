@@ -1,7 +1,7 @@
 import React from "react";
 //import { View, Text } from "react-native-web";
-//import Main from "./TabNavigate";
-import Main from './components/List'
+import Main from "./TabNavigate";
+//import Main from './components/List'
 import Form from "./components/Form";
 import { StatusBar } from "expo-status-bar";
 
