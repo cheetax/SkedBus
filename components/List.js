@@ -10,26 +10,30 @@ const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 var red = 0;
 
 export default function Main({ navigation, route }) {
-
+  //console.log(route)
+  
   useEffect(() => {
+    //console.log(listOfItems, 2);
     if (listOfItems.length !== 0) {
+      //console.log(listOfItems);
       setData({ listOfItems, settings });
     }
   }, [red, listOfItems]);
 
   useEffect(() => {
     if (route.params?.post) {
+      
       const post = JSON.parse(route.params.post);
-      (async () => await setListOfItems(list => [
+      //console.log(post)
+      setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
       ]
-      ))();
+      );
       setSettings(setting => setting = {
         priceFuel: post.priceFuel,
         averageFuel: post.averageFuel
       });
-
       red = red + 1;
     }
   }, [route.params?.post])
@@ -82,7 +86,7 @@ export default function Main({ navigation, route }) {
         icon="plus"
         size="medium"
         onPress={() => {
-          console.log(1)
+          //console.log(item)
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
       </FAB>
