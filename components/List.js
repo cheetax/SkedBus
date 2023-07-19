@@ -90,20 +90,20 @@ export default function Main({ navigation, route }) {
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
       </FAB>
-      <Appbar.Header
+      {/* <Appbar.Header
         elevated={true}
         dark={true}
         style={{
           backgroundColor: '#1976d2',
-          shadowColor: '#D3D3D3',
+          //shadowColor: '#D3D3D3',
           //shadowOffset: {width: 0, height:4}, 
           //shadowOpacity: 0.2,
-          elevation: 10
+          //elevation: 10
         }}
       >
         <Appbar.Action icon='menu' onPress={() => { }} color='white' />
         <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
-      </Appbar.Header>
+      </Appbar.Header> */}
       <AccordionList
         style={Styles.accordionMain}
         containerItemStyle={Styles.accordion}

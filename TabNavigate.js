@@ -1,7 +1,8 @@
 import React from "react";
 import List from "./components/List";
 import Chart from "./components/Chart";
-import { useTheme } from 'react-native-paper';
+import { useTheme, Appbar, Text } from 'react-native-paper';
+import { View } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 const Tab = createMaterialBottomTabNavigator();
@@ -11,7 +12,22 @@ export default function TabNavigate() {
     const { isV3 } = useTheme();    
 
    return (
-        <Tab.Navigator
+    <View>
+        <Appbar.Header
+        elevated={true}
+        dark={true}
+        style={{
+          backgroundColor: '#1976d2',
+          //shadowColor: '#D3D3D3',
+          //shadowOffset: {width: 0, height:4}, 
+          //shadowOpacity: 0.2,
+          //elevation: 10
+        }}
+      >
+        <Appbar.Action icon='menu' onPress={() => { }} color='white' />
+        <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
+      </Appbar.Header>
+      <Tab.Navigator
             initialRouteName="List"
             shifting={false}
             sceneAnimationEnabled={false}
@@ -37,6 +53,8 @@ export default function TabNavigate() {
                 }}
             />
         </Tab.Navigator>
+    </View>
+        
 
     );
 }
