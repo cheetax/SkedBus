@@ -84,11 +84,13 @@ const DatePicer = (props) => {
     values: { date },
     setFieldValue
   } = useFormikContext();
-  const onChange = (event, selected) => setFieldValue('date', dayjs(selected).format('DD.MM.YY'))
+  const onChange = (event, selected) => setFieldValue('date', selected)
 
   const showDatePicer = () => {
+    console.log(date)
+    console.log(props.date)
     DateTimePickerAndroid.open({
-      value: dayjs(date, 'DD.MM.YY').toDate(),
+      value: date,
       mode: 'date',
       onChange
     });
@@ -96,7 +98,7 @@ const DatePicer = (props) => {
   return (
     <TextInput
       {...props}
-      value={props.date}
+      value={dayjs(props.date).format('DD.MM.YY')}
       label='Дата'
       mode="outlined"
       editable={true}

@@ -1,53 +1,42 @@
 import React from "react";
 import Main from "./components/List";
-import { Easing } from "react-native";
-import { BottomNavigation, useTheme } from 'react-native-paper';
+import Chart from "./components/Chart";
+import { useTheme } from 'react-native-paper';
+import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+const Tab = createMaterialBottomTabNavigator();
 
+export default function TabNavigate() {
 
+    const { isV3 } = useTheme();    
 
-export default function TabNavigate({ navigation, route }) {
+   return (
+        <Tab.Navigator
+            initialRouteName="Main"
+            shifting={false}
+            sceneAnimationEnabled={false}
+        >
+            <Tab.Screen
+                name="Main"
+                component={Main}                
+                options={{       
+                    tabBarIcon : ({ focused, color }) => (
+                        <MaterialCommunityIcons name={ focused ? "home" : 'home-outline'} color={color}  size={26}/>
+                      ),             
+                    tabBarLabel: 'Смены',
+                }}
+            />
+            <Tab.Screen
+                name="Chart"
+                component={Chart}
+                options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <MaterialCommunityIcons name={ focused ? 'equalizer' : 'equalizer-outline'} color={color}  size={26}/>
+                      ), 
+                    tabBarLabel: 'Статистика'                   
+                }}
+            />
+        </Tab.Navigator>
 
-    const [index, setIndex] = React.useState(0);
-    const { isV3 } = useTheme();
-    //const [sceneAnimation, setSceneAnimation] = React.useState('shifting');
-    const [routes] = React.useState([
-        {
-            key: 'home',
-            title: 'Смены',
-            focusedIcon: 'home',
-            ...(isV3
-                ? { unfocusedIcon: 'home-outline' }
-                : {
-                    color: '#2962ff',
-                }),
-        },
-        {
-            key: 'statistic',
-            title: 'Статистика',
-            focusedIcon: 'chart-bar',
-            ...(isV3
-                ? {  }
-                : {
-                    color: '#2962ff',
-                }),
-        },
-
-    ]);
-
-    return (
-        <BottomNavigation
-            style={{backgroundColor: 'f2f2f2'}}
-            //safeAreaInsets={{ bottom: insets.bottom }}
-            navigationState={{ index, routes }}
-            onIndexChange={setIndex}
-            labelMaxFontSizeMultiplier={2}
-            renderScene={BottomNavigation.SceneMap({
-                home: Main,
-                statistic: Main,
-            })}
-        //sceneAnimationEnabled={sceneAnimation !== undefined}
-        //sceneAnimationType={sceneAnimation}
-        //sceneAnimationEasing={Easing.bounce}
-        />
     );
 }

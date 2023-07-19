@@ -45,7 +45,7 @@ export default function Main({ navigation, route }) {
     }
   )
   const item = {
-    date: dayjs().format('DD.MM.YY'),
+    date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
     averageFuel: settings.averageFuel,
     proceeds: '3000', //выручка
@@ -107,7 +107,7 @@ export default function Main({ navigation, route }) {
         data={listOfItems}
         customTitle={item =>
           <View style={Styles.accordionTitle} >
-            <Text style={Styles.text} variant='bodyLarge'>{item.date}</Text>
+            <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
             <View style={Styles.stackRow}>
               <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
               <Text style={Styles.text} variant='bodyMedium'>{item.profit}</Text>
