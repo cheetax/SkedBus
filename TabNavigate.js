@@ -1,15 +1,13 @@
 import React from "react";
 import List from "./components/List";
 import Chart from "./components/Chart";
-import { useTheme, Appbar, Text, Surface } from 'react-native-paper';
+import { Appbar, Text, Surface } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate() {
-    //console.log('навигация')
-    const { isV3 } = useTheme();
 
     return (
         <View style={Styles.main} >
