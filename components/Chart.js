@@ -13,6 +13,7 @@ const ViewChart = ( props ) => {
 export default function Chart({ navigation, route }) {
     const [value, setValue] = React.useState('day');
     const {listsOfItems} = useAppContext();
+    console.log(listsOfItems)
     return (
         <View style={Styles.main}>
             <SegmentedButtons
