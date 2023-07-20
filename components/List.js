@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
 import { AccordionList } from "react-native-accordion-list-view";
-import { Appbar, FAB, Text, Card, IconButton } from 'react-native-paper';
+import { FAB, Text, Card, IconButton } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -13,9 +13,7 @@ export default function Main({ navigation, route }) {
   //console.log(route)
   
   useEffect(() => {
-    //console.log(listOfItems, 2);
     if (listOfItems.length !== 0) {
-      //console.log(listOfItems);
       setData({ listOfItems, settings });
     }
   }, [red, listOfItems]);
@@ -24,7 +22,6 @@ export default function Main({ navigation, route }) {
     if (route.params?.post) {
       
       const post = JSON.parse(route.params.post);
-      //console.log(post)
       setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
@@ -86,24 +83,9 @@ export default function Main({ navigation, route }) {
         icon="plus"
         size="medium"
         onPress={() => {
-          //console.log(item)
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
-      </FAB>
-      {/* <Appbar.Header
-        elevated={true}
-        dark={true}
-        style={{
-          backgroundColor: '#1976d2',
-          //shadowColor: '#D3D3D3',
-          //shadowOffset: {width: 0, height:4}, 
-          //shadowOpacity: 0.2,
-          //elevation: 10
-        }}
-      >
-        <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-        <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
-      </Appbar.Header> */}
+      </FAB>      
       <AccordionList
         style={Styles.accordionMain}
         containerItemStyle={Styles.accordion}
@@ -183,7 +165,6 @@ const Styles = StyleSheet.create({
     zIndex: 1000,
     alignSelf: 'flex-end',
     bottom: 20,
-    // borderRadius: 48,
     right: 20,
     backgroundColor: '#1976d2',
   },
@@ -197,17 +178,11 @@ const Styles = StyleSheet.create({
     paddingRight: 0,
   },
   card: {
-    // width: '50%', 
-    //paddingBottom: '50%', 
-    //height: 0,
     flex: 1,
     marginVertical: 8,
     marginRight: 8,
   },
   contentCard: {
-    // width: '50%', 
-    //paddingBottom: '50%', 
-    //height: 0,
     flex: 1,
     alignItems: 'center',
     alignSelf: 'center'
@@ -225,8 +200,6 @@ const Styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    //alignSelf: 'center',
-    //alignItems: 'center',
     marginVertical: 0,
     paddingHorizontal: 0,
     marginBottom: 0,
@@ -258,10 +231,6 @@ const Styles = StyleSheet.create({
     paddingRight: 16,
     shadowColor: '#D3D3D3',
     shadowOffset: {width: 1, height:2}, 
-    //shadowOpacity: 0.2,
-    //shadowRadius: 3
-    
-    //justifyContent: 'space-between'
   },
 
   accordionMain: {
@@ -291,38 +260,6 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    //justifyContent: 'space-around',
     flex: 1
-  }
-  //   detail: {
-  //     fontSize: 18,
-  //     textAlign: 'left',
-  //     //marginLeft: 10,
-  //     paddingVertical: 5
-  //   },
-  //   header: {
-  //     fontSize: 21,
-  //     color: 'white'
-  //     //textAlign: 'center',
-  //     //paddingVertical: 20
-  //   },
-  //   profit: {
-  //     fontSize: 18,
-  //     //textAlign: 'left',
-  //     //paddingVertical: 15,
-  //     //backgroundColor: '#98FB98',
-  //     //paddingHorizontal: 10,
-  //   },
-  //   summary: {
-  //     fontSize: 18,
-  //     fontStyle: '400',
-  //     textAlign: 'left',
-  //   },
-  // iconAdd: {
-  //   position: 'fixed',
-  //   bottom: 16,
-  //   right: 16,
-  //textAlign: 'center',
-  //marginVertical: 15
-  //  }
+  }  
 })

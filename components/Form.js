@@ -87,8 +87,6 @@ const DatePicer = (props) => {
   const onChange = (event, selected) => setFieldValue('date', selected)
 
   const showDatePicer = () => {
-    //console.log(dayjs(date).toDate())
-    //console.log(props.date)
     DateTimePickerAndroid.open({
       value: dayjs(date).toDate(),
       mode: 'date',
@@ -113,8 +111,6 @@ export default function Form({ route, navigation }) {
       <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
-          //onsole.log(values, 'возврат из формы')
-          //values.date = dayjs(values.date, 'DD.MM.YY').format('DD.MM.YY');
           navigation.navigate({
             name: 'List',
             params: { post: JSON.stringify(values) },
