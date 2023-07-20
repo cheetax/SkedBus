@@ -75,6 +75,7 @@ export default function Main({ navigation, route }) {
 
   //const [listOfItems, setListOfItems] = useState([]);
   const {listOfItems, setListOfItems} = useAppContext();
+  console.log(listOfItems)
 
   return (
     <View style={Styles.main} >

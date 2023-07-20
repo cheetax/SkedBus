@@ -15,7 +15,7 @@ export function useAppContext() {
 
 export const useCreateAppContext = function (props) {
     const [listOfItems, setListOfItems] = useState([]);
-
+    console.log(listOfItems)
     return {
         listOfItems,
         setListOfItems

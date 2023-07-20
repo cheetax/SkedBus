@@ -5,12 +5,13 @@ import { Appbar, Text, Surface } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AppContextProvider } from "./providers/AppContextProvider";
+import { AppContextProvider, useAppContext } from "./providers/AppContextProvider";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
+    //const {listOfItems} = useAppContext()
     React.useEffect(() => {
-        console.log(route)
+        //console.log(listOfItems)
     })
 
 
