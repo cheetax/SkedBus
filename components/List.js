@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from 'react-native';
-import { AccordionList } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton } from 'react-native-paper';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
+import { FAB, Text, Card, IconButton, Surface } from 'react-native-paper';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -86,75 +86,85 @@ export default function Main({ navigation, route }) {
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
       </FAB>
-      <AccordionList
-        style={Styles.accordionMain}
-        containerItemStyle={Styles.accordion}
-        //contentContainerStyle={Styles.accordion}
+      <FlatList
         data={listOfItems}
-        customTitle={item =>
-          <View style={Styles.accordionTitle} >
-            <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
-            <View style={Styles.stackRow}>
-              <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{item.profit}</Text>
-              <Text style={Styles.text} variant='bodyMedium'>Доход на пробег</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{item.profitPerOdometer}</Text>
-            </View>
-          </View>
-        }
-        customBody={item =>
-          <View>
-            <View style={Styles.stackRow}>
-              <Card
-                style={{ ...Styles.card, backgroundColor: '#90EE90' }}
-                contentStyle={Styles.contentCard}
-                mode='outlined' >
-                <Card.Title
-                  //titleStyle={Styles.contentCard}
-                  title={
-                    <View >
-                      <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
-                    </View>}
-                />
-                <Card.Content>
-                  <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
-                </Card.Content>
-              </Card>
-              <Card
-                style={{ ...Styles.card, backgroundColor: '#F08080' }}
-                contentStyle={Styles.contentCard}
-                mode='outlined' >
-                <Card.Title title={
-                  <Text variant='bodyLarge'>Расходы</Text>
-                } />
-                <Card.Content>
-                  <Text variant='titleLarge'>{item.expenses}</Text>
-                </Card.Content>
-              </Card>
+        style={Styles.accordionMain}
+        renderItem={({ item, index, separators }) => (
+          <Surface style={Styles.surface} elevation={2} >
+            <AccordionItem
+              containerStyle={Styles.accordion}
 
-            </View>
-            <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
-              <IconButton
-                icon="pencil-outline"
-                //size={20}
-                onPress={() => {
-                  navigation.navigate('Form', { item: JSON.stringify(item) })
-                }}
-              />
-              <IconButton
-                icon="delete-outline"
-                //size={20}
-                onPress={() => {
-                  red = red + 1;
-                  setListOfItems((list) => [
-                    ...list.filter(listOfItems => listOfItems.key != item.key)
-                  ])
-                }}
-              />
-            </View>
-          </View>
-        }
-      />
+              customTitle={() =>
+                <View style={Styles.accordionTitle} >
+                  <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
+                  <View style={Styles.stackRow}>
+                    <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>{item.profit}</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>Доход на пробег</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>{item.profitPerOdometer}</Text>
+                  </View>
+                </View>
+              }
+              customBody={() =>
+                <View>
+                  <View style={Styles.stackRow}>
+                    <Card
+                      style={{ ...Styles.card, backgroundColor: '#90EE90' }}
+                      contentStyle={Styles.contentCard}
+                      mode='outlined' >
+                      <Card.Title
+                        //titleStyle={Styles.contentCard}
+                        title={
+                          <View >
+                            <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
+                          </View>}
+                      />
+                      <Card.Content>
+                        <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
+                      </Card.Content>
+                    </Card>
+                    <Card
+                      style={{ ...Styles.card, backgroundColor: '#F08080' }}
+                      contentStyle={Styles.contentCard}
+                      mode='outlined' >
+                      <Card.Title title={
+                        <Text variant='bodyLarge'>Расходы</Text>
+                      } />
+                      <Card.Content>
+                        <Text variant='titleLarge'>{item.expenses}</Text>
+                      </Card.Content>
+                    </Card>
+
+                  </View>
+                  <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
+                    <IconButton
+                      icon="pencil-outline"
+                      //size={20}
+                      onPress={() => {
+                        navigation.navigate('Form', { item: JSON.stringify(item) })
+                      }}
+                    />
+                    <IconButton
+                      icon="delete-outline"
+                      //size={20}
+                      onPress={() => {
+                        red = red + 1;
+                        setListOfItems((list) => [
+                          ...list.filter(listOfItems => listOfItems.key != item.key)
+                        ])
+                      }}
+                    />
+                  </View>
+                </View>
+              }
+            />
+          </Surface>
+
+        )}
+      >
+
+      </FlatList>
+
     </View >
   );
 }
@@ -218,24 +228,27 @@ const Styles = StyleSheet.create({
   },
 
   accordion: {
-    marginHorizontal: 0,
-    marginTop: 8,
-    marginBottom: 8,
-    borderRadius: 12,
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-    borderColor: '#D3D3D3',
+    flex: 1,
+    marginBottom: 0,
+    //borderRadius: 12,
     padding: 0,
     paddingVertical: 8,
     paddingLeft: 16,
     paddingRight: 16,
-    shadowColor: '#D3D3D3',
-    shadowOffset: { width: 1, height: 2 },
+  },
+
+  surface: {
+    flex: 1,
+    marginTop: 8,
+    //marginBottom: 8,
+    borderRadius: 12,
   },
 
   accordionMain: {
     marginHorizontal: 22,
-    paddingRight: 2,
+    paddingBottom: 10,
+    //paddingRight: 2,
+    marginBottom: 8
   },
 
   accordionItem: {

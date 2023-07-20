@@ -38,6 +38,7 @@ export default function TabNavigate() {
                             <MaterialCommunityIcons name={focused ? "home" : 'home-outline'} color={color} size={26} />
                         ),
                         tabBarLabel: 'Смены',
+                        headerShown: false
                     }}
                 />
                 <Tab.Screen
@@ -47,7 +48,8 @@ export default function TabNavigate() {
                         tabBarIcon: ({ focused, color }) => (
                             <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
                         ),
-                        tabBarLabel: 'Статистика'
+                        tabBarLabel: 'Статистика',
+                        headerShown: false
                     }}
                 />
             </Tab.Navigator>

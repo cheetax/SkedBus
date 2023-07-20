@@ -28,7 +28,7 @@ export default function Navigate({ }) {
                     />
                 </Stack.Navigator>
                 <StatusBar
-                    style="dark"
+                    style="auto"
                     translucent={true}
                     hidden={false}
                 />
