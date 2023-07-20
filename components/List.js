@@ -11,7 +11,7 @@ var red = 0;
 
 export default function Main({ navigation, route }) {
   //console.log(route)
-  
+
   useEffect(() => {
     if (listOfItems.length !== 0) {
       setData({ listOfItems, settings });
@@ -20,7 +20,7 @@ export default function Main({ navigation, route }) {
 
   useEffect(() => {
     if (route.params?.post) {
-      
+
       const post = JSON.parse(route.params.post);
       setListOfItems(list => [
         post,
@@ -85,7 +85,7 @@ export default function Main({ navigation, route }) {
         onPress={() => {
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
-      </FAB>      
+      </FAB>
       <AccordionList
         style={Styles.accordionMain}
         containerItemStyle={Styles.accordion}
@@ -133,8 +133,8 @@ export default function Main({ navigation, route }) {
               </Card>
 
             </View>
-            <View style={{...Styles.stackRow, justifyContent: 'flex-end'}} >
-            <IconButton
+            <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
+              <IconButton
                 icon="pencil-outline"
                 //size={20}
                 onPress={() => {
@@ -230,7 +230,7 @@ const Styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     shadowColor: '#D3D3D3',
-    shadowOffset: {width: 1, height:2}, 
+    shadowOffset: { width: 1, height: 2 },
   },
 
   accordionMain: {
@@ -261,5 +261,5 @@ const Styles = StyleSheet.create({
   stackRow: {
     flexDirection: 'row',
     flex: 1
-  }  
+  }
 })

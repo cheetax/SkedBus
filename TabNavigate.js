@@ -1,7 +1,7 @@
 import React from "react";
 import List from "./components/List";
 import Chart from "./components/Chart";
-import { useTheme, Appbar, Text } from 'react-native-paper';
+import { useTheme, Appbar, Text, Surface } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,21 +13,24 @@ export default function TabNavigate() {
 
     return (
         <View style={Styles.main} >
-            <Appbar.Header
-                elevated={true}
-                dark={true}
-                style={{
-                    backgroundColor: '#1976d2',
-                    height: 56
-                }}
-            >
-                <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-                <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
-            </Appbar.Header>
+            <Surface elevation={5} >
+                <Appbar.Header
+                    //elevated={true}
+                    //dark={true}
+                    style={{
+                        backgroundColor: '#1976d2',
+                        height: 56
+                    }}
+                >
+                    <Appbar.Action icon='menu' onPress={() => { }} color='white' />
+                    <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
+                </Appbar.Header>
+            </Surface>
+
             <Tab.Navigator
                 initialRouteName="List"
                 shifting={false}
-                sceneAnimationEnabled={false}
+                sceneAnimationEnabled={true}
             >
                 <Tab.Screen
                     name="List"
@@ -56,7 +59,7 @@ export default function TabNavigate() {
     );
 }
 
-const Styles = StyleSheet.create({    
+const Styles = StyleSheet.create({
     main: {
         flex: 1,
         flexDirection: 'column',
