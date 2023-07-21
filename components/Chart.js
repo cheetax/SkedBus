@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import dayjs from 'dayjs'
 
 const ViewChart = (props) => {
-    console.log(props.list)
+    // console.log(props.list)
     return (
         <View>
-            <Text>{props.mode}</Text>
+
+            <FlatList
+                data={props.list}
+                renderItem={({ item }) => (
+                    <View>
+                        <Text>{item.date}</Text>
+                        <Text>{item.proceeds}</Text>
+                    </View>)}
+            >
+
+            </FlatList>
         </View>)
 }
 
@@ -20,11 +30,10 @@ export default function Chart({ navigation, route }) {
     const [listChart, setListChart] = useState([])
 
     useEffect(() => {
+        const data = JSON.parse(JSON.stringify(listOfItems));
+        setListChart(data.reduce((acc, item) => {
 
-        setListChart(listOfItems.reduce((acc, item) => {
-
-
-            let result = acc.find(itemACC => {
+            var result = acc.find(itemACC => {
                 //console.log(dayjs(itemACC.date).isSame(dayjs(item.date), mode))
                 return dayjs(itemACC.date).isSame(dayjs(item.date), mode)
             })
@@ -32,6 +41,7 @@ export default function Chart({ navigation, route }) {
             if (result) {
 
                 //console.log(result)
+
                 result.proceeds = (Number(result.proceeds) + Number(item.proceeds)).toString();
                 //console.log(result)
                 acc = acc.filter(list => list.key != result.key)
@@ -45,7 +55,7 @@ export default function Chart({ navigation, route }) {
                 acc.push(item)
                 //console.log(JSON.stringify(acc))
             }
-
+            //console.log(listOfItems)
             return acc
 
         }, []))
