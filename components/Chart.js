@@ -14,7 +14,7 @@ const ViewChart = (props) => {
 
 export default function Chart({ navigation, route }) {
 
-    const { listOfItems, setListOfItems } = useAppContext();
+    const { listOfItems } = useAppContext();
     const [mode, setMode] = React.useState('day');
 
     const [listChart, setListChart] = useState([])
@@ -25,15 +25,15 @@ export default function Chart({ navigation, route }) {
 
 
             let result = acc.find(itemACC => {
-                console.log(dayjs(itemACC.date).isSame(dayjs(item.date), mode))
+                //console.log(dayjs(itemACC.date).isSame(dayjs(item.date), mode))
                 return dayjs(itemACC.date).isSame(dayjs(item.date), mode)
             })
             //console.log(result)
             if (result) {
 
-                console.log(result)
+                //console.log(result)
                 result.proceeds = (Number(result.proceeds) + Number(item.proceeds)).toString();
-                console.log(result)
+                //console.log(result)
                 acc = acc.filter(list => list.key != result.key)
                 acc.push(result)
 
