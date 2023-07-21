@@ -10,8 +10,7 @@ const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 var red = 0;
 
 export default function Main({ navigation, route }) {
-  //console.log(route)
-
+  
   useEffect(() => {
     if (listOfItems.length !== 0) {
       setData({ listOfItems, settings });
@@ -25,7 +24,8 @@ export default function Main({ navigation, route }) {
       setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
-      ]
+      ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+
       );
       setSettings(setting => setting = {
         priceFuel: post.priceFuel,
@@ -61,7 +61,6 @@ export default function Main({ navigation, route }) {
 
   const setData = (data) => {
     AsyncStorage.setItem('dataCalcCost', JSON.stringify(data));
-    //console.log(data);
   }
 
   const showData = async () => {
@@ -73,9 +72,7 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  //const [listOfItems, setListOfItems] = useState([]);
-  const {listOfItems, setListOfItems} = useAppContext();
-  console.log(listOfItems)
+  const { listOfItems, setListOfItems } = useAppContext();
 
   return (
     <View style={Styles.main} >

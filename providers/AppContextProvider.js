@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import dayjs from 'dayjs'
 
 const Context = React.createContext(null);
 
@@ -15,7 +16,7 @@ export function useAppContext() {
 
 export const useCreateAppContext = function (props) {
     const [listOfItems, setListOfItems] = useState([]);
-    console.log(listOfItems)
+    
     return {
         listOfItems,
         setListOfItems
