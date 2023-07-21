@@ -10,7 +10,7 @@ const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 var red = 0;
 
 export default function Main({ navigation, route }) {
-  
+
   useEffect(() => {
     if (listOfItems.length !== 0) {
       setData({ listOfItems, settings });
@@ -89,7 +89,7 @@ export default function Main({ navigation, route }) {
         data={listOfItems}
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
-          <Surface style={Styles.surface} elevation={2} >
+          <Surface style={Styles.surface} elevation={1} >
             <AccordionItem
               containerStyle={Styles.accordion}
 

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-const ViewChart = ( props ) => {
-    
+import dayjs from 'dayjs'
+
+const ViewChart = (props) => {
+    console.log(props.list)
     return (
         <View>
             <Text>{props.mode}</Text>
@@ -11,14 +13,49 @@ const ViewChart = ( props ) => {
 }
 
 export default function Chart({ navigation, route }) {
-    const [value, setValue] = React.useState('day');
-    const {listOfItems, setListOfItems} = useAppContext();
-    console.log(listOfItems)
+
+    const { listOfItems, setListOfItems } = useAppContext();
+    const [mode, setMode] = React.useState('day');
+
+    const [listChart, setListChart] = useState([])
+
+    useEffect(() => {
+
+        setListChart(listOfItems.reduce((acc, item) => {
+
+
+            let result = acc.find(itemACC => {
+                console.log(dayjs(itemACC.date).isSame(dayjs(item.date), mode))
+                return dayjs(itemACC.date).isSame(dayjs(item.date), mode)
+            })
+            //console.log(result)
+            if (result) {
+
+                console.log(result)
+                result.proceeds = (Number(result.proceeds) + Number(item.proceeds)).toString();
+                console.log(result)
+                acc = acc.filter(list => list.key != result.key)
+                acc.push(result)
+
+
+            }
+            else {
+                //console.log(JSON.stringify(acc))
+
+                acc.push(item)
+                //console.log(JSON.stringify(acc))
+            }
+
+            return acc
+
+        }, []))
+    }, [mode])
+
     return (
         <View style={Styles.main}>
             <SegmentedButtons
-                value={value}
-                onValueChange={setValue}
+                value={mode}
+                onValueChange={setMode}
                 buttons={[
                     {
                         value: 'day',
@@ -34,7 +71,7 @@ export default function Chart({ navigation, route }) {
                     },
                 ]}
             />
-            <ViewChart mode={value} />
+            <ViewChart mode={mode} list={listChart} />
         </View>
     )
 }
