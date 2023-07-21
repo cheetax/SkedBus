@@ -8,7 +8,6 @@ const ViewChart = (props) => {
     // console.log(props.list)
     return (
         <View>
-
             <FlatList
                 data={props.list}
                 renderItem={({ item }) => (
@@ -17,7 +16,6 @@ const ViewChart = (props) => {
                         <Text>{item.proceeds}</Text>
                     </View>)}
             >
-
             </FlatList>
         </View>)
 }
