@@ -1,24 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions  } from 'react-native';
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { BarChart } from "react-native-chart-kit";
 import dayjs from 'dayjs'
 
 const ViewChart = (props) => {
     // console.log(props.list)
+    const data = {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+            {
+                data: [830, 762, 810, 700, 723, 493, 677, 641, 509, 213, 335, 198, 29]
+            },
+        ],
+      };
     return (
         <View>
-            <FlatList
-                data={props.list}
-                renderItem={({ item }) => (
-                    <View>
-                        <Text>{item.date}</Text>
-                        <Text>{item.proceeds}</Text>
-                    </View>)}
-            >
-            </FlatList>
+            <BarChart
+                data={data}
+                width={Dimensions.get('window').width}
+                height={200}
+                yAxisSuffix={''}
+                //yAxisLabel={'$'}
+                chartConfig={{
+                    //backgroundGradientFrom: 'darkblue',
+                    //backgroundGradientTo: 'blue',
+                    color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
+                }}
+            />
         </View>)
 }
+
+const sum = (a, b) => (Number(a) + Number(b)).toString()
 
 export default function Chart({ navigation, route }) {
 
@@ -31,27 +45,21 @@ export default function Chart({ navigation, route }) {
         const data = JSON.parse(JSON.stringify(listOfItems));
         setListChart(data.reduce((acc, item) => {
 
-            var result = acc.find(itemACC => {
-                //console.log(dayjs(itemACC.date).isSame(dayjs(item.date), mode))
-                return dayjs(itemACC.date).isSame(dayjs(item.date), mode)
-            })
-            //console.log(result)
-            if (result) {
-
-                //console.log(result)
-
-                result.proceeds = (Number(result.proceeds) + Number(item.proceeds)).toString();
-                //console.log(result)
-                acc = acc.filter(list => list.key != result.key)
-                acc.push(result)
-
-
+            var result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode)
+            )
+            //console.log(dayjs(item.date).startOf(mode))
+            if (result) {                
+                result.proceeds = sum(result.proceeds, item.proceeds);
+                result.profit = sum(result.profit, item.profit);
+                result.odometer = sum(result.odometer, item.odometer);
+                result.expenses = sum(result.expenses, item.expenses);
+                result.profitPerOdometer = (Number(result.profit)/Number(result.odometer)).toString()
             }
             else {
-                //console.log(JSON.stringify(acc))
 
-                acc.push(item)
-                //console.log(JSON.stringify(acc))
+                acc.push({
+                    period: dayjs(item.date).startOf(mode).toString() + '-' + dayjs(item.date).endOf(mode).toString(),
+                    ...item})
             }
             //console.log(listOfItems)
             return acc
