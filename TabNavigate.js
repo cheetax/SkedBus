@@ -1,35 +1,47 @@
 import React, { useState, useEffect } from "react";
 import List from "./components/List";
 import Chart from "./components/Chart";
-import { Appbar, Text, Surface } from 'react-native-paper';
+import { Appbar, Text, Surface, Card, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AppContextProvider, useAppContext } from "./providers/AppContextProvider";
+import { AppContextProvider } from "./providers/AppContextProvider";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
     //const {listOfItems} = useAppContext()
+    const theme = useTheme()
+    console.log(theme)
     React.useEffect(() => {
         //console.log(listOfItems)
     })
 
-
     return (
         <View style={Styles.main} >
-            <Surface elevation={5} >
+            <Card
+                elevation={5}
+                mode="elevated"
+            >
                 <Appbar.Header
-                    //elevated={true}
-                    //dark={true}
-                    style={{
-                        backgroundColor: '#1976d2',
+                    elevated={true}
+                    dark={true}
+                    theme={theme}
+                    
+                    /* style={{
+                        //   backgroundColor: '#1976d2',
                         height: 56
-                    }}
+                    }} */
                 >
                     <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-                    <Appbar.Content title={<Text style={{ color: 'white' }} variant='titleLarge'>Учет работы таксиста</Text>} color='white' />
+                    <Appbar.Content title={
+                        <Text
+                            //style={{ color: 'white' }}
+                            variant='titleLarge'>Учет работы таксиста {theme.dark.toString()}
+                        </Text>}
+                    //color='white'
+                    />
                 </Appbar.Header>
-            </Surface>
+            </Card>
             <AppContextProvider>
                 <Tab.Navigator
                     initialRouteName="List"

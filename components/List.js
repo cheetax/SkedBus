@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, Surface } from 'react-native-paper';
+import { FAB, Text, Card, IconButton } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -89,7 +89,7 @@ export default function Main({ navigation, route }) {
         data={listOfItems}
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
-          <Surface style={Styles.surface} elevation={1} >
+          <Card style={Styles.surface} elevation={1} >
             <AccordionItem
               containerStyle={Styles.accordion}
 
@@ -157,7 +157,7 @@ export default function Main({ navigation, route }) {
                 </View>
               }
             />
-          </Surface>
+          </Card>
 
         )}
       >

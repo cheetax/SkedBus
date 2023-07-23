@@ -3,7 +3,7 @@ import React from "react";
 import Main from "./TabNavigate";
 //import Main from './components/List'
 import Form from "./components/Form";
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, useTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,8 +12,11 @@ import { NavigationContainer } from "@react-navigation/native";
 const Stack = createNativeStackNavigator();
 
 export default function Navigate({ }) {
+    const theme = useTheme()
+   // theme.dark=true
+    //console.log(theme)
     return (
-        <PaperProvider>
+        <PaperProvider theme={theme}>
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen
