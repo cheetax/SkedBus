@@ -5,7 +5,7 @@ import { Appbar, Text, Surface, Card, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AppContextProvider } from "./providers/AppContextProvider";
+
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
@@ -18,19 +18,20 @@ export default function TabNavigate({ navigation, route }) {
 
     return (
         <View style={Styles.main} >
+
             <Card
                 elevation={5}
                 mode="elevated"
             >
                 <Appbar.Header
                     elevated={true}
-                    dark={true}
+                    //dark={true}
                     theme={theme}
-                    
-                    /* style={{
-                        //   backgroundColor: '#1976d2',
+
+                    style={{
+                        backgroundColor: theme.colors.onSurface,
                         height: 56
-                    }} */
+                    }}
                 >
                     <Appbar.Action icon='menu' onPress={() => { }} color='white' />
                     <Appbar.Content title={
@@ -42,37 +43,35 @@ export default function TabNavigate({ navigation, route }) {
                     />
                 </Appbar.Header>
             </Card>
-            <AppContextProvider>
-                <Tab.Navigator
-                    initialRouteName="List"
-                    shifting={false}
-                    sceneAnimationEnabled={true}
-                >
-                    <Tab.Screen
-                        name="List"
-                        component={List}
-                        options={{
-                            tabBarIcon: ({ focused, color }) => (
-                                <MaterialCommunityIcons name={focused ? "home" : 'home-outline'} color={color} size={26} />
-                            ),
-                            tabBarLabel: 'Смены',
-                            headerShown: false
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Chart"
-                        component={Chart}
-                        options={{
-                            tabBarIcon: ({ focused, color }) => (
-                                <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
-                            ),
-                            tabBarLabel: 'Статистика',
-                            headerShown: false
-                        }}
-                    />
-                </Tab.Navigator>
-            </AppContextProvider>
 
+            <Tab.Navigator
+                initialRouteName="List"
+                shifting={false}
+                sceneAnimationEnabled={true}
+            >
+                <Tab.Screen
+                    name="List"
+                    component={List}
+                    options={{
+                        tabBarIcon: ({ focused, color }) => (
+                            <MaterialCommunityIcons name={focused ? "home" : 'home-outline'} color={color} size={26} />
+                        ),
+                        tabBarLabel: 'Смены',
+                        headerShown: false
+                    }}
+                />
+                <Tab.Screen
+                    name="Chart"
+                    component={Chart}
+                    options={{
+                        tabBarIcon: ({ focused, color }) => (
+                            <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
+                        ),
+                        tabBarLabel: 'Статистика',
+                        headerShown: false
+                    }}
+                />
+            </Tab.Navigator>
         </View>
 
 

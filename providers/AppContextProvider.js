@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { useTheme } from "react-native-paper";
 import dayjs from 'dayjs'
 
 const Context = React.createContext(null);
@@ -16,9 +17,14 @@ export function useAppContext() {
 
 export const useCreateAppContext = function (props) {
     const [listOfItems, setListOfItems] = useState([]);
+    const [isDarkTheme, setIsDarkTheme] = useState(true)
+
+    const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
     
     return {
         listOfItems,
-        setListOfItems
+        setListOfItems,
+        isDarkTheme, 
+        toggleTheme
     };
 }
