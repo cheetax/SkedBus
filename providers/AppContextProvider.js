@@ -17,14 +17,19 @@ export function useAppContext() {
 
 export const useCreateAppContext = function (props) {
     const [listOfItems, setListOfItems] = useState([]);
-    const [isDarkTheme, setIsDarkTheme] = useState(true)
+    const [isDarkTheme, setIsDarkTheme] = useState(true);
+    const [isStartScroll, setIsStartScroll] = useState(false);
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
+
+    const startScroll = (a) => setIsStartScroll(a !== 0)
     
     return {
         listOfItems,
         setListOfItems,
         isDarkTheme, 
-        toggleTheme
+        toggleTheme,
+        isStartScroll,
+        startScroll
     };
 }

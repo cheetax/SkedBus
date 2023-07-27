@@ -5,13 +5,14 @@ import { Appbar, Text, Surface, Card, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAppContext } from "./providers/AppContextProvider";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
-    //const {listOfItems} = useAppContext()
+    const { isStartScroll } = useAppContext()
     const theme = useTheme()
-    console.log(theme)
+    //console.log(isStartScroll)
     React.useEffect(() => {
         //console.log(listOfItems)
     })
@@ -19,30 +20,23 @@ export default function TabNavigate({ navigation, route }) {
     return (
         <View style={Styles.main} >
 
-            <Card
-                elevation={5}
-                mode="elevated"
-            >
-                <Appbar.Header
-                    elevated={true}
-                    //dark={true}
-                    theme={theme}
 
-                    style={{
-                        backgroundColor: theme.colors.onSurface,
-                        height: 56
-                    }}
-                >
-                    <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-                    <Appbar.Content title={
-                        <Text
-                            //style={{ color: 'white' }}
-                            variant='titleLarge'>Учет работы таксиста {theme.dark.toString()}
-                        </Text>}
-                    //color='white'
-                    />
-                </Appbar.Header>
-            </Card>
+            <Appbar.Header
+                //elevated={true}
+                dark={theme.dark}
+                mode="small"
+                theme={theme}
+                style={{
+                    backgroundColor: isStartScroll ? theme.colors.elevation.level2 : theme.colors.surface
+                }}
+            >
+                <Appbar.Action icon='menu' onPress={() => { }}  />
+                <Appbar.Content title={
+                    <Text
+                        variant='titleLarge'>Учет работы таксиста
+                    </Text>}
+                />
+            </Appbar.Header>
 
             <Tab.Navigator
                 initialRouteName="List"

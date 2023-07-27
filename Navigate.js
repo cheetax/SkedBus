@@ -17,7 +17,7 @@ export default function Navigate({ }) {
     const { isDarkTheme } = useAppContext();
     const theme = isDarkTheme ? MD3DarkTheme : MD3LightTheme;
     // theme.dark=true
-    console.log(theme)
+    //console.log(isStartScroll)
     return (
 
         <PaperProvider theme={theme}>

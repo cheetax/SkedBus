@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton } from 'react-native-paper';
+import { FAB, Text, Card, IconButton, useTheme } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
@@ -72,13 +72,15 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  const { listOfItems, setListOfItems } = useAppContext();
+  const { listOfItems, setListOfItems, isStartScroll, startScroll } = useAppContext();
+  const theme = useTheme();
 
   return (
     <View style={Styles.main} >
       <FAB
         style={Styles.fab}
-        color="white"
+        theme={theme}
+        //color="white"
         icon="plus"
         size="medium"
         onPress={() => {
@@ -86,10 +88,15 @@ export default function Main({ navigation, route }) {
         }}>
       </FAB>
       <FlatList
+        onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOfItems}
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
-          <Card style={Styles.surface} elevation={1} >
+          <Card
+            theme={theme}
+            style={Styles.surface}
+          //elevation={1} 
+          >
             <AccordionItem
               containerStyle={Styles.accordion}
 
@@ -109,10 +116,8 @@ export default function Main({ navigation, route }) {
                   <View style={Styles.stackRow}>
                     <Card
                       style={{ ...Styles.card, backgroundColor: '#90EE90' }}
-                      contentStyle={Styles.contentCard}
                       mode='outlined' >
                       <Card.Title
-                        //titleStyle={Styles.contentCard}
                         title={
                           <View >
                             <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
@@ -124,7 +129,6 @@ export default function Main({ navigation, route }) {
                     </Card>
                     <Card
                       style={{ ...Styles.card, backgroundColor: '#F08080' }}
-                      contentStyle={Styles.contentCard}
                       mode='outlined' >
                       <Card.Title title={
                         <Text variant='bodyLarge'>Расходы</Text>
@@ -145,7 +149,6 @@ export default function Main({ navigation, route }) {
                     />
                     <IconButton
                       icon="delete-outline"
-                      //size={20}
                       onPress={() => {
                         red = red + 1;
                         setListOfItems((list) => [
@@ -161,7 +164,6 @@ export default function Main({ navigation, route }) {
 
         )}
       >
-
       </FlatList>
 
     </View >
@@ -173,14 +175,14 @@ const Styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1000,
     alignSelf: 'flex-end',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#1976d2',
+    bottom: 16,
+    right: 16,
+    //backgroundColor: '#1976d2',
   },
   main: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#f2f2f2',
+    //backgroundColor: '#f2f2f2',
   },
   item: {
     paddingHorizontal: 0,
@@ -201,10 +203,7 @@ const Styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingRight: 8,
   },
-  itemDetail: {
-    paddingRight: 32,
-    paddingTop: 16
-  },
+
   accordionTitle: {
     flex: 1,
     flexDirection: 'column',
@@ -218,56 +217,24 @@ const Styles = StyleSheet.create({
     //backgroundColor: 'red'
   },
 
-  accordionItemTitle: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 0,
-
-  },
-
   accordion: {
     flex: 1,
-    marginBottom: 0,
-    //borderRadius: 12,
     padding: 0,
-    paddingVertical: 8,
-    paddingLeft: 16,
-    paddingRight: 16,
+    backgroundColor: 'none'
   },
 
   surface: {
     flex: 1,
     marginTop: 8,
-    //marginBottom: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     borderRadius: 12,
   },
 
   accordionMain: {
     marginHorizontal: 22,
     paddingBottom: 10,
-    //paddingRight: 2,
     marginBottom: 8
-  },
-
-  accordionItem: {
-    marginHorizontal: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    padding: 0,
-    paddingTop: 16,
-    paddingRight: 0,
-    marginBottom: 0,
-    borderRadius: 0,
-  },
-
-  accordionDetail: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginVertical: 0,
-    marginRight: 0,
-    paddingVertical: 0
   },
 
   stackRow: {
