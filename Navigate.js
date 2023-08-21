@@ -21,8 +21,8 @@ export default function Navigate({ }) {
     return (
 
         <PaperProvider theme={theme}>
-            <NavigationContainer>
-                <Stack.Navigator>
+            <NavigationContainer theme={theme} >
+                <Stack.Navigator  >
                     <Stack.Screen
                         name="Main"
                         component={Main}

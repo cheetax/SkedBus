@@ -1,13 +1,15 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
-import { Appbar, IconButton, TextInput, Text } from 'react-native-paper';
+import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
+
+
 
 const ViewDataField = (props) => {
   const {
@@ -105,6 +107,7 @@ const DatePicer = (props) => {
 }
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
+  const theme = useTheme();
   //console.log(route)
   return (
     <View style={Styles.main} >
@@ -123,28 +126,23 @@ export default function Form({ route, navigation }) {
           <View style={Styles.main} >
 
             <Appbar.Header
-              elevated={true}
-              dark={true}
-              style={{
-                backgroundColor: '#1976d2',
-                height: 56
-              }}
+              //elevated={true}
+              //dark={theme.dark}
+              //theme={theme}              
+              
             >
               <Appbar.Action
                 //style={{marginHorizontal: 16}}
                 icon='close'
                 onPress={() => navigation.goBack()}
-                color='white' />
+                //color='white' 
+                />
               <Appbar.Content
                 title={
-                  <Text
-                    style={{
-                      color: 'white',
-                      //alignSelf: 'center'
-                    }}
+                  <Text                    
                     variant='titleLarge'>Новая смена</Text>}
               />
-              <Appbar.Action icon='check' onPress={handleSubmit} color='white' />
+              <Appbar.Action icon='check' onPress={handleSubmit} />
             </Appbar.Header>
             <ScrollView style={Styles.forma} >
               <DatePicer date={values.date} style={Styles.inputField} />
