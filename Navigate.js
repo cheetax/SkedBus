@@ -7,10 +7,12 @@ import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-na
 import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "./providers/AppContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function Navigate({ }) {
     //const theme = useTheme()
@@ -22,6 +24,14 @@ export default function Navigate({ }) {
 
         <PaperProvider theme={theme}>
             <NavigationContainer theme={theme} >
+                <Drawer.Navigator
+                    // screenOptions={{
+                    //     drawerStyle: collapsed && {
+                    //         width: collapsedDrawerWidth,
+                    //     },
+                    // }}
+                    drawerContent={() => <DrawerContent />}>
+                </Drawer.Navigator>
                 <Stack.Navigator  >
                     <Stack.Screen
                         name="Main"
