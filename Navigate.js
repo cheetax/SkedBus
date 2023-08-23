@@ -9,6 +9,7 @@ import { useAppContext } from "./providers/AppContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
+import DrawerContent from "./components/drawerItem";
 
 
 const Stack = createNativeStackNavigator();
