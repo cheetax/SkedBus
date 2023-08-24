@@ -1,16 +1,29 @@
 import React from "react";
-import { Formik, useField, useFormikContext } from "formik";
-import { Close, Done } from '@mui/icons-material';
-import { TextField, Box, AppBar, Toolbar, IconButton, Stack, Typography, } from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { Formik, useFormikContext, useField } from "formik";
+import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { ruRU } from '@mui/x-date-pickers/locales';
+
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+dayjs.extend(customParseFormat)
+
+
 
 const ViewDataField = (props) => {
   const {
-    values: { expenses, proceeds, profit, odometer, priceFuel, averageFuel, odometerFinish, odometerStart },
+    values: {
+      expenses,
+      proceeds,
+      profit,
+      profitPerOdometer,
+      odometer,
+      priceFuel,
+      averageFuel,
+      odometerFinish,
+      odometerStart 
+    },
     setFieldValue
   } = useFormikContext();
 
@@ -22,14 +35,17 @@ const ViewDataField = (props) => {
     }
     if (odometerFinish && odometerStart) {
       setFieldValue('odometer', odometerFinish - odometerStart);
+      setFieldValue('profitPerOdometer', profit / odometer)
     }
     if (odometer && priceFuel && averageFuel) {
       setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
+    
     }
   }, [
     proceeds,
     expenses,
     profit,
+    profitPerOdometer,
     odometerFinish,
     odometerStart,
     odometer,
@@ -40,39 +56,66 @@ const ViewDataField = (props) => {
   ]);
 
   return (
-    <Stack sx={{ p: 1 }} spacing={2}>
-      <Stack direction='row' spacing={1}>
-        <Typography {...props} {...field}>Пробег:</Typography>
-        <Typography {...props} {...field}>{odometer}</Typography>
-      </Stack>
+    <View style={Styles.main} >
+      <View style={Styles.stackRow} >
+        <Text {...props} {...field}>Пробег:</Text>
+        <Text {...props} {...field}>{odometer}</Text>
+      </View>
 
-      <Stack direction='row' spacing={1}>
-        <Typography {...props} {...field}>Затраты:</Typography>
-        <Typography {...props} {...field}>{expenses}</Typography>
-      </Stack>
+      <View style={Styles.stackRow} >
+        <Text {...props} {...field}>Затраты:</Text>
+        <Text {...props} {...field}>{expenses}</Text>
+      </View>
 
-      <Stack direction='row' spacing={1}>
-        <Typography {...props} {...field}>Доход:</Typography>
-        <Typography {...props} {...field}>{profit}</Typography>
-      </Stack>
+      <View style={Styles.stackRow} >
+        <Text {...props} {...field}>Доход:</Text>
+        <Text {...props} {...field}>{profit}</Text>
+      </View>
+      <View style={Styles.stackRow} >
+        <Text {...props} {...field}>Доход на пробег:</Text>
+        <Text {...props} {...field}>{profitPerOdometer}</Text>
+      </View>
 
-    </Stack>
+    </View>
 
   )
 }
 
+const DatePicer = (props) => {
+  const {
+    values: { date },
+    setFieldValue
+  } = useFormikContext();
+  const onChange = (event, selected) => setFieldValue('date', selected)
+
+  const showDatePicer = () => {
+    DateTimePickerAndroid.open({
+      value: dayjs(date).toDate(),
+      mode: 'date',
+      onChange
+    });
+  }
+  return (
+    <TextInput
+      {...props}
+      value={dayjs(props.date).format('DD.MM.YY')}
+      label='Дата'
+      mode="outlined"
+      editable={true}
+      onFocus={() => showDatePicer()} />
+  )
+}
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
+  const theme = useTheme();
+  //console.log(route)
   return (
-    <Box bgcolor={'white'} sx={{ flexGrow: 1 }} >
-
-      <Toolbar sx={{ pb: 1 }} />
+    <View style={Styles.main} >
       <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
-          values.date = dayjs(values.date, 'DD.MM.YY').format('DD.MM.YY');
           navigation.navigate({
-            name: 'Main',
+            name: 'List',
             params: { post: JSON.stringify(values) },
             merge: true,
           });
@@ -80,79 +123,102 @@ export default function Form({ route, navigation }) {
         onChange={(values) => { console.log(values) }}
       >
         {({ values, handleSubmit, handleChange, handleBlur, setFieldValue }) => (
-          <Box >
-            <AppBar position='fixed'>
-              <Toolbar sx={{ justifyContent: 'space-between' }} >
-                <IconButton
-                  edge='start'
-                  color='inherit'
-                  aria-label='menu'
-                  onClick={() => { navigation.goBack() }} >
-                  <Close />
-                </IconButton>
-                <Typography variant="h6" >Новая смена</Typography>
-                <IconButton
-                  edge='end'
-                  color='inherit'
-                  aria-label='done'
-                  onClick={
-                    handleSubmit
-                  } >
-                  <Done />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
-            <Stack sx={{ p: 1 }} spacing={2} >
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                adapterLocale='ru'
-                localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
-              >
-                <DatePicker
-                  value={dayjs(values.date, 'DD.MM.YY')}
-                  label='Дата'
-                  onChange={(value) => setFieldValue('date', value)}
-                />
-                <TextField
-                  value={values.priceFuel}
-                  type="number"
-                  onChange={handleChange('priceFuel')}
-                  label='Стоимость топлива'
-                  variant="outlined" />
-                <TextField
-                  value={values.averageFuel}
-                  type="number"
-                  onChange={handleChange('averageFuel')}
-                  label='Средний расход'
-                  variant="outlined" />
-                <TextField
-                  value={values.proceeds}
-                  type="number"
-                  onChange={handleChange('proceeds')}
-                  label='Выручка'
-                  variant="outlined" />
-                <TextField
-                  value={values.odometerStart}
-                  type="number"
-                  minRows={0}
-                  onChange={handleChange('odometerStart')}
-                  label='Спидометр на начало'
-                  variant="outlined" />
-                <TextField
-                  value={values.odometerFinish}
-                  type="number"
-                  minRows={0}
-                  onChange={handleChange('odometerFinish')}
-                  label='Спидометр на конец'
-                  variant="outlined" />
-                <ViewDataField name='viewData' variant='h6' />
-              </LocalizationProvider>
-            </Stack>
-          </Box>
-        )}
-      </Formik>
+          <View style={Styles.main} >
 
-    </Box>
+            <Appbar.Header
+              //elevated={true}
+              //dark={theme.dark}
+              //theme={theme}              
+              
+            >
+              <Appbar.Action
+                //style={{marginHorizontal: 16}}
+                icon='close'
+                onPress={() => navigation.goBack()}
+                //color='white' 
+                />
+              <Appbar.Content
+                title={
+                  <Text                    
+                    variant='titleLarge'>Новая смена</Text>}
+              />
+              <Appbar.Action icon='check' onPress={handleSubmit} />
+            </Appbar.Header>
+            <ScrollView style={Styles.forma} >
+              <DatePicer date={values.date} style={Styles.inputField} />
+              <TextInput
+                style={Styles.inputField}
+                value={values.priceFuel}
+                //type="number"
+                onChangeText={handleChange('priceFuel')}
+                label='Стоимость топлива'
+                mode="outlined" />
+              <TextInput
+                style={Styles.inputField}
+                value={values.averageFuel}
+                //type="number"
+                onChangeText={handleChange('averageFuel')}
+                label='Средний расход'
+                mode="outlined" />
+              <TextInput
+                style={Styles.inputField}
+                value={values.proceeds}
+                //type="number"
+                onChangeText={handleChange('proceeds')}
+                label='Выручка'
+                mode="outlined" />
+              <TextInput
+                style={Styles.inputField}
+                value={values.odometerStart}
+                //type="number"
+                minRows={0}
+                onChangeText={handleChange('odometerStart')}
+                label='Спидометр на начало'
+                mode="outlined" />
+              <TextInput
+                style={Styles.inputField}
+                value={values.odometerFinish}
+                //type="number"
+                //minRows={0}
+                onChangeText={handleChange('odometerFinish')}
+                label='Спидометр на конец'
+                mode="outlined" />
+
+              <ViewDataField name='viewData' variant='headlineMedium' />
+
+            </ScrollView>
+          </View>)
+        }
+      </Formik >
+
+
+    </View >
 
   );
 }
+
+const Styles = StyleSheet.create({
+
+  main: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  forma: {
+    flex: 1,
+    flexDirection: 'column',
+    marginHorizontal: 24
+  },
+  text: {
+    paddingHorizontal: 0,
+    paddingRight: 8,
+  },
+  inputField: {
+    marginTop: 12,
+    height: 56
+  },
+  stackRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1
+  }
+})

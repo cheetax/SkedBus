@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, View, StyleSheet } from 'react-native';
-import { Stack, Flex } from "native-base";
-import { Appbar, List, FAB, IconButton, MD3Elevation, Text } from 'react-native-paper';
-
+import { View, StyleSheet, FlatList } from 'react-native';
+import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
+import { FAB, Text, Card, IconButton, useTheme } from 'react-native-paper';
+import { useAppContext } from "../providers/AppContextProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 
@@ -19,17 +19,18 @@ export default function Main({ navigation, route }) {
 
   useEffect(() => {
     if (route.params?.post) {
+
       const post = JSON.parse(route.params.post);
-      (async () => await setListOfItems(list => [
+      setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
-      ]
-      ))();
+      ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+
+      );
       setSettings(setting => setting = {
         priceFuel: post.priceFuel,
         averageFuel: post.averageFuel
       });
-
       red = red + 1;
     }
   }, [route.params?.post])
@@ -40,26 +41,26 @@ export default function Main({ navigation, route }) {
 
   const [settings, setSettings] = useState(
     {
-      priceFuel: 46,
-      averageFuel: 9.5
+      priceFuel: '46',
+      averageFuel: '9.5'
     }
   )
   const item = {
-    date: dayjs().format('DD.MM.YY'),
+    date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
     averageFuel: settings.averageFuel,
-    proceeds: 3000, //выручка
-    odometerStart: 0, //спидометр старт
-    odometerFinish: 0, //спидометр финиш
-    profit: 2000,
-    odometer: 0,     //пробег
-    expenses: 0,     //затраты
+    proceeds: '3000', //выручка
+    odometerStart: '0', //спидометр старт
+    odometerFinish: '0', //спидометр финиш
+    profit: '2000', //доход
+    profitPerOdometer: '0', //доход на километр
+    odometer: '0',     //пробег
+    expenses: '0',     //затраты
     key: keyGenerator()
   };
 
   const setData = (data) => {
     AsyncStorage.setItem('dataCalcCost', JSON.stringify(data));
-    //console.log(data);
   }
 
   const showData = async () => {
@@ -71,120 +72,101 @@ export default function Main({ navigation, route }) {
     }
   }
 
-  const [listOfItems, setListOfItems] = useState([{ ...item }]);
-
+  const { listOfItems, setListOfItems, isStartScroll, startScroll } = useAppContext();
+  const theme = useTheme();
 
   return (
     <View style={Styles.main} >
       <FAB
         style={Styles.fab}
-        color="white"
+        theme={theme}
+        //color="white"
         icon="plus"
-        size="large"
+        size="medium"
         onPress={() => {
-          console.log(1)
           navigation.navigate('Form', { item: JSON.stringify(item) })
         }}>
       </FAB>
-      <Appbar.Header
-        elevated={true}
-        dark={true}
-        style={{
-          backgroundColor: '#1976d2',
-
-        }}
-      >
-        <Appbar.Action icon='menu' onPress={() => { }} color='white' />
-        <Appbar.Content title='Учет работы таксиста' color='white' />
-      </Appbar.Header>
-      <FlatList data={listOfItems} renderItem={({ item }) =>
-        <List.Section>
-          <List.Accordion
-            style={Styles.accordion}
-            //expandIcon={<ExpandMoreIcon />}
-            //aria-controls="panel1a-content"
-            // id='panel1a-header'
-            title={
-              <Stack direction="row" space={1} justifyContent={"space-between"} >
-                <Text style={Styles.item} variant='headlineLarge'>{item.date}</Text>
-
-                <Stack direction="row" space={3}>
-                  <Text style={Styles.item} variant='headlineLarge'>Доход</Text>
-                  <Text style={Styles.item} variant='headlineLarge'>{item.profit}</Text>
-                </Stack>
-
-              </Stack>}
+      <FlatList
+        onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
+        data={listOfItems}
+        style={Styles.accordionMain}
+        renderItem={({ item, index, separators }) => (
+          <Card
+            theme={theme}
+            style={Styles.surface}
+          //elevation={1} 
           >
-            <List.Item
-              style={  { backgroundColor: 'green', ...Styles.accordion}}
-              title={
-                <View style={{ backgroundColor: 'red', ...Styles.accordionDetail}}>
-                  <View style={{ backgroundColor: 'blue', ...Styles.accordionDetail}} >
-                    <View style={Styles.stackRow}>
-                      <Text style={Styles.item} variant='headlineSmall'>Выручка</Text>
-                      <Text style={Styles.item} variant='headlineSmall'>{item.proceeds}</Text>
-                    </View>
-                    <View style={Styles.stackRow} >
-                      <Text variant='headlineSmall'>Цена топлива</Text>
-                      <Text variant='headlineSmall'>{item.priceFuel}</Text>
-                    </View>
+            <AccordionItem
+              containerStyle={Styles.accordion}
 
-                    <View style={Styles.stackRow}>
-                      <Text variant='headlineSmall'>Средний расход</Text>
-                      <Text variant='headlineSmall'>{item.averageFuel}</Text>
-                    </View>
-                  </View>
-
+              customTitle={() =>
+                <View style={Styles.accordionTitle} >
+                  <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
                   <View style={Styles.stackRow}>
-                    <Text variant='headlineSmall'>Пробег</Text>
-                    <Text variant='headlineSmall'>{item.odometer}</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>Доход</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>{item.profit}</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>Доход на пробег</Text>
+                    <Text style={Styles.text} variant='bodyMedium'>{item.profitPerOdometer}</Text>
                   </View>
-
+                </View>
+              }
+              customBody={() =>
+                <View>
                   <View style={Styles.stackRow}>
-                    <Text variant='headlineSmall'>Расходы</Text>
-                    <Text variant='headlineSmall'>{item.expenses}</Text>
+                    <Card
+                      style={{ ...Styles.card, backgroundColor: '#90EE90' }}
+                      mode='outlined' >
+                      <Card.Title
+                        title={
+                          <View >
+                            <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
+                          </View>}
+                      />
+                      <Card.Content>
+                        <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
+                      </Card.Content>
+                    </Card>
+                    <Card
+                      style={{ ...Styles.card, backgroundColor: '#F08080' }}
+                      mode='outlined' >
+                      <Card.Title title={
+                        <Text variant='bodyLarge'>Расходы</Text>
+                      } />
+                      <Card.Content>
+                        <Text variant='titleLarge'>{item.expenses}</Text>
+                      </Card.Content>
+                    </Card>
+
                   </View>
-
-
-                  {/*  <View style={Styles.stackRow}>
+                  <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
                     <IconButton
-                      edge='start'
-                      color='inherit'
-                      aria-label='menu'
-                      onClick={() => {
+                      icon="pencil-outline"
+                      //size={20}
+                      onPress={() => {
+                        navigation.navigate('Form', { item: JSON.stringify(item) })
+                      }}
+                    />
+                    <IconButton
+                      icon="delete-outline"
+                      onPress={() => {
                         red = red + 1;
                         setListOfItems((list) => [
                           ...list.filter(listOfItems => listOfItems.key != item.key)
                         ])
                       }}
-                      sx={{ mr: 1 }}>
-                      <Delete />
-                    </IconButton>
-                    <IconButton
-                      edge='start'
-                      color='inherit'
-                      aria-label='menu'
-                      sx={{ mr: 1 }}
-                      onClick={() => {
-                        navigation.navigate('Form', { item: JSON.stringify(item) })
-                      }}>
-                      <Edit />
-                    </IconButton>
-
-                  </View> */}
+                    />
+                  </View>
                 </View>
-
               }
-            >
+            />
+          </Card>
 
+        )}
+      >
+      </FlatList>
 
-            </List.Item>
-          </List.Accordion>
-
-        </List.Section>
-      } />
-
-    </View>
+    </View >
   );
 }
 
@@ -193,79 +175,70 @@ const Styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 1000,
     alignSelf: 'flex-end',
-    bottom: 20,
-    borderRadius: 48,
-    right: 20,
-    backgroundColor: '#1976d2',
+    bottom: 16,
+    right: 16,
+    //backgroundColor: '#1976d2',
   },
   main: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    //backgroundColor: '#f2f2f2',
   },
   item: {
-    //flex: 1,
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
-    paddingLeft: 8,
+    paddingHorizontal: 0,
+    paddingRight: 0,
   },
-  accordion: {
-    //flex: 1,
-    flexDirection: 'column',
-    display: 'flex',
-    justifyContent: 'space-between',
+  card: {
+    flex: 1,
+    marginVertical: 8,
+    marginRight: 8,
+  },
+  contentCard: {
+    flex: 1,
+    alignItems: 'center',
+    alignSelf: 'center'
   },
 
-  accordionDetail: {
-    //flex: 1,
-    width: 'auto',
-    display: 'flex',
+  text: {
+    paddingHorizontal: 0,
+    paddingRight: 8,
+  },
+
+  accordionTitle: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
+    marginVertical: 0,
+    paddingHorizontal: 0,
+    marginBottom: 0,
+    padding: 0,
+    height: 56,
+    margin: 0,
+    //backgroundColor: 'red'
+  },
+
+  accordion: {
+    flex: 1,
+    padding: 0,
+    backgroundColor: 'none'
+  },
+
+  surface: {
+    flex: 1,
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+  },
+
+  accordionMain: {
+    marginHorizontal: 22,
+    paddingBottom: 10,
+    marginBottom: 8
   },
 
   stackRow: {
     flexDirection: 'row',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignContent: 'space-between',
-    alignItems: 'stretch',
-    alignSelf: 'stretch',
-    //alignContent: 'space-between',
-    //flex: 1
+    flex: 1
   }
-  //   detail: {
-  //     fontSize: 18,
-  //     textAlign: 'left',
-  //     //marginLeft: 10,
-  //     paddingVertical: 5
-  //   },
-  //   header: {
-  //     fontSize: 21,
-  //     color: 'white'
-  //     //textAlign: 'center',
-  //     //paddingVertical: 20
-  //   },
-  //   profit: {
-  //     fontSize: 18,
-  //     //textAlign: 'left',
-  //     //paddingVertical: 15,
-  //     //backgroundColor: '#98FB98',
-  //     //paddingHorizontal: 10,
-  //   },
-  //   summary: {
-  //     fontSize: 18,
-  //     fontStyle: '400',
-  //     textAlign: 'left',
-  //   },
-  // iconAdd: {
-  //   position: 'fixed',
-  //   bottom: 16,
-  //   right: 16,
-  //textAlign: 'center',
-  //marginVertical: 15
-  //  }
 })
