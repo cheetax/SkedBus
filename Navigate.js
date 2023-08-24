@@ -9,7 +9,7 @@ import { useAppContext } from "./providers/AppContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
-import DrawerContent from "./components/drawerItem";
+import DrawerItem  from "./components/DrawerItem";
 
 
 const Stack = createNativeStackNavigator();
@@ -31,9 +31,19 @@ export default function Navigate({ }) {
                     //         width: collapsedDrawerWidth,
                     //     },
                     // }}
-                    drawerContent={() => <DrawerContent />}>
+                    drawerContent={() => <DrawerItem />}>
+                    <Drawer.Screen
+                        name="Main"
+                        component={Main}
+                        options={{ headerShown: false }}
+                    />
+                    <Drawer.Screen
+                        name="Form"
+                        component={Form}
+                        options={{ headerShown: false }}
+                    />
                 </Drawer.Navigator>
-                <Stack.Navigator  >
+                {/* <Stack.Navigator  >
                     <Stack.Screen
                         name="Main"
                         component={Main}
@@ -44,7 +54,7 @@ export default function Navigate({ }) {
                         component={Form}
                         options={{ headerShown: false }}
                     />
-                </Stack.Navigator>
+                </Stack.Navigator> */}
                 <StatusBar
                     style="auto"
                     translucent={true}
