@@ -30,11 +30,9 @@ export default function TabNavigate({ navigation, route }) {
                     backgroundColor: isStartScroll ? theme.colors.elevation.level2 : theme.colors.surface
                 }}
             >
-                <Appbar.Action icon='menu' onPress={
-                    () => { 
-                        console.log(navigation)
-                        navigation.openDrawer()
-                    }}  />
+                <Appbar.Action
+                    icon='menu'
+                    onPress={() => navigation.openDrawer()} />
                 <Appbar.Content title={
                     <Text
                         variant='titleLarge'>Учет работы таксиста
