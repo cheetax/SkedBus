@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
 import { IconButton, Text, useTheme, Drawer, TouchableRipple, Switch, Surface, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
@@ -9,11 +9,9 @@ export default function DrawerItem({ route, navigation }) {
     const { colors } = useTheme();
     const { toggleTheme, isDarkTheme } = useAppContext();
     return (
-        <SafeAreaView>
             <Card
-                style={{ height: '100%',  }}
+                style={{ height: '100%', paddingTop: StatusBar.currentHeight }}
             >
-
                 <Drawer.Item
                     onPress={toggleTheme}
                     label="Темная тема"
@@ -24,10 +22,6 @@ export default function DrawerItem({ route, navigation }) {
                     label="О приложении"
                 />
             </Card >
-        </SafeAreaView>
-
-
-
     )
 }
 
