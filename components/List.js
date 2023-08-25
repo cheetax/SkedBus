@@ -79,7 +79,7 @@ export default function Main({ navigation, route }) {
     <View style={Styles.main} >
       <FAB
         style={Styles.fab}
-        theme={theme}
+        //theme={theme}
         //color="white"
         icon="plus"
         size="medium"
@@ -93,7 +93,7 @@ export default function Main({ navigation, route }) {
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
           <Card
-            theme={theme}
+            //theme={theme}
             style={Styles.surface}
           //elevation={1} 
           >

@@ -1,7 +1,7 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { IconButton, Text, useTheme, Drawer, TouchableRipple, Switch } from 'react-native-paper';
+import { IconButton, Text, useTheme, Drawer, TouchableRipple, Switch, Surface, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 
 
@@ -9,19 +9,25 @@ export default function DrawerItem({ route, navigation }) {
     const { colors } = useTheme();
     const { toggleTheme, isDarkTheme } = useAppContext();
     return (
-        <DrawerContentScrollView
-            style={{ backgroundColor: colors.surface }}
-        >
-            <Drawer.Item
-                onPress={toggleTheme}
-                label="Темная тема"
-                right={(props) => <Switch value={isDarkTheme} onChange={toggleTheme} />}
+        <SafeAreaView>
+            <Card
+                style={{ height: '100%',  }}
             >
-            </Drawer.Item>
-            <Drawer.Item
-                label="О приложении"
-            />
-        </DrawerContentScrollView>
+
+                <Drawer.Item
+                    onPress={toggleTheme}
+                    label="Темная тема"
+                    right={(props) => <Switch value={isDarkTheme} onChange={toggleTheme} />}
+                >
+                </Drawer.Item>
+                <Drawer.Item
+                    label="О приложении"
+                />
+            </Card >
+        </SafeAreaView>
+
+
+
     )
 }
 
