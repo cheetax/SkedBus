@@ -1,7 +1,6 @@
 import React from "react";
-import { View, StyleSheet, StatusBar } from 'react-native';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
-import { IconButton, Text, useTheme, Drawer, TouchableRipple, Switch, Surface, Card } from 'react-native-paper';
+import {  StatusBar } from 'react-native';
+import { useTheme, Drawer, Switch, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 
 
@@ -24,29 +23,3 @@ export default function DrawerItem({ route, navigation }) {
             </Card >
     )
 }
-
-const Styles = StyleSheet.create({
-
-    main: {
-        flex: 1,
-        flexDirection: 'column',
-    },
-    forma: {
-        flex: 1,
-        flexDirection: 'column',
-        marginHorizontal: 24
-    },
-    text: {
-        paddingHorizontal: 0,
-        paddingRight: 8,
-    },
-    inputField: {
-        marginTop: 12,
-        height: 56
-    },
-    stackRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flex: 1
-    }
-})
