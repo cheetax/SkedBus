@@ -11,11 +11,16 @@ var red = 0;
 
 export default function Main({ navigation, route }) {
 
-  useEffect(() => {
-    if (listOfItems.length !== 0) {
-      setData({ listOfItems, settings });
-    }
-  }, [red, listOfItems]);
+  const {
+    listOfItems,
+    setListOfItems,
+    isStartScroll,
+    startScroll,
+    setIsDarkTheme,
+    isDarkTheme,
+    settings,
+    setSettings
+  } = useAppContext();
 
   useEffect(() => {
     if (route.params?.post) {
@@ -35,16 +40,6 @@ export default function Main({ navigation, route }) {
     }
   }, [route.params?.post])
 
-  useEffect(() => {
-    showData();
-  }, []);
-
-  const [settings, setSettings] = useState(
-    {
-      priceFuel: '46',
-      averageFuel: '9.5'
-    }
-  )
   const item = {
     date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
@@ -57,22 +52,8 @@ export default function Main({ navigation, route }) {
     odometer: '0',     //пробег
     expenses: '0',     //затраты
     key: keyGenerator()
-  };
+  }; 
 
-  const setData = (data) => {
-    AsyncStorage.setItem('dataCalcCost', JSON.stringify(data));
-  }
-
-  const showData = async () => {
-    var data = await AsyncStorage.getItem('dataCalcCost');
-    if (data) {
-      data = JSON.parse(data)
-      setListOfItems(data.listOfItems);
-      setSettings(data.settings);
-    }
-  }
-
-  const { listOfItems, setListOfItems, isStartScroll, startScroll } = useAppContext();
   const theme = useTheme();
 
   return (
