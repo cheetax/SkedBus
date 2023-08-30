@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
 import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
@@ -22,7 +22,7 @@ const ViewDataField = (props) => {
       priceFuel,
       averageFuel,
       odometerFinish,
-      odometerStart 
+      odometerStart
     },
     setFieldValue
   } = useFormikContext();
@@ -39,7 +39,7 @@ const ViewDataField = (props) => {
     }
     if (odometer && priceFuel && averageFuel) {
       setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
-    
+
     }
   }, [
     proceeds,
@@ -126,67 +126,73 @@ export default function Form({ route, navigation }) {
           <View style={Styles.main} >
 
             <Appbar.Header
-              //elevated={true}
-              //dark={theme.dark}
-              //theme={theme}              
-              
+            //elevated={true}
+            //dark={theme.dark}
+            //theme={theme}              
+
             >
               <Appbar.Action
                 //style={{marginHorizontal: 16}}
                 icon='close'
                 onPress={() => navigation.goBack()}
-                //color='white' 
-                />
+              //color='white' 
+              />
               <Appbar.Content
                 title={
-                  <Text                    
+                  <Text
                     variant='titleLarge'>Новая смена</Text>}
               />
               <Appbar.Action icon='check' onPress={handleSubmit} />
             </Appbar.Header>
-            <ScrollView style={Styles.forma} >
-              <DatePicer date={values.date} style={Styles.inputField} />
-              <TextInput
-                style={Styles.inputField}
-                value={values.priceFuel}
-                //type="number"
-                onChangeText={handleChange('priceFuel')}
-                label='Стоимость топлива'
-                mode="outlined" />
-              <TextInput
-                style={Styles.inputField}
-                value={values.averageFuel}
-                //type="number"
-                onChangeText={handleChange('averageFuel')}
-                label='Средний расход'
-                mode="outlined" />
-              <TextInput
-                style={Styles.inputField}
-                value={values.proceeds}
-                //type="number"
-                onChangeText={handleChange('proceeds')}
-                label='Выручка'
-                mode="outlined" />
-              <TextInput
-                style={Styles.inputField}
-                value={values.odometerStart}
-                //type="number"
-                minRows={0}
-                onChangeText={handleChange('odometerStart')}
-                label='Спидометр на начало'
-                mode="outlined" />
-              <TextInput
-                style={Styles.inputField}
-                value={values.odometerFinish}
-                //type="number"
-                //minRows={0}
-                onChangeText={handleChange('odometerFinish')}
-                label='Спидометр на конец'
-                mode="outlined" />
+            <KeyboardAvoidingView 
+              style={{flex: 1}}
+              behavior="height"
+              keyboardVerticalOffset={10}
+            >
+              <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
+                <DatePicer date={values.date} style={Styles.inputField} />
+                <TextInput
+                  style={Styles.inputField}
+                  value={values.priceFuel}
+                  //type="number"
+                  onChangeText={handleChange('priceFuel')}
+                  label='Стоимость топлива'
+                  mode="outlined" />
+                <TextInput
+                  style={Styles.inputField}
+                  value={values.averageFuel}
+                  //type="number"
+                  onChangeText={handleChange('averageFuel')}
+                  label='Средний расход'
+                  mode="outlined" />
+                <TextInput
+                  style={Styles.inputField}
+                  value={values.proceeds}
+                  //type="number"
+                  onChangeText={handleChange('proceeds')}
+                  label='Выручка'
+                  mode="outlined" />
+                <TextInput
+                  style={Styles.inputField}
+                  value={values.odometerStart}
+                  //type="number"
+                  minRows={0}
+                  onChangeText={handleChange('odometerStart')}
+                  label='Спидометр на начало'
+                  mode="outlined" />
+                <TextInput
+                  style={Styles.inputField}
+                  value={values.odometerFinish}
+                  //type="number"
+                  //minRows={0}
+                  onChangeText={handleChange('odometerFinish')}
+                  label='Спидометр на конец'
+                  mode="outlined" />
 
-              <ViewDataField name='viewData' variant='headlineMedium' />
+                <ViewDataField name='viewData' variant='headlineMedium' />
 
-            </ScrollView>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>)
         }
       </Formik >
