@@ -35,7 +35,7 @@ export default function Navigate({ }) {
                     screenOptions={{
                         drawerStyle: {
                             //backgroundColor: theme.colors.surface,
-                            width: '90%',
+                            width: '85%',
                             flex: 1
                         },
                     }}
