@@ -96,15 +96,22 @@ const DatePicer = (props) => {
     });
   }
   return (
-    <TextInput
+    <InputField
       {...props}
       value={dayjs(props.date).format('DD.MM.YY')}
       label='Дата'
-      mode="outlined"
       editable={true}
       onFocus={() => showDatePicer()} />
   )
 }
+
+const InputField = (props) => <TextInput
+  style={{ marginTop: 12 }}
+  contentStyle={{ height: 56 }}
+  mode="outlined"
+  {...props}
+/>
+
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
   const theme = useTheme();
@@ -124,18 +131,11 @@ export default function Form({ route, navigation }) {
       >
         {({ values, handleSubmit, handleChange, handleBlur, setFieldValue }) => (
           <View style={Styles.main} >
-
             <Appbar.Header
-            //elevated={true}
-            //dark={theme.dark}
-            //theme={theme}              
-
             >
               <Appbar.Action
-                //style={{marginHorizontal: 16}}
                 icon='close'
                 onPress={() => navigation.goBack()}
-              //color='white' 
               />
               <Appbar.Content
                 title={
@@ -144,50 +144,33 @@ export default function Form({ route, navigation }) {
               />
               <Appbar.Action icon='check' onPress={handleSubmit} />
             </Appbar.Header>
-            <KeyboardAvoidingView 
-              style={{flex: 1}}
+            <KeyboardAvoidingView
+              style={{ flex: 1 }}
               behavior="height"
               keyboardVerticalOffset={10}
             >
               <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
                 <DatePicer date={values.date} style={Styles.inputField} />
-                <TextInput
-                  style={Styles.inputField}
+                <InputField
                   value={values.priceFuel}
-                  //type="number"
                   onChangeText={handleChange('priceFuel')}
-                  label='Стоимость топлива'
-                  mode="outlined" />
-                <TextInput
-                  style={Styles.inputField}
+                  label='Стоимость топлива' />
+                <InputField
                   value={values.averageFuel}
-                  //type="number"
                   onChangeText={handleChange('averageFuel')}
-                  label='Средний расход'
-                  mode="outlined" />
-                <TextInput
-                  style={Styles.inputField}
+                  label='Средний расход' />
+                <InputField
                   value={values.proceeds}
-                  //type="number"
                   onChangeText={handleChange('proceeds')}
-                  label='Выручка'
-                  mode="outlined" />
-                <TextInput
-                  style={Styles.inputField}
+                  label='Выручка' />
+                <InputField
                   value={values.odometerStart}
-                  //type="number"
-                  minRows={0}
                   onChangeText={handleChange('odometerStart')}
-                  label='Спидометр на начало'
-                  mode="outlined" />
-                <TextInput
-                  style={Styles.inputField}
+                  label='Спидометр на начало' />
+                <InputField
                   value={values.odometerFinish}
-                  //type="number"
-                  //minRows={0}
                   onChangeText={handleChange('odometerFinish')}
-                  label='Спидометр на конец'
-                  mode="outlined" />
+                  label='Спидометр на конец' />
 
                 <ViewDataField name='viewData' variant='headlineMedium' />
 
@@ -220,6 +203,8 @@ const Styles = StyleSheet.create({
   },
   inputField: {
     marginTop: 12,
+  },
+  inputFieldContent: {
     height: 56
   },
   stackRow: {
