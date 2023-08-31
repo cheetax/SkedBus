@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, useTheme } from 'react-native-paper';
+import { FAB, Text, Card, IconButton, useTheme, } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 
@@ -74,13 +75,13 @@ export default function Main({ navigation, route }) {
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
           <Card
-            //theme={theme}
+            theme={theme}
             style={Styles.surface}
           //elevation={1} 
           >
             <AccordionItem
               containerStyle={Styles.accordion}
-
+              customIcon={() => <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
               customTitle={() =>
                 <View style={Styles.accordionTitle} >
                   <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
@@ -201,7 +202,7 @@ const Styles = StyleSheet.create({
   accordion: {
     flex: 1,
     padding: 0,
-    backgroundColor: 'none'
+    backgroundColor: 'none',
   },
 
   surface: {
