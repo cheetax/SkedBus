@@ -9,8 +9,6 @@ import 'dayjs/locale/ru';
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
 
-
-
 const ViewDataField = (props) => {
   const {
     values: {
@@ -22,7 +20,8 @@ const ViewDataField = (props) => {
       priceFuel,
       averageFuel,
       odometerFinish,
-      odometerStart
+      odometerStart, 
+      key
     },
     setFieldValue
   } = useFormikContext();
@@ -52,7 +51,7 @@ const ViewDataField = (props) => {
     priceFuel,
     averageFuel,
     setFieldValue,
-    props.name
+    props.name,
   ]);
 
   return (
@@ -73,11 +72,9 @@ const ViewDataField = (props) => {
       </View>
       <View style={Styles.stackRow} >
         <Text {...props} {...field}>Доход на пробег:</Text>
-        <Text {...props} {...field}>{profitPerOdometer}</Text>
+        <Text {...props} {...field}>{key}</Text>
       </View>
-
     </View>
-
   )
 }
 
@@ -115,12 +112,13 @@ const InputField = (props) => <TextInput
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
   const theme = useTheme();
-  //console.log(route)
+  console.log(navigation)
   return (
     <View style={Styles.main} >
       <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
+          console.log(values)
           navigation.navigate({
             name: 'List',
             params: { post: JSON.stringify(values) },

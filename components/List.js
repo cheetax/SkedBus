@@ -24,9 +24,11 @@ export default function Main({ navigation, route }) {
   } = useAppContext();
 
   useEffect(() => {
+    console.log(navigation)
     if (route.params?.post) {
-
+      
       const post = JSON.parse(route.params.post);
+      console.log(post)
       setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
@@ -39,9 +41,10 @@ export default function Main({ navigation, route }) {
       });
       red = red + 1;
     }
+    //navigation.reset()
   }, [route.params?.post])
 
-  const item = {
+  const item = () => ({
     date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
     priceFuel: settings.priceFuel,
     averageFuel: settings.averageFuel,
@@ -53,7 +56,7 @@ export default function Main({ navigation, route }) {
     odometer: '0',     //пробег
     expenses: '0',     //затраты
     key: keyGenerator()
-  }; 
+  }); 
 
   const theme = useTheme();
 
@@ -65,9 +68,8 @@ export default function Main({ navigation, route }) {
         //color="white"
         icon="plus"
         size="medium"
-        onPress={() => {
-          navigation.navigate('Form', { item: JSON.stringify(item) })
-        }}>
+        onPress={() => navigation.navigate({name:'Form', params: {item: JSON.stringify(item())}, merge: true})
+        }>
       </FAB>
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
