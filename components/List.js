@@ -26,7 +26,7 @@ export default function Main({ navigation, route }) {
   useEffect(() => {
     console.log(navigation)
     if (route.params?.post) {
-      
+
       const post = JSON.parse(route.params.post);
       console.log(post)
       setListOfItems(list => [
@@ -56,7 +56,7 @@ export default function Main({ navigation, route }) {
     odometer: '0',     //пробег
     expenses: '0',     //затраты
     key: keyGenerator()
-  }); 
+  });
 
   const theme = useTheme();
 
@@ -68,7 +68,10 @@ export default function Main({ navigation, route }) {
         //color="white"
         icon="plus"
         size="medium"
-        onPress={() => navigation.navigate({name:'Form', params: {item: JSON.stringify(item())}, merge: true})
+        onPress={() => navigation.navigate({
+          name: 'Form',
+          params: { item: JSON.stringify(item()) },
+        })
         }>
       </FAB>
       <FlatList

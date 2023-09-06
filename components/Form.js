@@ -112,15 +112,15 @@ const InputField = (props) => <TextInput
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
   const theme = useTheme();
-  console.log(navigation)
+  console.log(item.key)
   return (
     <View style={Styles.main} >
       <Formik
         initialValues={{ ...item }}
         onSubmit={(values) => {
-          console.log(values)
+          console.log(values.key)
           navigation.navigate({
-            name: 'List',
+            name: 'Main',
             params: { post: JSON.stringify(values) },
             merge: true,
           });
