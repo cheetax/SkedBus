@@ -42,25 +42,29 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         },
     }}
     drawerContent={() => <DrawerItem />}>
-    <Drawer.Screen
-        name="Main"
-        component={Main}
-        options={{ headerShown: false }}
-    />
-    <Drawer.Screen
-        name="Form"
-        component={Form}
+    <Stack.Screen
+        name="Home"
+        component={Home}
         options={{ headerShown: false }}
     />
 </Drawer.Navigator>
 
+const Home = () => <Stack.Navigator>
+    <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="Form"
+        component={Form}
+        options={{ headerShown: false }}
+    />
+</Stack.Navigator>
+
 export default function Navigate({ }) {
-    //const theme = useTheme()
     const { isDarkTheme } = useAppContext();
     const theme = isDarkTheme ? MD3DarkTheme : MD3LightTheme;
-    //const theme = useTheme();
-    // theme.dark=true
-    //console.log(isStartScroll)
     return (
 
         <PaperProvider theme={theme}>
@@ -69,7 +73,6 @@ export default function Navigate({ }) {
                     style={isDarkTheme ? 'light' : 'dark'}
                     translucent={true}
                     hidden={false}
-
                 />
                 <Navigator />
 

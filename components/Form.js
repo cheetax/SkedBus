@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
 import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
@@ -116,7 +116,7 @@ export default function Form({ route, navigation }) {
   return (
     <View style={Styles.main} >
       <Formik
-        initialValues={{ ...item }}
+        initialValues={ item }
         onSubmit={(values) => {
           console.log(values.key)
           navigation.navigate({
