@@ -3,11 +3,14 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native
 import { Formik, useFormikContext, useField } from "formik";
 import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { useAppContext } from "../providers/AppContextProvider";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
+
+const {item, getItem} = useAppContext();
 
 const ViewDataField = (props) => {
   const {
@@ -110,6 +113,10 @@ const InputField = (props) => <TextInput
 />
 
 export default function Form({ route, navigation }) {
+
+  useEffect(() =>{
+    getItem
+  }, [route.params.key])
   const item = JSON.parse(route.params.item);
   const theme = useTheme();
   //console.log(item.key)

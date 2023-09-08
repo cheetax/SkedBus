@@ -53,6 +53,26 @@ export const useCreateAppContext = function (props) {
         }
     }, [listOfItems, isDarkTheme]);
 
+    const [item, setItem] = useState({})
+
+    const getItem = () => setItem({
+        date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
+        priceFuel: settings.priceFuel,
+        averageFuel: settings.averageFuel,
+        proceeds: '3000', //выручка
+        odometerStart: '0', //спидометр старт
+        odometerFinish: '0', //спидометр финиш
+        profit: '2000', //доход
+        profitPerOdometer: '0', //доход на километр
+        odometer: '0',     //пробег
+        expenses: '0',     //затраты
+        key: keyGenerator()
+      })
+
+    const appliedListOfItems = (item) => {
+
+    }
+
     return {
         listOfItems,
         setListOfItems,
@@ -62,6 +82,8 @@ export const useCreateAppContext = function (props) {
         startScroll,
         setIsDarkTheme,
         settings,
-        setSettings
+        setSettings,
+        item,
+        getItem
     };
 }
