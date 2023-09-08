@@ -19,8 +19,6 @@ export default function TabNavigate({ navigation, route }) {
 
     return (
         <View style={Styles.main} >
-
-
             <Appbar.Header
                 //elevated={true}
                 dark={theme.dark}
@@ -69,10 +67,10 @@ export default function TabNavigate({ navigation, route }) {
                 />
             </Tab.Navigator>
         </View>
-
-
     );
 }
+
+
 
 const Styles = StyleSheet.create({
     main: {

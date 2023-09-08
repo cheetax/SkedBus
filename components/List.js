@@ -24,25 +24,20 @@ export default function Main({ navigation, route }) {
   } = useAppContext();
 
   useEffect(() => {
-    console.log(navigation)
     if (route.params?.post) {
-
       const post = JSON.parse(route.params.post);
-      console.log(post)
       setListOfItems(list => [
         post,
         ...list.filter(list => list.key != post.key)
       ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
-
       );
       setSettings(setting => setting = {
         priceFuel: post.priceFuel,
         averageFuel: post.averageFuel
       });
-      red = red + 1;
     }
     //navigation.reset()
-  }, [route.params?.post])
+  }, [route.params?.post] )
 
   const item = () => ({
     date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),

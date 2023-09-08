@@ -112,7 +112,7 @@ const InputField = (props) => <TextInput
 export default function Form({ route, navigation }) {
   const item = JSON.parse(route.params.item);
   const theme = useTheme();
-  console.log(item.key)
+  //console.log(item.key)
   return (
     <View style={Styles.main} >
       <Formik
@@ -120,9 +120,9 @@ export default function Form({ route, navigation }) {
         onSubmit={(values) => {
           console.log(values.key)
           navigation.navigate({
-            name: 'Main',
+            name: 'List',
             params: { post: JSON.stringify(values) },
-            merge: true,
+            //merge: true,
           });
         }}
         onChange={(values) => { console.log(values) }}
@@ -177,8 +177,6 @@ export default function Form({ route, navigation }) {
           </View>)
         }
       </Formik >
-
-
     </View >
 
   );
