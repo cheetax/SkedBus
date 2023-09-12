@@ -65,7 +65,7 @@ export default function Main({ navigation, route }) {
         size="medium"
         onPress={() => navigation.navigate({
           name: 'Form',
-          params: { key: '' },
+          params: { key: null },
         })
         }>
       </FAB>
@@ -126,7 +126,7 @@ export default function Main({ navigation, route }) {
                       icon="pencil-outline"
                       //size={20}
                       onPress={() => {
-                        navigation.navigate('Form', { item: JSON.stringify(item) })
+                        navigation.navigate('Form', { key: item.key })
                       }}
                     />
                     <IconButton
