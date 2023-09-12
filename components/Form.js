@@ -10,7 +10,7 @@ import 'dayjs/locale/ru';
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
 
-const {item, getItem} = useAppContext();
+
 
 const ViewDataField = (props) => {
   const {
@@ -23,7 +23,7 @@ const ViewDataField = (props) => {
       priceFuel,
       averageFuel,
       odometerFinish,
-      odometerStart, 
+      odometerStart,
       key
     },
     setFieldValue
@@ -114,16 +114,20 @@ const InputField = (props) => <TextInput
 
 export default function Form({ route, navigation }) {
 
-  useEffect(() =>{
-    getItem
-  }, [route.params.key])
-  const item = JSON.parse(route.params.item);
+  const { item, getItem } = useAppContext();
+  console.log(route.params.key)
+  useEffect(() => {
+    console.log(route.params.key)
+    getItem(route.params.key)
+  }, [])
+
+  //const item = JSON.parse(route.params.item);
   const theme = useTheme();
   //console.log(item.key)
   return (
     <View style={Styles.main} >
       <Formik
-        initialValues={ item }
+        initialValues={item}
         onSubmit={(values) => {
           console.log(values.key)
           navigation.navigate({

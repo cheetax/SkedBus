@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 
 const Context = React.createContext(null);
+
+const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 
 export const AppContextProvider = ({ children, ...props }) => {
     const context = useCreateAppContext(props);
@@ -53,21 +57,36 @@ export const useCreateAppContext = function (props) {
         }
     }, [listOfItems, isDarkTheme]);
 
-    const [item, setItem] = useState({})
-
-    const getItem = () => setItem({
+    const [item, setItem] = useState({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings.priceFuel,
         averageFuel: settings.averageFuel,
-        proceeds: '3000', //выручка
+        proceeds: '0', //выручка
         odometerStart: '0', //спидометр старт
         odometerFinish: '0', //спидометр финиш
-        profit: '2000', //доход
+        profit: '0', //доход
         profitPerOdometer: '0', //доход на километр
         odometer: '0',     //пробег
         expenses: '0',     //затраты
-        key: keyGenerator()
-      })
+        key: ''
+    })
+
+    const getItem = (key) => {
+        console.log(key)
+        setItem(key ? listOfItems.filter(list => list.key === key) : {
+            date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
+            priceFuel: settings.priceFuel,
+            averageFuel: settings.averageFuel,
+            proceeds: '0', //выручка
+            odometerStart: '0', //спидометр старт
+            odometerFinish: '0', //спидометр финиш
+            profit: '0', //доход
+            profitPerOdometer: '0', //доход на километр
+            odometer: '0',     //пробег
+            expenses: '0',     //затраты
+            key: keyGenerator()
+        })
+    }
 
     const appliedListOfItems = (item) => {
 

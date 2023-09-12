@@ -65,7 +65,7 @@ export default function Main({ navigation, route }) {
         size="medium"
         onPress={() => navigation.navigate({
           name: 'Form',
-          params: { item: JSON.stringify(item()) },
+          params: { key: '' },
         })
         }>
       </FAB>
