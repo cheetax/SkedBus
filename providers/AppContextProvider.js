@@ -57,19 +57,7 @@ export const useCreateAppContext = function (props) {
         }
     }, [listOfItems, isDarkTheme]);
 
-    const [item, setItem] = useState({
-        date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
-        priceFuel: settings.priceFuel,
-        averageFuel: settings.averageFuel,
-        proceeds: '0', //выручка
-        odometerStart: '0', //спидометр старт
-        odometerFinish: '0', //спидометр финиш
-        profit: '0', //доход
-        profitPerOdometer: '0', //доход на километр
-        odometer: '0',     //пробег
-        expenses: '0',     //затраты
-        key: ''
-    })
+    const [item, setItem] = useState({})
 
     const getItem = (key) => {
         console.log(key)
