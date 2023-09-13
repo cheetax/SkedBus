@@ -24,30 +24,12 @@ export default function Main({ navigation, route }) {
     deleteItemOfListOfItems
   } = useAppContext();
 
-  // useEffect(() => {
-  //   if (route.params?.post) {
-  //     const post = JSON.parse(route.params.post);
-  //     setListOfItems(list => [
-  //       post,
-  //       ...list.filter(list => list.key != post.key)
-  //     ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
-  //     );
-  //     setSettings(setting => setting = {
-  //       priceFuel: post.priceFuel,
-  //       averageFuel: post.averageFuel
-  //     });
-  //   }
-  //   //navigation.reset()
-  // }, [route.params?.post] )  
-
   const theme = useTheme();
 
   return (
     <View style={Styles.main} >
       <FAB
         style={Styles.fab}
-        //theme={theme}
-        //color="white"
         icon="plus"
         size="medium"
         onPress={() => navigation.navigate({

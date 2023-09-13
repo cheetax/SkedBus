@@ -53,8 +53,9 @@ export const useCreateAppContext = function (props) {
 
     useEffect(() => {
         if (listOfItems.length !== 0) {
-            setData({ listOfItems, settings, isDarkTheme });
+            
         }
+        setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
     const [item, setItem] = useState()

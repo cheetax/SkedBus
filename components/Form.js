@@ -116,6 +116,7 @@ export default function Form({ route, navigation }) {
 
   const { item, getItem, appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
+  const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
 
   useEffect(() => {
     getItem(route.params.key)
@@ -123,11 +124,12 @@ export default function Form({ route, navigation }) {
   }, [])
 
   const theme = useTheme();
-  
+  console.log(loaded)
+  console.log(item)
   return (
     <View style={Styles.main} >
-      {loaded ? <Formik
-        enableReinitialize={true}
+      <Formik
+        //enableReinitialize={true}
         initialValues={item}
         onSubmit={(values) => {
           appliedListOfItems(values)
@@ -148,11 +150,11 @@ export default function Form({ route, navigation }) {
               <Appbar.Content
                 title={
                   <Text
-                    variant='titleLarge'>Новая смена</Text>}
+                    variant='titleLarge'>{nameForma} </Text>}
               />
               <Appbar.Action icon='check' onPress={handleSubmit} />
             </Appbar.Header>
-            <KeyboardAvoidingView
+            {loaded ? <KeyboardAvoidingView
               style={{ flex: 1 }}
               behavior="height"
               keyboardVerticalOffset={10}
@@ -183,10 +185,10 @@ export default function Form({ route, navigation }) {
                 <ViewDataField name='viewData' variant='headlineMedium' />
 
               </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> : <></>}
           </View>)
         }
-      </Formik > : <></> }
+      </Formik >
     </View >
   );
 }
