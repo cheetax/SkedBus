@@ -123,12 +123,27 @@ export default function Form({ route, navigation }) {
     setLoaded(!loaded)
   }, [])
 
+  const { handleSubmit } = useFormikContext();
+
   const theme = useTheme();
   console.log(loaded)
   console.log(item)
   return (
     <View style={Styles.main} >
-      <Formik
+      <Appbar.Header
+      >
+        <Appbar.Action
+          icon='close'
+          onPress={() => navigation.goBack()}
+        />
+        <Appbar.Content
+          title={
+            <Text
+              variant='titleLarge'>{nameForma} </Text>}
+        />
+        <Appbar.Action icon='check' onPress={handleSubmit()} />
+      </Appbar.Header>
+      {loaded ? <Formik
         //enableReinitialize={true}
         initialValues={item}
         onSubmit={(values) => {
@@ -141,20 +156,8 @@ export default function Form({ route, navigation }) {
       >
         {({ values, handleSubmit, handleChange, handleBlur, setFieldValue }) => (
           <View style={Styles.main} >
-            <Appbar.Header
-            >
-              <Appbar.Action
-                icon='close'
-                onPress={() => navigation.goBack()}
-              />
-              <Appbar.Content
-                title={
-                  <Text
-                    variant='titleLarge'>{nameForma} </Text>}
-              />
-              <Appbar.Action icon='check' onPress={handleSubmit} />
-            </Appbar.Header>
-            {loaded ? <KeyboardAvoidingView
+
+            <KeyboardAvoidingView
               style={{ flex: 1 }}
               behavior="height"
               keyboardVerticalOffset={10}
@@ -185,10 +188,10 @@ export default function Form({ route, navigation }) {
                 <ViewDataField name='viewData' variant='headlineMedium' />
 
               </ScrollView>
-            </KeyboardAvoidingView> : <></>}
+            </KeyboardAvoidingView>
           </View>)
         }
-      </Formik >
+      </Formik > : <></>}
     </View >
   );
 }
