@@ -57,27 +57,32 @@ export const useCreateAppContext = function (props) {
         }
     }, [listOfItems, isDarkTheme]);
 
-    const [item, setItem] = useState({})
+    const [item, setItem] = useState()
 
     const getItem = (key) => {
-        console.log(key)
-        setItem(key ? listOfItems.filter(list => list.key === key) : {
+        //console.log(listOfItems.filter(list => list.key === key)[0] )
+        setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : {
             date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
             priceFuel: settings.priceFuel,
             averageFuel: settings.averageFuel,
-            proceeds: '0', //выручка
-            odometerStart: '0', //спидометр старт
-            odometerFinish: '0', //спидометр финиш
-            profit: '0', //доход
-            profitPerOdometer: '0', //доход на километр
-            odometer: '0',     //пробег
-            expenses: '0',     //затраты
+            proceeds: '', //выручка
+            odometerStart: '', //спидометр старт
+            odometerFinish: '', //спидометр финиш
+            profit: '', //доход
+            profitPerOdometer: '', //доход на километр
+            odometer: '',     //пробег
+            expenses: '',     //затраты
             key: keyGenerator()
         })
     }
 
     const appliedListOfItems = (item) => {
-
+        console.log(item)
+        setListOfItems(list => [
+            item,
+            ...list.filter(list => list.key != item.key)
+        ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+        );
     }
 
     return {
@@ -91,6 +96,7 @@ export const useCreateAppContext = function (props) {
         settings,
         setSettings,
         item,
-        getItem
+        getItem,
+        appliedListOfItems
     };
 }
