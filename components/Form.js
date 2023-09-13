@@ -114,7 +114,7 @@ const InputField = (props) => <TextInput
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem } = useAppContext();
+  const { item, getItem, appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -125,13 +125,12 @@ export default function Form({ route, navigation }) {
   return (
     <View style={Styles.main} >
       {loaded ? <Formik
+        enableReinitialize={true}
         initialValues={item}
         onSubmit={(values) => {
-          console.log(values.key)
+          appliedListOfItems(values)
           navigation.navigate({
             name: 'List',
-            params: { post: JSON.stringify(values) },
-            //merge: true,
           });
         }}
         onChange={(values) => { console.log(values) }}
