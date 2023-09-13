@@ -121,7 +121,9 @@ export default function Form({ route, navigation }) {
     getItem(route.params.key)
     setLoaded(!loaded)
   }, [])
+
   const theme = useTheme();
+  
   return (
     <View style={Styles.main} >
       {loaded ? <Formik

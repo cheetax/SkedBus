@@ -20,38 +20,25 @@ export default function Main({ navigation, route }) {
     setIsDarkTheme,
     isDarkTheme,
     settings,
-    setSettings
+    setSettings,
+    deleteItemOfListOfItems
   } = useAppContext();
 
-  useEffect(() => {
-    if (route.params?.post) {
-      const post = JSON.parse(route.params.post);
-      setListOfItems(list => [
-        post,
-        ...list.filter(list => list.key != post.key)
-      ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
-      );
-      setSettings(setting => setting = {
-        priceFuel: post.priceFuel,
-        averageFuel: post.averageFuel
-      });
-    }
-    //navigation.reset()
-  }, [route.params?.post] )
-
-  const item = () => ({
-    date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
-    priceFuel: settings.priceFuel,
-    averageFuel: settings.averageFuel,
-    proceeds: '3000', //выручка
-    odometerStart: '0', //спидометр старт
-    odometerFinish: '0', //спидометр финиш
-    profit: '2000', //доход
-    profitPerOdometer: '0', //доход на километр
-    odometer: '0',     //пробег
-    expenses: '0',     //затраты
-    key: keyGenerator()
-  });
+  // useEffect(() => {
+  //   if (route.params?.post) {
+  //     const post = JSON.parse(route.params.post);
+  //     setListOfItems(list => [
+  //       post,
+  //       ...list.filter(list => list.key != post.key)
+  //     ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+  //     );
+  //     setSettings(setting => setting = {
+  //       priceFuel: post.priceFuel,
+  //       averageFuel: post.averageFuel
+  //     });
+  //   }
+  //   //navigation.reset()
+  // }, [route.params?.post] )  
 
   const theme = useTheme();
 
@@ -131,12 +118,7 @@ export default function Main({ navigation, route }) {
                     />
                     <IconButton
                       icon="delete-outline"
-                      onPress={() => {
-                        red = red + 1;
-                        setListOfItems((list) => [
-                          ...list.filter(listOfItems => listOfItems.key != item.key)
-                        ])
-                      }}
+                      onPress={() => deleteItemOfListOfItems(item.key)}
                     />
                   </View>
                 </View>

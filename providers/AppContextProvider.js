@@ -76,14 +76,15 @@ export const useCreateAppContext = function (props) {
         })
     }
 
-    const appliedListOfItems = (item) => {
-        console.log(item)
-        setListOfItems(list => [
-            item,
-            ...list.filter(list => list.key != item.key)
-        ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
-        );
-    }
+    const appliedListOfItems = (item) => setListOfItems(list => [
+        item,
+        ...list.filter(list => list.key != item.key)
+    ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+    );
+
+    const deleteItemOfListOfItems = (key) => setListOfItems(list => [
+        ...list.filter(listOfItems => listOfItems.key != key)
+    ])
 
     return {
         listOfItems,
@@ -97,6 +98,7 @@ export const useCreateAppContext = function (props) {
         setSettings,
         item,
         getItem,
-        appliedListOfItems
+        appliedListOfItems,
+        deleteItemOfListOfItems
     };
 }
