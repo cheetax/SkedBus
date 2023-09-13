@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Formik, useFormikContext, useField } from "formik";
 import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
@@ -115,18 +115,16 @@ const InputField = (props) => <TextInput
 export default function Form({ route, navigation }) {
 
   const { item, getItem } = useAppContext();
-  console.log(route.params.key)
-  useEffect(() => {
-    console.log(route.params.key)
-    getItem(route.params.key)
-  }, [])
+  const [loaded, setLoaded] = useState(false);
 
-  //const item = JSON.parse(route.params.item);
+  useEffect(() => {
+    getItem(route.params.key)
+    setLoaded(!loaded)
+  }, [])
   const theme = useTheme();
-  //console.log(item.key)
   return (
     <View style={Styles.main} >
-      <Formik
+      {loaded ? <Formik
         initialValues={item}
         onSubmit={(values) => {
           console.log(values.key)
@@ -187,9 +185,8 @@ export default function Form({ route, navigation }) {
             </KeyboardAvoidingView>
           </View>)
         }
-      </Formik >
+      </Formik > : <></> }
     </View >
-
   );
 }
 
