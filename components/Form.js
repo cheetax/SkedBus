@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Formik, useFormikContext, useField, useFormik } from "formik";
-import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
+import { useFormik } from "formik";
+import { Appbar, TextInput, Text, useTheme, ActivityIndicator } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { useAppContext } from "../providers/AppContextProvider";
 import dayjs from 'dayjs';
@@ -120,9 +120,6 @@ export default function Form({ route, navigation }) {
     getItem(route.params.key)
     setLoaded(!loaded)
   }, [])
-  useEffect(() => {
-    console.log(item)
-  }, [item])
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -184,7 +181,12 @@ export default function Form({ route, navigation }) {
             <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
 
           </ScrollView>
-        </KeyboardAvoidingView> : <></>}
+        </KeyboardAvoidingView> :
+        <ActivityIndicator
+          animating={true}
+          size={"large"}
+          style={Styles.activitiIndicator}
+        />}
     </View >
   );
 }
@@ -194,6 +196,10 @@ const Styles = StyleSheet.create({
   main: {
     flex: 1,
     flexDirection: 'column',
+  },
+  activitiIndicator: {
+    flex: 1,
+    marginVertical: 'auto',
   },
   forma: {
     flex: 1,
