@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Formik, useFormikContext, useField } from "formik";
+import { Formik, useFormikContext, useField, useFormik } from "formik";
 import { Appbar, IconButton, TextInput, Text, useTheme } from 'react-native-paper';
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { useAppContext } from "../providers/AppContextProvider";
@@ -28,6 +28,8 @@ const ViewDataField = (props) => {
     },
     setFieldValue
   } = useFormikContext();
+
+
 
   const [field, meta] = useField(props);
 
@@ -123,7 +125,16 @@ export default function Form({ route, navigation }) {
     setLoaded(!loaded)
   }, [])
 
-  const { handleSubmit } = useFormikContext();
+  const formik = useFormik({
+    validateOnChange: false,
+    onSubmit: values => {
+      appliedListOfItems(values)
+      navigation.navigate({
+        name: 'List',
+      });
+
+    }
+  });
 
   const theme = useTheme();
   console.log(loaded)
@@ -141,7 +152,7 @@ export default function Form({ route, navigation }) {
             <Text
               variant='titleLarge'>{nameForma} </Text>}
         />
-        <Appbar.Action icon='check' onPress={handleSubmit()} />
+        <Appbar.Action icon='check' onPress={formik.handleSubmit} />
       </Appbar.Header>
       {loaded ? <Formik
         //enableReinitialize={true}
