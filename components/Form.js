@@ -10,8 +10,6 @@ import 'dayjs/locale/ru';
 const customParseFormat = require('dayjs/plugin/customParseFormat')
 dayjs.extend(customParseFormat)
 
-
-
 const ViewDataField = props => {
   const {
     values: {
@@ -39,7 +37,7 @@ const ViewDataField = props => {
     }
     if (odometerFinish && odometerStart) {
       setFieldValue('odometer', odometerFinish - odometerStart);
-      setFieldValue('profitPerOdometer', profit / odometer)
+      setFieldValue('profitPerOdometer', Math.round(profit / odometer))
     }
     if (odometer && priceFuel && averageFuel) {
       setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
@@ -155,40 +153,38 @@ export default function Form({ route, navigation }) {
         <Appbar.Action icon='check' onPress={formik.handleSubmit} />
       </Appbar.Header>
       {loaded ?
-        <View style={Styles.main} >
-          <KeyboardAvoidingView
-            style={{ flex: 1 }}
-            behavior="height"
-            keyboardVerticalOffset={10}
-          >
-            <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
-              <DatePicer date={formik.values.date} setFieldValue={formik.setFieldValue} style={Styles.inputField} />
-              <InputField
-                value={formik.values.priceFuel}
-                onChangeText={formik.handleChange('priceFuel')}
-                label='Стоимость топлива' />
-              <InputField
-                value={formik.values.averageFuel}
-                onChangeText={formik.handleChange('averageFuel')}
-                label='Средний расход' />
-              <InputField
-                value={formik.values.proceeds}
-                onChangeText={formik.handleChange('proceeds')}
-                label='Выручка' />
-              <InputField
-                value={formik.values.odometerStart}
-                onChangeText={formik.handleChange('odometerStart')}
-                label='Спидометр на начало' />
-              <InputField
-                value={formik.values.odometerFinish}
-                onChangeText={formik.handleChange('odometerFinish')}
-                label='Спидометр на конец' />
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="height"
+          keyboardVerticalOffset={10}
+        >
+          <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
+            <DatePicer date={formik.values.date} setFieldValue={formik.setFieldValue} style={Styles.inputField} />
+            <InputField
+              value={formik.values.priceFuel}
+              onChangeText={formik.handleChange('priceFuel')}
+              label='Стоимость топлива' />
+            <InputField
+              value={formik.values.averageFuel}
+              onChangeText={formik.handleChange('averageFuel')}
+              label='Средний расход' />
+            <InputField
+              value={formik.values.proceeds}
+              onChangeText={formik.handleChange('proceeds')}
+              label='Выручка' />
+            <InputField
+              value={formik.values.odometerStart}
+              onChangeText={formik.handleChange('odometerStart')}
+              label='Спидометр на начало' />
+            <InputField
+              value={formik.values.odometerFinish}
+              onChangeText={formik.handleChange('odometerFinish')}
+              label='Спидометр на конец' />
 
-              <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
+            <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
 
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </View> : <></>}
+          </ScrollView>
+        </KeyboardAvoidingView> : <></>}
     </View >
   );
 }
