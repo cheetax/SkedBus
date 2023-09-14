@@ -12,7 +12,7 @@ dayjs.extend(customParseFormat)
 
 
 
-const ViewDataField = (props) => {
+const ViewDataField = props => {
   const {
     values: {
       expenses,
@@ -27,11 +27,11 @@ const ViewDataField = (props) => {
       key
     },
     setFieldValue
-  } = useFormikContext();
+  } = props;
 
 
 
-  const [field, meta] = useField(props);
+  //const [field, meta] = useField(props);
 
   React.useEffect(() => {
     if (proceeds && expenses) {
@@ -62,32 +62,30 @@ const ViewDataField = (props) => {
   return (
     <View style={Styles.main} >
       <View style={Styles.stackRow} >
-        <Text {...props} {...field}>Пробег:</Text>
-        <Text {...props} {...field}>{odometer}</Text>
+        <Text {...props} >Пробег:</Text>
+        <Text {...props} >{odometer}</Text>
       </View>
 
       <View style={Styles.stackRow} >
-        <Text {...props} {...field}>Затраты:</Text>
-        <Text {...props} {...field}>{expenses}</Text>
+        <Text {...props} >Затраты:</Text>
+        <Text {...props} >{expenses}</Text>
       </View>
 
       <View style={Styles.stackRow} >
-        <Text {...props} {...field}>Доход:</Text>
-        <Text {...props} {...field}>{profit}</Text>
+        <Text {...props} >Доход:</Text>
+        <Text {...props}>{profit}</Text>
       </View>
       <View style={Styles.stackRow} >
-        <Text {...props} {...field}>Доход на пробег:</Text>
-        <Text {...props} {...field}>{key}</Text>
+        <Text {...props} >Доход на пробег:</Text>
+        <Text {...props} >{key}</Text>
       </View>
     </View>
   )
 }
 
-const DatePicer = (props) => {
-  const {
-    values: { date },
-    setFieldValue
-  } = useFormikContext();
+const DatePicer = props => {
+  const { date, setFieldValue } = props;
+
   const onChange = (event, selected) => setFieldValue('date', selected)
 
   const showDatePicer = () => {
@@ -124,21 +122,23 @@ export default function Form({ route, navigation }) {
     getItem(route.params.key)
     setLoaded(!loaded)
   }, [])
+  useEffect(() => {
+    console.log(item)
+  }, [item])
 
   const formik = useFormik({
+    enableReinitialize: true,
+    initialValues: { ...item },
     validateOnChange: false,
     onSubmit: values => {
       appliedListOfItems(values)
       navigation.navigate({
         name: 'List',
       });
-
     }
   });
 
   const theme = useTheme();
-  console.log(loaded)
-  console.log(item)
   return (
     <View style={Styles.main} >
       <Appbar.Header
@@ -154,55 +154,41 @@ export default function Form({ route, navigation }) {
         />
         <Appbar.Action icon='check' onPress={formik.handleSubmit} />
       </Appbar.Header>
-      {loaded ? <Formik
-        //enableReinitialize={true}
-        initialValues={item}
-        onSubmit={(values) => {
-          appliedListOfItems(values)
-          navigation.navigate({
-            name: 'List',
-          });
-        }}
-        onChange={(values) => { console.log(values) }}
-      >
-        {({ values, handleSubmit, handleChange, handleBlur, setFieldValue }) => (
-          <View style={Styles.main} >
+      {loaded ?
+        <View style={Styles.main} >
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior="height"
+            keyboardVerticalOffset={10}
+          >
+            <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
+              <DatePicer date={formik.values.date} setFieldValue={formik.setFieldValue} style={Styles.inputField} />
+              <InputField
+                value={formik.values.priceFuel}
+                onChangeText={formik.handleChange('priceFuel')}
+                label='Стоимость топлива' />
+              <InputField
+                value={formik.values.averageFuel}
+                onChangeText={formik.handleChange('averageFuel')}
+                label='Средний расход' />
+              <InputField
+                value={formik.values.proceeds}
+                onChangeText={formik.handleChange('proceeds')}
+                label='Выручка' />
+              <InputField
+                value={formik.values.odometerStart}
+                onChangeText={formik.handleChange('odometerStart')}
+                label='Спидометр на начало' />
+              <InputField
+                value={formik.values.odometerFinish}
+                onChangeText={formik.handleChange('odometerFinish')}
+                label='Спидометр на конец' />
 
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior="height"
-              keyboardVerticalOffset={10}
-            >
-              <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
-                <DatePicer date={values.date} style={Styles.inputField} />
-                <InputField
-                  value={values.priceFuel}
-                  onChangeText={handleChange('priceFuel')}
-                  label='Стоимость топлива' />
-                <InputField
-                  value={values.averageFuel}
-                  onChangeText={handleChange('averageFuel')}
-                  label='Средний расход' />
-                <InputField
-                  value={values.proceeds}
-                  onChangeText={handleChange('proceeds')}
-                  label='Выручка' />
-                <InputField
-                  value={values.odometerStart}
-                  onChangeText={handleChange('odometerStart')}
-                  label='Спидометр на начало' />
-                <InputField
-                  value={values.odometerFinish}
-                  onChangeText={handleChange('odometerFinish')}
-                  label='Спидометр на конец' />
+              <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
 
-                <ViewDataField name='viewData' variant='headlineMedium' />
-
-              </ScrollView>
-            </KeyboardAvoidingView>
-          </View>)
-        }
-      </Formik > : <></>}
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View> : <></>}
     </View >
   );
 }
