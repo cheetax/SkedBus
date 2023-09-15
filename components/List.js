@@ -25,7 +25,7 @@ export default function Main({ navigation, route }) {
   } = useAppContext();
 
   const theme = useTheme();
-
+  console.log(listOfItems)
   return (
     <View style={Styles.main} >
       <FAB
@@ -68,7 +68,7 @@ export default function Main({ navigation, route }) {
                     <Card
                       style={{
                         ...Styles.card,
-                        //backgroundColor: '#90EE90'
+                        backgroundColor: theme.colors.surfaceVariant
                       }}
                     //</View>mode='outlined'
                     >

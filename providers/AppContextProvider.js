@@ -53,22 +53,24 @@ export const useCreateAppContext = function (props) {
 
     useEffect(() => {
         if (listOfItems.length !== 0) {
-            
+
         }
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
-    const [item, setItem] = useState({date: '', //dayjs().format('DD.MM.YY'),
-    priceFuel: '',
-    averageFuel: '',
-    proceeds: '', //выручка
-    odometerStart: '', //спидометр старт
-    odometerFinish: '', //спидометр финиш
-    profit: '', //доход
-    profitPerOdometer: '', //доход на километр
-    odometer: '',     //пробег
-    expenses: '',     //затраты
-    key: ''})
+    const [item, setItem] = useState({
+        date: '', //dayjs().format('DD.MM.YY'),
+        priceFuel: '',
+        averageFuel: '',
+        proceeds: '', //выручка
+        odometerStart: '', //спидометр старт
+        odometerFinish: '', //спидометр финиш
+        profit: '', //доход
+        profitPerOdometer: '', //доход на километр
+        odometer: '',     //пробег
+        expenses: '',     //затраты
+        key: ''
+    })
 
     const getItem = (key) => {
         //console.log(listOfItems.filter(list => list.key === key)[0] )
@@ -87,11 +89,14 @@ export const useCreateAppContext = function (props) {
         })
     }
 
-    const appliedListOfItems = (item) => setListOfItems(list => [
-        item,
-        ...list.filter(list => list.key != item.key)
-    ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
-    );
+    const appliedListOfItems = (item) => {
+        console.log(item)
+        setListOfItems(list => [
+            item,
+            ...list.filter(list => list.key != item.key)
+        ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
+        );
+    }
 
     const deleteItemOfListOfItems = (key) => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
