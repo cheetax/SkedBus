@@ -66,8 +66,12 @@ export default function Main({ navigation, route }) {
                 <View>
                   <View style={Styles.stackRow}>
                     <Card
-                      style={{ ...Styles.card, backgroundColor: '#90EE90' }}
-                      mode='outlined' >
+                      style={{
+                        ...Styles.card,
+                        //backgroundColor: '#90EE90'
+                      }}
+                    //</View>mode='outlined'
+                    >
                       <Card.Title
                         title={
                           <View >
@@ -79,8 +83,12 @@ export default function Main({ navigation, route }) {
                       </Card.Content>
                     </Card>
                     <Card
-                      style={{ ...Styles.card, backgroundColor: '#F08080' }}
-                      mode='outlined' >
+                      style={{
+                        ...Styles.card,
+                        backgroundColor: theme.colors.surfaceVariant
+                      }}
+                     //mode='outlined' 
+                    >
                       <Card.Title title={
                         <Text variant='bodyLarge'>Расходы</Text>
                       } />
@@ -138,6 +146,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     marginVertical: 8,
     marginRight: 8,
+    marginLeft: 4
   },
   contentCard: {
     flex: 1,
@@ -171,17 +180,19 @@ const Styles = StyleSheet.create({
 
   surface: {
     flex: 1,
-    marginTop: 8,
+    marginTop: 6,
+    marginBottom: 2,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 12,
+    marginHorizontal: 22
   },
 
   accordionMain: {
-    marginHorizontal: 18,
+   // marginHorizontal: 22,
     paddingBottom: 10,
     marginBottom: 8,
-    paddingHorizontal: 4
+    // paddingHorizontal: 4
   },
 
   stackRow: {
