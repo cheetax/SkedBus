@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import List from "./components/List";
 import Chart from "./components/Chart";
-import { Appbar, Text, Surface, Card, useTheme } from 'react-native-paper';
+import { Appbar, Text, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,11 +12,6 @@ const Tab = createMaterialBottomTabNavigator();
 export default function TabNavigate({ navigation, route }) {
     const { isStartScroll } = useAppContext()
     const theme = useTheme()
-    //console.log(isStartScroll)
-    React.useEffect(() => {
-        //console.log(listOfItems)
-    })
-
     return (
         <View style={Styles.main} >
             <Appbar.Header

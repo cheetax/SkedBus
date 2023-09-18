@@ -10,6 +10,5 @@ export default function App() {
     <AppContextProvider>
       <MainStack />
     </AppContextProvider>
-
   );
 }

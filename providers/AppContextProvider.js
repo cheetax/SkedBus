@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
 const Context = React.createContext(null);
+const ContextScroll = React.createContext(null);
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 
@@ -12,10 +13,31 @@ export const AppContextProvider = ({ children, ...props }) => {
     return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 
-export function useAppContext() {
+export const AppContextProviderScroll = ({ children, ...props }) => {
+    const context = useCreateAppContextScroll(props);
+    return <Context.Provider value={context}>{children}</Context.Provider>;
+};
+
+export const useAppContext = () => {
     const context = React.useContext(Context);
     if (!context) throw new Error('Use app context within provider!');
     return context;
+}
+
+export const useAppContextScroll = () => {
+    const context = React.useContext(ContextScroll);
+    if (!context) throw new Error('Use app context within provider!');
+    return context;
+}
+
+export const useCreateAppContextScroll = (props) => {
+    const [isStartScroll, setIsStartScroll] = useState(false);
+    const startScroll = (a) => setIsStartScroll(a !== 0)   
+
+    return {        
+        isStartScroll,
+        startScroll
+    };
 }
 
 export const useCreateAppContext = function (props) {
@@ -37,6 +59,7 @@ export const useCreateAppContext = function (props) {
         var data = await AsyncStorage.getItem('dataCalcCost');
         if (data) {
             data = JSON.parse(data)
+            data.listOfItems.forEach(item => item.date = dayjs(item.date).toDate())
             setListOfItems(data.listOfItems);
             setSettings(data.settings);
             setIsDarkTheme(data.isDarkTheme)
@@ -52,9 +75,6 @@ export const useCreateAppContext = function (props) {
     }
 
     useEffect(() => {
-        if (listOfItems.length !== 0) {
-
-        }
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
@@ -73,7 +93,7 @@ export const useCreateAppContext = function (props) {
     })
 
     const getItem = (key) => {
-        //console.log(listOfItems.filter(list => list.key === key)[0] )
+        
         setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : {
             date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
             priceFuel: settings.priceFuel,

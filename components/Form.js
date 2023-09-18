@@ -3,13 +3,10 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator } from 'react-native-paper';
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { useAppContext } from "../providers/AppContextProvider";
-import dayjs from 'dayjs';
-import 'dayjs/locale/ru';
 
 registerTranslation('ru', {
-  save: 'Сохр.',
+  save: 'Записать',
   selectSingle: 'Выбрать дату',
   selectMultiple: 'Выбрать даты',
   selectRange: 'Select period',
@@ -26,9 +23,6 @@ registerTranslation('ru', {
   pickDateFromCalendar: 'Выберите дату из календаря',
   close: 'Закрыть'
 })
-
-const customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
 
 const ViewDataField = props => {
   const {
@@ -101,28 +95,6 @@ const ViewDataField = props => {
   )
 }
 
-const DatePicer = props => {
-  const { date, setFieldValue } = props;
-
-  const onChange = (event, selected) => setFieldValue('date', selected)
-
-  const showDatePicer = () => {
-    DateTimePickerAndroid.open({
-      value: dayjs(date).toDate(),
-      mode: 'date',
-      onChange
-    });
-  }
-  return (
-    <InputField
-      {...props}
-      value={dayjs(props.date).format('DD.MM.YY')}
-      label='Дата'
-      editable={true}
-      onFocus={() => showDatePicer()} />
-  )
-}
-
 const InputField = (props) => <TextInput
   style={{ marginTop: 12 }}
   contentStyle={{ height: 56 }}
@@ -152,7 +124,7 @@ export default function Form({ route, navigation }) {
       });
     }
   });
-  console.log(dayjs(item.date).toDate())
+  //console.log(dayjs(item.date).toDate())
   const theme = useTheme();
   return (
     <View style={Styles.main} >
@@ -182,15 +154,11 @@ export default function Form({ route, navigation }) {
               label="Дата"
               value={formik.values.date}
               onChange={d => {
-                console.log(d)
                 formik.setFieldValue('date', d)}}
               inputMode="start"
               mode="outlined"
               presentationStyle="formSheet"
             />
-            {/* <DatePicer 
-            date={formik.values.date} 
-            setFieldValue={formik.setFieldValue} style={Styles.inputField} /> */}
             <InputField
               value={formik.values.priceFuel}
               onChangeText={formik.handleChange('priceFuel')}

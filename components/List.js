@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
-import { AccordionList, AccordionItem } from "react-native-accordion-list-view";
+import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
@@ -14,18 +13,12 @@ export default function Main({ navigation, route }) {
 
   const {
     listOfItems,
-    setListOfItems,
-    isStartScroll,
     startScroll,
-    setIsDarkTheme,
-    isDarkTheme,
-    settings,
-    setSettings,
     deleteItemOfListOfItems
   } = useAppContext();
 
   const theme = useTheme();
-  console.log(listOfItems)
+  //console.log(listOfItems)
   return (
     <View style={Styles.main} >
       <FAB
