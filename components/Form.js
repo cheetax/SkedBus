@@ -2,13 +2,27 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator } from 'react-native-paper';
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { useAppContext } from "../providers/AppContextProvider";
-import dayjs from 'dayjs';
-import 'dayjs/locale/ru';
 
-const customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+registerTranslation('ru', {
+  save: 'Записать',
+  selectSingle: 'Выбрать дату',
+  selectMultiple: 'Выбрать даты',
+  selectRange: 'Select period',
+  notAccordingToDateFormat: (inputFormat) =>
+    `Формат даты должен быть ${inputFormat}`,
+  mustBeHigherThan: (date) => `Должно быть позже чем ${date}`,
+  mustBeLowerThan: (date) => `Должно быть раньше чем ${date}`,
+  mustBeBetween: (startDate, endDate) =>
+    `Должно быть между ${startDate} - ${endDate}`,
+  dateIsDisabled: 'День не разрешен',
+  previous: 'Предыдущий',
+  next: 'Слудующий',
+  typeInDate: 'Тип даты',
+  pickDateFromCalendar: 'Выберите дату из календаря',
+  close: 'Закрыть'
+})
 
 const ViewDataField = props => {
   const {
@@ -81,28 +95,6 @@ const ViewDataField = props => {
   )
 }
 
-const DatePicer = props => {
-  const { date, setFieldValue } = props;
-
-  const onChange = (event, selected) => setFieldValue('date', selected)
-
-  const showDatePicer = () => {
-    DateTimePickerAndroid.open({
-      value: dayjs(date).toDate(),
-      mode: 'date',
-      onChange
-    });
-  }
-  return (
-    <InputField
-      {...props}
-      value={dayjs(props.date).format('DD.MM.YY')}
-      label='Дата'
-      editable={true}
-      onFocus={() => showDatePicer()} />
-  )
-}
-
 const InputField = (props) => <TextInput
   style={{ marginTop: 12 }}
   contentStyle={{ height: 56 }}
@@ -132,7 +124,7 @@ export default function Form({ route, navigation }) {
       });
     }
   });
-
+  //console.log(dayjs(item.date).toDate())
   const theme = useTheme();
   return (
     <View style={Styles.main} >
@@ -156,7 +148,17 @@ export default function Form({ route, navigation }) {
           keyboardVerticalOffset={10}
         >
           <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
-            <DatePicer date={formik.values.date} setFieldValue={formik.setFieldValue} style={Styles.inputField} />
+            <DatePickerInput
+              locale='ru'
+              withDateFormatInLabel={false}
+              label="Дата"
+              value={formik.values.date}
+              onChange={d => {
+                formik.setFieldValue('date', d)}}
+              inputMode="start"
+              mode="outlined"
+              presentationStyle="formSheet"
+            />
             <InputField
               value={formik.values.priceFuel}
               onChangeText={formik.handleChange('priceFuel')}
