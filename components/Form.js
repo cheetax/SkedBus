@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator } from 'react-native-paper';
+import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip, IconButton } from 'react-native-paper';
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { useAppContext } from "../providers/AppContextProvider";
 
@@ -102,6 +102,27 @@ const InputField = (props) => <TextInput
   {...props}
 />
 
+const ExpensesView = props => {
+  const { values:
+    {
+      priceFuel,
+      averageFuel
+    }
+  } = props
+
+  return <Card
+    style={{ ...props.style }}
+    mode='outlined'
+  >
+    <Card.Title title={
+      <Text variant='bodyLarge'>Расходы на километр пробега</Text>
+    } />
+    <Card.Content>
+      <Text variant='titleLarge'>{priceFuel * averageFuel / 100}</Text>
+    </Card.Content>
+  </Card>
+}
+
 export default function Form({ route, navigation }) {
 
   const { item, getItem, appliedListOfItems } = useAppContext();
@@ -154,7 +175,10 @@ export default function Form({ route, navigation }) {
             keyboardShouldPersistTaps='handled'
             contentInsetAdjustmentBehavior='always'
           >
+            <Chip mode="outlined" closeIcon="pencil-outline" onClose={() => console.log('Редактировать')}
+            >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
             <DatePickerInput
+              style={{ height: 56, marginTop: 12 }}
               locale='ru'
               withDateFormatInLabel={false}
               label="Дата"
@@ -166,14 +190,20 @@ export default function Form({ route, navigation }) {
               mode="outlined"
               presentationStyle="formSheet"
             />
-            <InputField
+            {/* <InputField
               value={formik.values.priceFuel}
               onChangeText={formik.handleChange('priceFuel')}
               label='Стоимость топлива' />
             <InputField
               value={formik.values.averageFuel}
               onChangeText={formik.handleChange('averageFuel')}
-              label='Средний расход' />
+              label='Средний расход' /> */}
+            {/* <ExpensesView values={formik.values} style={{
+              ...Styles.card,
+             //backgroundColor: theme.colors.surfaceVariant
+            }} /> */}
+
+
             <InputField
               value={formik.values.proceeds}
               onChangeText={formik.handleChange('proceeds')}
@@ -209,6 +239,13 @@ const Styles = StyleSheet.create({
   activitiIndicator: {
     flex: 1,
     marginVertical: 'auto',
+  },
+  card: {
+    flex: 1,
+    marginTop: 12
+    // marginVertical: 8,
+    //marginRight: 8,
+    // marginLeft: 4
   },
   forma: {
     flex: 1,
