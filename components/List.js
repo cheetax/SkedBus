@@ -13,6 +13,7 @@ export default function Main({ navigation, route }) {
 
   const {
     listOfItems,
+    isStartScroll,
     startScroll,
     deleteItemOfListOfItems
   } = useAppContext();
@@ -25,6 +26,7 @@ export default function Main({ navigation, route }) {
         style={Styles.fab}
         icon="plus"
         size="medium"
+        visible={!isStartScroll}
         onPress={() => navigation.navigate({
           name: 'Form',
           params: { key: '' },
