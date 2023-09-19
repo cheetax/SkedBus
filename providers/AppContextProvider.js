@@ -50,6 +50,20 @@ export const useCreateAppContext = function (props) {
             averageFuel: '9.5'
         }
     )
+    
+    const newItem = () => ({
+        date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
+        priceFuel: settings.priceFuel,
+        averageFuel: settings.averageFuel,
+        proceeds: '', //выручка
+        odometerStart: '', //спидометр старт
+        odometerFinish: '', //спидометр финиш
+        profit: '', //доход
+        profitPerOdometer: '', //доход на километр
+        odometer: '',     //пробег
+        expenses: '',     //затраты
+        key: keyGenerator()
+    })
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
 
@@ -78,39 +92,14 @@ export const useCreateAppContext = function (props) {
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
-    const [item, setItem] = useState({
-        date: '', //dayjs().format('DD.MM.YY'),
-        priceFuel: '',
-        averageFuel: '',
-        proceeds: '', //выручка
-        odometerStart: '', //спидометр старт
-        odometerFinish: '', //спидометр финиш
-        profit: '', //доход
-        profitPerOdometer: '', //доход на километр
-        odometer: '',     //пробег
-        expenses: '',     //затраты
-        key: ''
-    })
+    const [item, setItem] = useState(newItem())
 
-    const getItem = (key) => {
-        
-        setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : {
-            date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
-            priceFuel: settings.priceFuel,
-            averageFuel: settings.averageFuel,
-            proceeds: '', //выручка
-            odometerStart: '', //спидометр старт
-            odometerFinish: '', //спидометр финиш
-            profit: '', //доход
-            profitPerOdometer: '', //доход на километр
-            odometer: '',     //пробег
-            expenses: '',     //затраты
-            key: keyGenerator()
-        })
-    }
+    
 
+    const getItem = (key) => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem() )
+    
     const appliedListOfItems = (item) => {
-        console.log(item)
+       // console.log(item)
         setListOfItems(list => [
             item,
             ...list.filter(list => list.key != item.key)

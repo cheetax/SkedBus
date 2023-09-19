@@ -18,6 +18,11 @@ export default function Main({ navigation, route }) {
     deleteItemOfListOfItems
   } = useAppContext();
 
+  const editForm = key => navigation.navigate({
+    name: 'Form',
+    params: { key },
+  }) 
+
   const theme = useTheme();
   //console.log(listOfItems)
   return (
@@ -27,11 +32,7 @@ export default function Main({ navigation, route }) {
         icon="plus"
         size="medium"
         visible={!isStartScroll}
-        onPress={() => navigation.navigate({
-          name: 'Form',
-          params: { key: '' },
-        })
-        }>
+        onPress={() => editForm('')}>
       </FAB>
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
@@ -97,9 +98,7 @@ export default function Main({ navigation, route }) {
                     <IconButton
                       icon="pencil-outline"
                       //size={20}
-                      onPress={() => {
-                        navigation.navigate('Form', { key: item.key })
-                      }}
+                      onPress={() => editForm(item.key)}
                     />
                     <IconButton
                       icon="delete-outline"

@@ -147,14 +147,21 @@ export default function Form({ route, navigation }) {
           behavior="height"
           keyboardVerticalOffset={10}
         >
-          <ScrollView style={Styles.forma} showsVerticalScrollIndicator={false} >
+          <ScrollView
+            style={Styles.forma}
+            showsVerticalScrollIndicator={false}
+            keyboardDismissMode='on-drag'
+            keyboardShouldPersistTaps='handled'
+            contentInsetAdjustmentBehavior='always'
+          >
             <DatePickerInput
               locale='ru'
               withDateFormatInLabel={false}
               label="Дата"
               value={formik.values.date}
               onChange={d => {
-                formik.setFieldValue('date', d)}}
+                formik.setFieldValue('date', d)
+              }}
               inputMode="start"
               mode="outlined"
               presentationStyle="formSheet"
