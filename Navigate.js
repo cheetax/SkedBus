@@ -64,7 +64,13 @@ const Home = () => <Stack.Navigator>
 
 export default function Navigate({ }) {
     const { isDarkTheme } = useAppContext();
-    const theme = isDarkTheme ? MD3DarkTheme : MD3LightTheme;
+    //console.log(MD3LightTheme)
+    const theme = isDarkTheme ? MD3DarkTheme : {
+        ...MD3LightTheme,
+        colors: { ...MD3LightTheme.colors, surface: "rgba(254, 247, 255, 1)" }
+    };
+    //theme = {...theme, colors: {surface: "rgba(254, 247, 255, 1)"}}
+    //console.log(theme)
     return (
 
         <PaperProvider theme={theme}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip, IconButton } from 'react-native-paper';
+import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip } from 'react-native-paper';
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { useAppContext } from "../providers/AppContextProvider";
 
@@ -98,6 +98,7 @@ const ViewDataField = props => {
 const InputField = (props) => <TextInput
   style={{ marginTop: 12 }}
   contentStyle={{ height: 56 }}
+  outlineStyle={{ backgroundColor: 'none' }}
   mode="outlined"
   {...props}
 />
@@ -128,6 +129,7 @@ export default function Form({ route, navigation }) {
   const { item, getItem, appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
+  //const theme = useTheme()
 
   useEffect(() => {
     getItem(route.params.key)
@@ -148,7 +150,7 @@ export default function Form({ route, navigation }) {
   //console.log(dayjs(item.date).toDate())
   const theme = useTheme();
   return (
-    <View style={Styles.main} >
+    <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
       <Appbar.Header
       >
         <Appbar.Action
@@ -178,7 +180,12 @@ export default function Form({ route, navigation }) {
             <Chip mode="outlined" closeIcon="pencil-outline" onClose={() => console.log('Редактировать')}
             >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
             <DatePickerInput
-              style={{ height: 56, marginTop: 12 }}
+              style={{
+                height: 56,
+                marginTop: 12,
+               // backgroundColor: theme.colors.surface
+              }}
+              outlineStyle={{ backgroundColor: 'none' }}
               locale='ru'
               withDateFormatInLabel={false}
               label="Дата"
@@ -235,6 +242,7 @@ const Styles = StyleSheet.create({
   main: {
     flex: 1,
     flexDirection: 'column',
+
   },
   activitiIndicator: {
     flex: 1,
