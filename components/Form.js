@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip } from 'react-native-paper';
+import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip, Divider } from 'react-native-paper';
+import { AccordionItem } from "react-native-accordion-list-view";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
 
 registerTranslation('ru', {
@@ -103,24 +105,35 @@ const InputField = (props) => <TextInput
   {...props}
 />
 
-const ExpensesView = props => {
-  const { values:
-    {
-      priceFuel,
-      averageFuel
-    }
+const OdometerView = props => {
+  const {
+    values,
+    theme
   } = props
 
   return <Card
-    style={{ ...props.style }}
-    mode='outlined'
+    style={{
+      ...Styles.surface,
+      // backgroundColor: theme.colors.surfaceVariant
+    }}
   >
-    <Card.Title title={
-      <Text variant='bodyLarge'>Расходы на километр пробега</Text>
-    } />
-    <Card.Content>
-      <Text variant='titleLarge'>{priceFuel * averageFuel / 100}</Text>
-    </Card.Content>
+    <AccordionItem
+      containerStyle={Styles.accordion}
+      customIcon={() => <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
+      customTitle={() =>
+        <View
+          style={Styles.accordionTitle}
+        >
+          <Text style={Styles.text} variant='titleMedium'>Пробег</Text>
+          <View style={Styles.stackRow}>
+            <Text style={Styles.text} variant='bodyMedium'>Общий пробег: {values.odometer}</Text>
+          </View>
+        </View>}
+      customBody={() => <View>
+        <Divider style={{marginTop: 12}} />
+
+      </View>}
+    />
   </Card>
 }
 
@@ -147,6 +160,7 @@ export default function Form({ route, navigation }) {
       });
     }
   });
+
   //console.log(dayjs(item.date).toDate())
   const theme = useTheme();
   return (
@@ -177,13 +191,16 @@ export default function Form({ route, navigation }) {
             keyboardShouldPersistTaps='handled'
             contentInsetAdjustmentBehavior='always'
           >
-            <Chip mode="outlined" closeIcon="pencil-outline" onClose={() => console.log('Редактировать')}
+            <Chip
+              mode="outlined"
+              closeIcon="pencil-outline"
+              onClose={() => console.log('Редактировать')}
             >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
             <DatePickerInput
               style={{
                 height: 56,
                 marginTop: 12,
-               // backgroundColor: theme.colors.surface
+                // backgroundColor: theme.colors.surface
               }}
               outlineStyle={{ backgroundColor: 'none' }}
               locale='ru'
@@ -210,11 +227,14 @@ export default function Form({ route, navigation }) {
              //backgroundColor: theme.colors.surfaceVariant
             }} /> */}
 
+            <OdometerView values={formik.values} theme={theme} />
 
             <InputField
               value={formik.values.proceeds}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
+
+
             <InputField
               value={formik.values.odometerStart}
               onChangeText={formik.handleChange('odometerStart')}
@@ -249,11 +269,37 @@ const Styles = StyleSheet.create({
     marginVertical: 'auto',
   },
   card: {
-    flex: 1,
+   // flex: 1,
     marginTop: 12
     // marginVertical: 8,
     //marginRight: 8,
     // marginLeft: 4
+  },
+  surface: {
+    //flex: 1,
+    marginTop: 12,
+    marginBottom: 2,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    marginHorizontal: 2
+  },
+  accordionTitle: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginVertical: 0,
+    paddingHorizontal: 0,
+    marginBottom: 0,
+    padding: 0,
+    //height: 56,
+    margin: 0,
+    backgroundColor: 'none'
+  },
+  accordion: {
+    flex: 1,
+    padding: 0,
+    backgroundColor: 'none',
   },
   forma: {
     flex: 1,

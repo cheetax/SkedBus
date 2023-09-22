@@ -59,7 +59,7 @@ export default function Main({ navigation, route }) {
                 </View>
               }
               customBody={() =>
-                <View>
+                <>
                   <View style={Styles.stackRow}>
                     <Card
                       style={{
@@ -105,7 +105,7 @@ export default function Main({ navigation, route }) {
                       onPress={() => deleteItemOfListOfItems(item.key)}
                     />
                   </View>
-                </View>
+                </>
               }
             />
           </Card>
