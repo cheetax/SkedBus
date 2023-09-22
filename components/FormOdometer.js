@@ -123,7 +123,7 @@ const OdometerView = props => {
   </Card>
 }
 
-export default function Form({ route, navigation }) {
+export default function FormOdometer({ route, navigation }) {
 
   const { item, getItem, appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
@@ -147,7 +147,7 @@ export default function Form({ route, navigation }) {
     }
   });
 
-  console.log(item)
+  //console.log(dayjs(item.date).toDate())
   const theme = useTheme();
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >

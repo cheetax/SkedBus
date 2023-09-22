@@ -32,9 +32,9 @@ export const useAppContextScroll = () => {
 
 export const useCreateAppContextScroll = (props) => {
     const [isStartScroll, setIsStartScroll] = useState(false);
-    const startScroll = (a) => setIsStartScroll(a !== 0)   
+    const startScroll = (a) => setIsStartScroll(a !== 0)
 
-    return {        
+    return {
         isStartScroll,
         startScroll
     };
@@ -50,18 +50,24 @@ export const useCreateAppContext = function (props) {
             averageFuel: '9.5'
         }
     )
-    
+
+    const [odometer, setOdometer] = useState([]) 
+
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings.priceFuel,
         averageFuel: settings.averageFuel,
         proceeds: '', //выручка
-        odometerStart: '', //спидометр старт
-        odometerFinish: '', //спидометр финиш
         profit: '', //доход
         profitPerOdometer: '', //доход на километр
-        odometer: '',     //пробег
+        odometer: odometer ,     //пробег
         expenses: '',     //затраты
+        key: keyGenerator()
+    })
+
+    const newItemOdometer = () => ({
+        odometerStart: '', //спидометр старт
+        odometerFinish: '', //спидометр финиш
         key: keyGenerator()
     })
 
@@ -93,21 +99,26 @@ export const useCreateAppContext = function (props) {
     }, [listOfItems, isDarkTheme]);
 
     const [item, setItem] = useState(newItem())
+    const [itemOdometer, setItemOdometer] = useState(newItemOdometer())
 
-    
+    const getItem = key => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem())
+    const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.filter(list => list.key === key)[0] : newItemOdometer())
 
-    const getItem = (key) => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem() )
-    
-    const appliedListOfItems = (item) => {
-       // console.log(item)
+    const appliedListOfItems = i => {
+        // console.log(item)
         setListOfItems(list => [
-            item,
-            ...list.filter(list => list.key != item.key)
+            i,
+            ...list.filter(list => list.key != i.key)
         ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
         );
     }
 
-    const deleteItemOfListOfItems = (key) => setListOfItems(list => [
+    const appliedOdometer = i => setOdometer(list => [
+        i,
+        ...list.filter(list => list.key != i.key)
+    ])
+
+    const deleteItemOfListOfItems = key => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
     ])
 
@@ -124,6 +135,7 @@ export const useCreateAppContext = function (props) {
         item,
         getItem,
         appliedListOfItems,
-        deleteItemOfListOfItems
+        deleteItemOfListOfItems,
+        appliedOdometer
     };
 }
