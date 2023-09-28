@@ -1,15 +1,15 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 //import { AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, useTheme, } from 'react-native-paper';
+import { FAB, Text, Divider, IconButton, useTheme, Appbar } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import dayjs from 'dayjs';
 
 export default function ListOdometer({ navigation, route }) {
-
+  // console.log(1)
   const {
-    listOfItems,
+    listOdometer,
     isStartScroll,
     startScroll,
     deleteItemOfListOfItems
@@ -21,9 +21,21 @@ export default function ListOdometer({ navigation, route }) {
   })
 
   const theme = useTheme();
-  //console.log(listOfItems)
+  console.log(listOdometer)
   return (
     <View style={Styles.main} >
+      <Appbar.Header
+      >
+        <Appbar.Action
+          icon='arrow-left'
+          onPress={() => navigation.goBack()}
+        />
+        <Appbar.Content
+          title={
+            <Text
+              variant='titleLarge'>Пробеги</Text>}
+        />
+      </Appbar.Header>
       <FAB
         style={Styles.fab}
         icon="plus"
@@ -33,20 +45,17 @@ export default function ListOdometer({ navigation, route }) {
       </FAB>
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
-        data={listOfItems}
+        data={listOdometer}
         style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
-          <Card
-            theme={theme}
-            style={Styles.surface}
-          //elevation={1} 
-          >
-            
-          </Card>
-
+          <View >
+            <Text>{item.odometerStart}</Text>
+            <Text>{item.odometerFinish} </Text>
+            <Divider />
+          </View>
         )}
       >
-      </FlatList>
+      </FlatList >
 
     </View >
   );

@@ -51,7 +51,7 @@ export const useCreateAppContext = function (props) {
         }
     )
 
-    const [odometer, setOdometer] = useState([]) 
+
 
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
@@ -60,14 +60,17 @@ export const useCreateAppContext = function (props) {
         proceeds: '', //выручка
         profit: '', //доход
         profitPerOdometer: '', //доход на километр
-        odometer: odometer ,     //пробег
+        odometer: {
+            resultOdometer: 0,
+            data: []
+        },     //пробег
         expenses: '',     //затраты
         key: keyGenerator()
     })
 
     const newItemOdometer = () => ({
-        odometerStart: '', //спидометр старт
-        odometerFinish: '', //спидометр финиш
+        odometerStart: 0, //спидометр старт
+        odometerFinish: 0, //спидометр финиш
         key: keyGenerator()
     })
 
@@ -98,25 +101,43 @@ export const useCreateAppContext = function (props) {
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
+    useEffect(() => {
+        console.log(listOdometer)
+        setItem(item => ({
+            ...item,
+            odometer: {
+                resultOdometer: 0, //listOdometer.reduce((val, item) => val + (item.odometerFinish - item.odometerStart)),
+                data: listOdometer
+            }
+        }))
+    }, [listOdometer])
+
     const [item, setItem] = useState(newItem())
     const [itemOdometer, setItemOdometer] = useState(newItemOdometer())
+    const [odometer, setOdometer] = useState(0)
+    const [listOdometer, setListOdometer] = useState([])
 
     const getItem = key => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem())
-    const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.filter(list => list.key === key)[0] : newItemOdometer())
+    //const getOdometer = () => setOdometer(item.odometer)
+    const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
     const appliedListOfItems = i => {
-        // console.log(item)
         setListOfItems(list => [
             i,
             ...list.filter(list => list.key != i.key)
         ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
         );
+        //setOdometer(i.odometer)
     }
 
-    const appliedOdometer = i => setOdometer(list => [
-        i,
-        ...list.filter(list => list.key != i.key)
-    ])
+    const appliedOdometer = async i => {
+        console.log(listOdometer)
+        await setListOdometer(list => [
+            i,
+            ...list.filter(list => list.key != i.key)
+        ])
+        console.log(listOdometer)
+    }
 
     const deleteItemOfListOfItems = key => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
@@ -136,6 +157,9 @@ export const useCreateAppContext = function (props) {
         getItem,
         appliedListOfItems,
         deleteItemOfListOfItems,
-        appliedOdometer
+        appliedOdometer,
+        itemOdometer,
+        getItemOdometer,
+        listOdometer
     };
 }

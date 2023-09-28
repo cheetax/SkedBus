@@ -2,96 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip, Divider } from 'react-native-paper';
-import { AccordionItem } from "react-native-accordion-list-view";
-import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
-
-registerTranslation('ru', {
-  save: 'Записать',
-  selectSingle: 'Выбрать дату',
-  selectMultiple: 'Выбрать даты',
-  selectRange: 'Select period',
-  notAccordingToDateFormat: (inputFormat) =>
-    `Формат даты должен быть ${inputFormat}`,
-  mustBeHigherThan: (date) => `Должно быть позже чем ${date}`,
-  mustBeLowerThan: (date) => `Должно быть раньше чем ${date}`,
-  mustBeBetween: (startDate, endDate) =>
-    `Должно быть между ${startDate} - ${endDate}`,
-  dateIsDisabled: 'День не разрешен',
-  previous: 'Предыдущий',
-  next: 'Слудующий',
-  typeInDate: 'Тип даты',
-  pickDateFromCalendar: 'Выберите дату из календаря',
-  close: 'Закрыть'
-})
-
-const ViewDataField = props => {
-  const {
-    values: {
-      expenses,
-      proceeds,
-      profit,
-      profitPerOdometer,
-      odometer,
-      priceFuel,
-      averageFuel,
-      odometerFinish,
-      odometerStart,
-      key
-    },
-    setFieldValue
-  } = props;
-
-  React.useEffect(() => {
-    if (proceeds && expenses) {
-      setFieldValue('profit', Math.round(proceeds - expenses));
-    }
-    if (odometerFinish && odometerStart) {
-      setFieldValue('odometer', odometerFinish - odometerStart);
-      setFieldValue('profitPerOdometer', Math.round(profit / odometer))
-    }
-    if (odometer && priceFuel && averageFuel) {
-      setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
-
-    }
-  }, [
-    proceeds,
-    expenses,
-    profit,
-    profitPerOdometer,
-    odometerFinish,
-    odometerStart,
-    odometer,
-    priceFuel,
-    averageFuel,
-    setFieldValue,
-    props.name,
-  ]);
-
-  return (
-    <View style={Styles.main} >
-      <View style={Styles.stackRow} >
-        <Text {...props} >Пробег:</Text>
-        <Text {...props} >{odometer}</Text>
-      </View>
-
-      <View style={Styles.stackRow} >
-        <Text {...props} >Затраты:</Text>
-        <Text {...props} >{expenses}</Text>
-      </View>
-
-      <View style={Styles.stackRow} >
-        <Text {...props} >Доход:</Text>
-        <Text {...props}>{profit}</Text>
-      </View>
-      <View style={Styles.stackRow} >
-        <Text {...props} >Доход на пробег:</Text>
-        <Text {...props} >{key}</Text>
-      </View>
-    </View>
-  )
-}
 
 const InputField = (props) => <TextInput
   style={{ marginTop: 12, marginHorizontal: 2 }}
@@ -101,48 +12,26 @@ const InputField = (props) => <TextInput
   {...props}
 />
 
-const OdometerView = props => {
-  const {
-    values,
-    theme
-  } = props
-
-  return <Card
-    style={{
-      ...Styles.card,
-      // backgroundColor: theme.colors.surfaceVariant
-    }}
-  >
-    <Card.Title
-      title={<Text style={Styles.text} variant='titleMedium'>Пробег</Text>}
-      subtitle={<Text style={Styles.text} variant='bodyMedium'>Общий пробег: {values.odometer}</Text>}
-      right={() => <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
-    />
-    
-
-  </Card>
-}
-
 export default function FormOdometer({ route, navigation }) {
 
-  const { item, getItem, appliedListOfItems } = useAppContext();
+  const { itemOdometer, getItemOdometer, appliedOdometer } = useAppContext();
   const [loaded, setLoaded] = useState(false);
-  const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
+  const nameForma = route.params.key !== '' ? 'Редактирование пробега' : 'Новый пробег'
   //const theme = useTheme()
 
   useEffect(() => {
-    getItem(route.params.key)
+    getItemOdometer(route.params.key)
     setLoaded(!loaded)
   }, [])
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: { ...item },
+    initialValues: { ...itemOdometer },
     validateOnChange: false,
     onSubmit: values => {
-      appliedListOfItems(values)
+      appliedOdometer(values)
       navigation.navigate({
-        name: 'List',
+        name: 'ListOdometer',
       });
     }
   });
@@ -177,50 +66,6 @@ export default function FormOdometer({ route, navigation }) {
             keyboardShouldPersistTaps='handled'
             contentInsetAdjustmentBehavior='always'
           >
-            <Chip
-              mode="outlined"
-              closeIcon="pencil-outline"
-              onClose={() => console.log('Редактировать')}
-            >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
-            <DatePickerInput
-              style={{
-                height: 56,
-                marginTop: 12,
-                // backgroundColor: theme.colors.surface
-              }}
-              outlineStyle={{ backgroundColor: 'none' }}
-              locale='ru'
-              withDateFormatInLabel={false}
-              label="Дата"
-              value={formik.values.date}
-              onChange={d => {
-                formik.setFieldValue('date', d)
-              }}
-              inputMode="start"
-              mode="outlined"
-              presentationStyle="formSheet"
-            />
-            {/* <InputField
-              value={formik.values.priceFuel}
-              onChangeText={formik.handleChange('priceFuel')}
-              label='Стоимость топлива' />
-            <InputField
-              value={formik.values.averageFuel}
-              onChangeText={formik.handleChange('averageFuel')}
-              label='Средний расход' /> */}
-            {/* <ExpensesView values={formik.values} style={{
-              ...Styles.card,
-             //backgroundColor: theme.colors.surfaceVariant
-            }} /> */}
-
-            <OdometerView values={formik.values} theme={theme} />
-
-            <InputField
-              value={formik.values.proceeds}
-              onChangeText={formik.handleChange('proceeds')}
-              label='Выручка' />
-
-
             <InputField
               value={formik.values.odometerStart}
               onChangeText={formik.handleChange('odometerStart')}
@@ -229,9 +74,6 @@ export default function FormOdometer({ route, navigation }) {
               value={formik.values.odometerFinish}
               onChangeText={formik.handleChange('odometerFinish')}
               label='Спидометр на конец' />
-
-            <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
-
           </ScrollView>
         </KeyboardAvoidingView> :
         <ActivityIndicator

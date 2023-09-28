@@ -35,6 +35,16 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         component={Form}
         options={{ headerShown: false }}
     />
+    <Stack.Screen
+        name="FormOdometer"
+        component={FormOdometer}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="ListOdometer"
+        component={ListOdometer}
+        options={{ headerShown: false }}
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
