@@ -21,7 +21,7 @@ export default function ListOdometer({ navigation, route }) {
   })
 
   const theme = useTheme();
-  console.log(listOdometer)
+  //console.log(listOdometer)
   return (
     <View style={Styles.main} >
       <Appbar.Header
@@ -56,7 +56,6 @@ export default function ListOdometer({ navigation, route }) {
         )}
       >
       </FlatList >
-
     </View >
   );
 }

@@ -51,8 +51,6 @@ export const useCreateAppContext = function (props) {
         }
     )
 
-
-
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings.priceFuel,
@@ -84,6 +82,8 @@ export const useCreateAppContext = function (props) {
             data = JSON.parse(data)
             data.listOfItems.forEach(item => item.date = dayjs(item.date).toDate())
             setListOfItems(data.listOfItems);
+            console.log(data.listOfItems)
+            //setListOdometer(data.listOfItems.odometer.data)
             setSettings(data.settings);
             setIsDarkTheme(data.isDarkTheme)
         }
@@ -101,24 +101,18 @@ export const useCreateAppContext = function (props) {
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
 
-    useEffect(() => {
-        console.log(listOdometer)
-        setItem(item => ({
-            ...item,
-            odometer: {
-                resultOdometer: 0, //listOdometer.reduce((val, item) => val + (item.odometerFinish - item.odometerStart)),
-                data: listOdometer
-            }
-        }))
-    }, [listOdometer])
-
     const [item, setItem] = useState(newItem())
     const [itemOdometer, setItemOdometer] = useState(newItemOdometer())
-    const [odometer, setOdometer] = useState(0)
     const [listOdometer, setListOdometer] = useState([])
 
-    const getItem = key => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem())
-    //const getOdometer = () => setOdometer(item.odometer)
+    const getItem = key => {
+        setItem(item => {            
+            const i = key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem()
+            setListOdometer(i.odometer.data)
+            return i
+        })
+        
+    }
     const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
     const appliedListOfItems = i => {
@@ -127,16 +121,22 @@ export const useCreateAppContext = function (props) {
             ...list.filter(list => list.key != i.key)
         ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
         );
-        //setOdometer(i.odometer)
     }
 
     const appliedOdometer = async i => {
-        console.log(listOdometer)
-        await setListOdometer(list => [
-            i,
-            ...list.filter(list => list.key != i.key)
-        ])
-        console.log(listOdometer)
+        await setListOdometer(list => {
+            const newList = [
+                i,
+                ...list.filter(list => list.key != i.key)
+            ]
+            setItem(item => ({
+                ...item,
+                odometer: {
+                    resultOdometer: newList.length !==0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+                    data: newList
+                }
+            }))
+            return newList})
     }
 
     const deleteItemOfListOfItems = key => setListOfItems(list => [
