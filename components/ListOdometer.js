@@ -46,13 +46,13 @@ export default function ListOdometer({ navigation, route }) {
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
-        //style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
           <View >
             <View style={Styles.item} >
+              <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
               <View style={Styles.stackRow} >
-                <Text>{item.odometerStart}</Text>
-                <Text>{item.odometerFinish} </Text>
+                <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
+                <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
               </View>
             </View>
 
@@ -81,8 +81,9 @@ const Styles = StyleSheet.create({
     //backgroundColor: '#f2f2f2',
   },
   item: {
-    height: 56, 
-    justifyContent: 'center'
+    height: 72, 
+    justifyContent: 'center',    
+    paddingHorizontal: 16,
   },
   card: {
     flex: 1,
@@ -139,7 +140,6 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
     //height: 56,
     //marginVertical: 'auto'
     //flex: 1
