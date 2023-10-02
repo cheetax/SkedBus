@@ -23,7 +23,7 @@ export default function ListOdometer({ navigation, route }) {
   const theme = useTheme();
   //console.log(listOdometer)
   return (
-    <View style={Styles.main} >
+    <View style={[Styles.main, { backgroundColor: theme.colors.surface }]} >
       <Appbar.Header
       >
         <Appbar.Action
@@ -46,13 +46,19 @@ export default function ListOdometer({ navigation, route }) {
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
-        style={Styles.accordionMain}
+        //style={Styles.accordionMain}
         renderItem={({ item, index, separators }) => (
           <View >
-            <Text>{item.odometerStart}</Text>
-            <Text>{item.odometerFinish} </Text>
+            <View style={Styles.item} >
+              <View style={Styles.stackRow} >
+                <Text>{item.odometerStart}</Text>
+                <Text>{item.odometerFinish} </Text>
+              </View>
+            </View>
+
             <Divider />
           </View>
+
         )}
       >
       </FlatList >
@@ -75,8 +81,8 @@ const Styles = StyleSheet.create({
     //backgroundColor: '#f2f2f2',
   },
   item: {
-    paddingHorizontal: 0,
-    paddingRight: 0,
+    height: 56, 
+    justifyContent: 'center'
   },
   card: {
     flex: 1,
@@ -133,6 +139,9 @@ const Styles = StyleSheet.create({
 
   stackRow: {
     flexDirection: 'row',
-    flex: 1
+    paddingHorizontal: 16,
+    //height: 56,
+    //marginVertical: 'auto'
+    //flex: 1
   }
 })
