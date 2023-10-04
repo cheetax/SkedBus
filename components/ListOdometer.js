@@ -47,15 +47,17 @@ export default function ListOdometer({ navigation, route }) {
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
         renderItem={({ item, index, separators }) => (
-          <View >
+          <View  >
             <View style={Styles.item} >
-              <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
-              <View style={Styles.stackRow} >
-                <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
-                <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
+              <View style={Styles.itemContent} >
+                <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
+                <View style={Styles.stackRow} >
+                  <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
+                  <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
+                </View>
               </View>
+              <IconButton icon="dots-vertical" style={Styles.iconButton} />
             </View>
-
             <Divider />
           </View>
 
@@ -80,10 +82,9 @@ const Styles = StyleSheet.create({
     flexDirection: 'column',
     //backgroundColor: '#f2f2f2',
   },
-  item: {
-    height: 72, 
-    justifyContent: 'center',    
-    paddingHorizontal: 16,
+  itemContent: {
+    height: 72,
+    justifyContent: 'center',
   },
   card: {
     flex: 1,
@@ -138,6 +139,20 @@ const Styles = StyleSheet.create({
     // paddingHorizontal: 4
   },
 
+  item: {
+    flexDirection: 'row',
+    margin: 0,
+    paddingHorizontal: 16,
+    //height: 56,
+    //marginVertical: 'auto'
+    //flex: 1
+  },
+  iconButton: {
+    margin: 0,
+    flex: 1,
+    alignSelf: 'center',
+    alignItems: 'flex-end'
+  },
   stackRow: {
     flexDirection: 'row',
     //height: 56,
