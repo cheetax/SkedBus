@@ -75,12 +75,10 @@ const Styles = StyleSheet.create({
     alignSelf: 'flex-end',
     bottom: 16,
     right: 16,
-    //backgroundColor: '#1976d2',
   },
   main: {
     flex: 1,
     flexDirection: 'column',
-    //backgroundColor: '#f2f2f2',
   },
   itemContent: {
     height: 72,
