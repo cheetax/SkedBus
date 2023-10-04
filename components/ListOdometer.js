@@ -85,67 +85,12 @@ const Styles = StyleSheet.create({
   itemContent: {
     height: 72,
     justifyContent: 'center',
-  },
-  card: {
-    flex: 1,
-    marginVertical: 8,
-    marginRight: 8,
-    marginLeft: 4
-  },
-  contentCard: {
-    flex: 1,
-    alignItems: 'center',
-    alignSelf: 'center'
-  },
-
-  text: {
-    paddingHorizontal: 0,
-    paddingRight: 8,
-  },
-
-  accordionTitle: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginVertical: 0,
-    paddingHorizontal: 0,
-    marginBottom: 0,
-    padding: 0,
-    height: 56,
-    margin: 0,
-    //backgroundColor: 'red'
-  },
-
-  accordion: {
-    flex: 1,
-    padding: 0,
-    backgroundColor: 'none',
-  },
-
-  surface: {
-    flex: 1,
-    marginTop: 6,
-    marginBottom: 2,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    marginHorizontal: 22
-  },
-
-  accordionMain: {
-    // marginHorizontal: 22,
-    paddingBottom: 10,
-    marginBottom: 8,
-    // paddingHorizontal: 4
-  },
-
+  },  
+   
   item: {
     flexDirection: 'row',
     margin: 0,
     paddingHorizontal: 16,
-    //height: 56,
-    //marginVertical: 'auto'
-    //flex: 1
   },
   iconButton: {
     margin: 0,
@@ -155,8 +100,5 @@ const Styles = StyleSheet.create({
   },
   stackRow: {
     flexDirection: 'row',
-    //height: 56,
-    //marginVertical: 'auto'
-    //flex: 1
   }
 })
