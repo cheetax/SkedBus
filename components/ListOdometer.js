@@ -12,7 +12,7 @@ export default function ListOdometer({ navigation, route }) {
     listOdometer,
     isStartScroll,
     startScroll,
-    deleteItemOfListOfItems
+    deleteOdometer
   } = useAppContext();
 
   const editForm = key => navigation.navigate({
