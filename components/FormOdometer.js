@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator, Card, Chip, Divider } from 'react-native-paper';
+import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 
 const InputField = (props) => <TextInput

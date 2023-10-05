@@ -1,13 +1,10 @@
 import React from "react";
-import { View, StyleSheet, FlatList } from 'react-native';
-//import { AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Divider, IconButton, useTheme, Appbar } from 'react-native-paper';
+import { View, StyleSheet, FlatList } from 'react-native';;
+import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import dayjs from 'dayjs';
+import { useState } from "react";
 
 export default function ListOdometer({ navigation, route }) {
-  // console.log(1)
   const {
     listOdometer,
     isStartScroll,
@@ -20,11 +17,39 @@ export default function ListOdometer({ navigation, route }) {
     params: { key },
   })
 
+  const MenuOdometer = props => {
+    const [visible, setVisible] = useState(false)
+
+    const openMenu = () => setVisible(true)
+    const closeMenu = () => setVisible(false)
+    const edit = () => {
+      setVisible(false)
+      editForm(props.keyItem)
+    }
+    const del = () => deleteOdometer(props.keyItem)
+
+    return (
+      <View style={{ justifyContent: 'center' }} >
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <IconButton onPress={openMenu} icon="dots-horizontal" style={Styles.iconButton} />
+          }
+        >
+          <Menu.Item leadingIcon="pencil" onPress={edit} title='Изменить' />
+          <Menu.Item leadingIcon="delete" onPress={del} title='Удалить' />
+        </Menu>
+      </View>)
+  }
+
   const theme = useTheme();
-  //console.log(listOdometer)
   return (
     <View style={[Styles.main, { backgroundColor: theme.colors.surface }]} >
       <Appbar.Header
+        style={{
+          backgroundColor: isStartScroll ? theme.colors.elevation.level2 : theme.colors.surface
+        }}
       >
         <Appbar.Action
           icon='arrow-left'
@@ -46,7 +71,7 @@ export default function ListOdometer({ navigation, route }) {
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
-        renderItem={({ item, index, separators }) => (
+        renderItem={({ item }) => (
           <View  >
             <View style={Styles.item} >
               <View style={Styles.itemContent} >
@@ -56,12 +81,10 @@ export default function ListOdometer({ navigation, route }) {
                   <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
                 </View>
               </View>
-              <IconButton icon="dots-vertical" style={Styles.iconButton} />
+              <MenuOdometer keyItem={item.key} />
             </View>
             <Divider />
-          </View>
-
-        )}
+          </View>)}
       >
       </FlatList >
     </View >
@@ -83,18 +106,16 @@ const Styles = StyleSheet.create({
   itemContent: {
     height: 72,
     justifyContent: 'center',
-  },  
-   
+  },
+
   item: {
     flexDirection: 'row',
     margin: 0,
     paddingHorizontal: 16,
+    justifyContent: 'space-between'
   },
   iconButton: {
     margin: 0,
-    flex: 1,
-    alignSelf: 'center',
-    alignItems: 'flex-end'
   },
   stackRow: {
     flexDirection: 'row',

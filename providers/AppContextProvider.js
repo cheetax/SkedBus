@@ -138,9 +138,10 @@ export const useCreateAppContext = function (props) {
         return newList
     })
 
-    const deleteOdometer = i => setListOdometer(list => {
+    const deleteOdometer = key => setListOdometer(list => {
+        //console.log(key)
         const newList = [
-            ...list.filter(list => list.key != i.key)
+            ...list.filter(list => list.key != key)
         ]
         setItem(item => ({
             ...item,
