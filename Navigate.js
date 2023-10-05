@@ -3,6 +3,8 @@ import { Platform } from "react-native";
 import Main from "./TabNavigate";
 //import Main from './components/List'
 import Form from "./components/Form";
+import ListOdometer from "./components/ListOdometer";
+import FormOdometer from "./components/FormOdometer";
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "./providers/AppContextProvider";
@@ -33,6 +35,16 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         component={Form}
         options={{ headerShown: false }}
     />
+    <Stack.Screen
+        name="FormOdometer"
+        component={FormOdometer}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="ListOdometer"
+        component={ListOdometer}
+        options={{ headerShown: false }}
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
@@ -60,11 +72,27 @@ const Home = () => <Stack.Navigator>
         component={Form}
         options={{ headerShown: false }}
     />
+    <Stack.Screen
+        name="FormOdometer"
+        component={FormOdometer}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="ListOdometer"
+        component={ListOdometer}
+        options={{ headerShown: false }}
+    />
 </Stack.Navigator>
 
 export default function Navigate({ }) {
     const { isDarkTheme } = useAppContext();
-    const theme = isDarkTheme ? MD3DarkTheme : MD3LightTheme;
+    //console.log(MD3LightTheme)
+    const theme = isDarkTheme ? MD3DarkTheme : {
+        ...MD3LightTheme,
+        colors: { ...MD3LightTheme.colors, surface: "rgba(254, 247, 255, 1)" }
+    };
+    //theme = {...theme, colors: {surface: "rgba(254, 247, 255, 1)"}}
+    //console.log(theme)
     return (
 
         <PaperProvider theme={theme}>

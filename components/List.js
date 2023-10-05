@@ -6,9 +6,6 @@ import { useAppContext } from "../providers/AppContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import dayjs from 'dayjs';
 
-const keyGenerator = () => (Math.random() * 10000000000000000).toString();
-var red = 0;
-
 export default function Main({ navigation, route }) {
 
   const {
@@ -21,7 +18,7 @@ export default function Main({ navigation, route }) {
   const editForm = key => navigation.navigate({
     name: 'Form',
     params: { key },
-  }) 
+  })
 
   const theme = useTheme();
   //console.log(listOfItems)
@@ -59,7 +56,7 @@ export default function Main({ navigation, route }) {
                 </View>
               }
               customBody={() =>
-                <View>
+                <>
                   <View style={Styles.stackRow}>
                     <Card
                       style={{
@@ -69,10 +66,7 @@ export default function Main({ navigation, route }) {
                     //</View>mode='outlined'
                     >
                       <Card.Title
-                        title={
-                          <View >
-                            <Text style={Styles.text} variant='bodyLarge'>Выручка</Text>
-                          </View>}
+                        title={<Text style={Styles.text} variant='bodyLarge'>Выручка</Text>}
                       />
                       <Card.Content>
                         <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
@@ -83,7 +77,7 @@ export default function Main({ navigation, route }) {
                         ...Styles.card,
                         backgroundColor: theme.colors.surfaceVariant
                       }}
-                     //mode='outlined' 
+                    //mode='outlined' 
                     >
                       <Card.Title title={
                         <Text variant='bodyLarge'>Расходы</Text>
@@ -105,7 +99,7 @@ export default function Main({ navigation, route }) {
                       onPress={() => deleteItemOfListOfItems(item.key)}
                     />
                   </View>
-                </View>
+                </>
               }
             />
           </Card>
@@ -183,7 +177,7 @@ const Styles = StyleSheet.create({
   },
 
   accordionMain: {
-   // marginHorizontal: 22,
+    // marginHorizontal: 22,
     paddingBottom: 10,
     marginBottom: 8,
     // paddingHorizontal: 4

@@ -32,9 +32,9 @@ export const useAppContextScroll = () => {
 
 export const useCreateAppContextScroll = (props) => {
     const [isStartScroll, setIsStartScroll] = useState(false);
-    const startScroll = (a) => setIsStartScroll(a !== 0)   
+    const startScroll = (a) => setIsStartScroll(a !== 0)
 
-    return {        
+    return {
         isStartScroll,
         startScroll
     };
@@ -50,18 +50,25 @@ export const useCreateAppContext = function (props) {
             averageFuel: '9.5'
         }
     )
-    
+
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings.priceFuel,
         averageFuel: settings.averageFuel,
         proceeds: '', //выручка
-        odometerStart: '', //спидометр старт
-        odometerFinish: '', //спидометр финиш
         profit: '', //доход
         profitPerOdometer: '', //доход на километр
-        odometer: '',     //пробег
+        odometer: {
+            resultOdometer: 0,
+            data: []
+        },     //пробег
         expenses: '',     //затраты
+        key: keyGenerator()
+    })
+
+    const newItemOdometer = () => ({
+        odometerStart: 0, //спидометр старт
+        odometerFinish: 0, //спидометр финиш
         key: keyGenerator()
     })
 
@@ -75,6 +82,8 @@ export const useCreateAppContext = function (props) {
             data = JSON.parse(data)
             data.listOfItems.forEach(item => item.date = dayjs(item.date).toDate())
             setListOfItems(data.listOfItems);
+            console.log(data.listOfItems)
+            //setListOdometer(data.listOfItems.odometer.data)
             setSettings(data.settings);
             setIsDarkTheme(data.isDarkTheme)
         }
@@ -93,21 +102,58 @@ export const useCreateAppContext = function (props) {
     }, [listOfItems, isDarkTheme]);
 
     const [item, setItem] = useState(newItem())
+    const [itemOdometer, setItemOdometer] = useState(newItemOdometer())
+    const [listOdometer, setListOdometer] = useState([])
 
-    
+    const getItem = key => {
+        setItem(item => {
+            const i = key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem()
+            setListOdometer(i.odometer.data)
+            return i
+        })
 
-    const getItem = (key) => setItem(key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem() )
-    
-    const appliedListOfItems = (item) => {
-       // console.log(item)
+    }
+    const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
+
+    const appliedListOfItems = i => {
         setListOfItems(list => [
-            item,
-            ...list.filter(list => list.key != item.key)
+            i,
+            ...list.filter(list => list.key != i.key)
         ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
         );
     }
 
-    const deleteItemOfListOfItems = (key) => setListOfItems(list => [
+    const appliedOdometer = i => setListOdometer(list => {
+        const newList = [
+            i,
+            ...list.filter(list => list.key != i.key)
+        ]
+        setItem(item => ({
+            ...item,
+            odometer: {
+                resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+                data: newList
+            }
+        }))
+        return newList
+    })
+
+    const deleteOdometer = key => setListOdometer(list => {
+        //console.log(key)
+        const newList = [
+            ...list.filter(list => list.key != key)
+        ]
+        setItem(item => ({
+            ...item,
+            odometer: {
+                resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+                data: newList
+            }
+        }))
+        return newList
+    })
+
+    const deleteItemOfListOfItems = key => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
     ])
 
@@ -124,6 +170,11 @@ export const useCreateAppContext = function (props) {
         item,
         getItem,
         appliedListOfItems,
-        deleteItemOfListOfItems
+        deleteItemOfListOfItems,
+        appliedOdometer,
+        itemOdometer,
+        getItemOdometer,
+        listOdometer,
+        deleteOdometer
     };
 }
