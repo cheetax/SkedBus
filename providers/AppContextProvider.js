@@ -82,7 +82,7 @@ export const useCreateAppContext = function (props) {
             data = JSON.parse(data)
             data.listOfItems.forEach(item => item.date = dayjs(item.date).toDate())
             setListOfItems(data.listOfItems);
-            console.log(data.listOfItems)
+           // console.log(data.listOfItems)
             //setListOdometer(data.listOfItems.odometer.data)
             setSettings(data.settings);
             setIsDarkTheme(data.isDarkTheme)
