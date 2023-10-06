@@ -7,10 +7,11 @@ import { useState } from "react";
 export default function ListOdometer({ navigation, route }) {
   const {
     listOdometer,
-    isStartScroll,
-    startScroll,
     deleteOdometer
   } = useAppContext();
+
+  const [isStartScroll, setIsStartScroll] = useState(false);
+  const startScroll = (a) => setIsStartScroll(a !== 0)
 
   const editForm = key => navigation.navigate({
     name: 'FormOdometer',

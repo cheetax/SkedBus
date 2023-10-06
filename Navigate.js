@@ -50,14 +50,13 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         options={{ headerShown: false }}
     />
 </Stack.Navigator> : <Drawer.Navigator
-    /* screenOptions={{
+    screenOptions={{
         drawerStyle: {
             //backgroundColor: theme.colors.surface,
             width: '85%',
             flex: 1
         },
-    }} */
-    //useLegacyImplementation={true}
+    }}
     drawerContent={() => <DrawerItem />}>
     <Stack.Screen
         name="Home"
