@@ -12,10 +12,13 @@ import { useAppContext } from "./providers/AppContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
+import { enableLayoutAnimations } from 'react-native-reanimated';
 import DrawerItem from "./components/DrawerItem";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+enableLayoutAnimations(false);
+
 
 const Navigator = () => Platform == 'Web' ? <Stack.Navigator
     screenOptions={{
@@ -54,7 +57,7 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
             flex: 1
         },
     }} */
-    useLegacyImplementation={false}
+    //useLegacyImplementation={true}
     drawerContent={() => <DrawerItem />}>
     <Stack.Screen
         name="Home"
@@ -87,6 +90,7 @@ const Home = () => <Stack.Navigator>
 </Stack.Navigator>
 
 export default function Navigate({ }) {
+    enableLayoutAnimations(false)
     const { isDarkTheme } = useAppContext();
     //console.log(MD3LightTheme)
     const theme = isDarkTheme ? MD3DarkTheme : {

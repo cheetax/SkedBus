@@ -23,7 +23,7 @@ export default function Main({ navigation, route }) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <View style={Styles.main} >
+    <View style={[Styles.main, {backgroundColor: theme.colors.surface} ]} >
       <FAB
         style={Styles.fab}
         icon="plus"
