@@ -54,6 +54,7 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
             flex: 1
         },
     }}
+    useLegacyImplementation={false}
     drawerContent={() => <DrawerItem />}>
     <Stack.Screen
         name="Home"
