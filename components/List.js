@@ -179,7 +179,7 @@ const Styles = StyleSheet.create({
   accordionMain: {
     // marginHorizontal: 22,
     paddingBottom: 10,
-    marginBottom: 8,
+   // marginBottom: 8,
     // paddingHorizontal: 4
   },
 
