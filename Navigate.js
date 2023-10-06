@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'
 import React from "react";
 import { Platform } from "react-native";
 import Main from "./TabNavigate";
