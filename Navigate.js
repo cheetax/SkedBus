@@ -6,6 +6,7 @@ import Main from "./TabNavigate";
 import Form from "./components/Form";
 import ListOdometer from "./components/ListOdometer";
 import FormOdometer from "./components/FormOdometer";
+import FormExpenses from './components/FormExpenses';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "./providers/AppContextProvider";
@@ -45,6 +46,11 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         options={{ headerShown: false }}
     />
     <Stack.Screen
+        name="FormExpenses"
+        component={FormExpenses}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
         name="ListOdometer"
         component={ListOdometer}
         options={{ headerShown: false }}
@@ -79,6 +85,11 @@ const Home = () => <Stack.Navigator>
     <Stack.Screen
         name="FormOdometer"
         component={FormOdometer}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="FormExpenses"
+        component={FormExpenses}
         options={{ headerShown: false }}
     />
     <Stack.Screen

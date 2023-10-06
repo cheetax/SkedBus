@@ -9,9 +9,7 @@ import {
   ActivityIndicator,
   Card,
   Chip,
-  Divider
 } from 'react-native-paper';
-import { AccordionItem } from "react-native-accordion-list-view";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
@@ -54,14 +52,6 @@ const ViewDataField = props => {
     if (proceeds && expenses) {
       setFieldValue('profit', Math.round(proceeds - expenses));
     }
-    // if (odometerFinish && odometerStart) {
-    //  // setFieldValue('odometer', odometerFinish - odometerStart);
-    //  // setFieldValue('profitPerOdometer', Math.round(profit / odometer))
-    // }
-    // if (odometer && priceFuel && averageFuel) {
-    //   setFieldValue('expenses', Math.round(odometer / 100 * averageFuel * priceFuel));
-
-    // }
   }, [
     proceeds,
     expenses,
@@ -97,6 +87,7 @@ const ViewDataField = props => {
 }
 
 const InputField = (props) => <TextInput
+  keyboardType="numeric"
   style={{ marginTop: 12, marginHorizontal: 2 }}
   contentStyle={{ height: 56 }}
   outlineStyle={{ backgroundColor: 'none' }}
@@ -110,7 +101,7 @@ const OdometerView = props => {
     navigation,
     theme
   } = props
- // console.log(props)
+  // console.log(props)
 
   return <Card
     style={{
@@ -142,7 +133,7 @@ export default function Form({ route, navigation }) {
   useEffect(() => {
     getItem(route.params.key)
     setLoaded(!loaded)
-   // console.log(route.params.key, item  )
+    // console.log(route.params.key, item  )
   }, [])
 
   const formik = useFormik({
@@ -157,7 +148,7 @@ export default function Form({ route, navigation }) {
     }
   });
 
- // console.log(item)
+  // console.log(item)
   const theme = useTheme();
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
@@ -190,7 +181,9 @@ export default function Form({ route, navigation }) {
             <Chip
               mode="outlined"
               closeIcon="pencil-outline"
-              onClose={() => console.log('Редактировать')}
+              onClose={() => navigation.navigate({
+                name: 'FormExpenses'
+              })}
             >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
             <DatePickerInput
               style={{
@@ -210,18 +203,6 @@ export default function Form({ route, navigation }) {
               mode="outlined"
               presentationStyle="formSheet"
             />
-            {/* <InputField
-              value={formik.values.priceFuel}
-              onChangeText={formik.handleChange('priceFuel')}
-              label='Стоимость топлива' />
-            <InputField
-              value={formik.values.averageFuel}
-              onChangeText={formik.handleChange('averageFuel')}
-              label='Средний расход' /> */}
-            {/* <ExpensesView values={formik.values} style={{
-              ...Styles.card,
-             //backgroundColor: theme.colors.surfaceVariant
-            }} /> */}
 
             <OdometerView values={formik.values} navigation={navigation} theme={theme} />
 
@@ -229,16 +210,6 @@ export default function Form({ route, navigation }) {
               value={formik.values.proceeds}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
-
-
-            {/* <InputField
-              value={formik.values.odometerStart}
-              onChangeText={formik.handleChange('odometerStart')}
-              label='Спидометр на начало' />
-            <InputField
-              value={formik.values.odometerFinish}
-              onChangeText={formik.handleChange('odometerFinish')}
-              label='Спидометр на конец' /> */}
 
             <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
 

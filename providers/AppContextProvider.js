@@ -67,8 +67,8 @@ export const useCreateAppContext = function (props) {
     })
 
     const newItemOdometer = () => ({
-        odometerStart: 0, //спидометр старт
-        odometerFinish: 0, //спидометр финиш
+        odometerStart: '', //спидометр старт
+        odometerFinish: '', //спидометр финиш
         key: keyGenerator()
     })
 
@@ -82,8 +82,6 @@ export const useCreateAppContext = function (props) {
             data = JSON.parse(data)
             data.listOfItems.forEach(item => item.date = dayjs(item.date).toDate())
             setListOfItems(data.listOfItems);
-           // console.log(data.listOfItems)
-            //setListOdometer(data.listOfItems.odometer.data)
             setSettings(data.settings);
             setIsDarkTheme(data.isDarkTheme)
         }
@@ -115,13 +113,19 @@ export const useCreateAppContext = function (props) {
     }
     const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
-    const appliedListOfItems = i => {
-        setListOfItems(list => [
+    const appliedListOfItems = i => setListOfItems(list => [
             i,
             ...list.filter(list => list.key != i.key)
         ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
         );
-    }
+    
+    const appliedSettings = i => setSettings(settings => {
+            setItem(item => ({
+                ...item,
+                ...i
+            }))
+            return i
+        })    
 
     const appliedOdometer = i => setListOdometer(list => {
         const newList = [
@@ -166,7 +170,7 @@ export const useCreateAppContext = function (props) {
         startScroll,
         setIsDarkTheme,
         settings,
-        setSettings,
+        appliedSettings,
         item,
         getItem,
         appliedListOfItems,

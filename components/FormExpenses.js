@@ -12,31 +12,30 @@ const InputField = (props) => <TextInput keyboardType="numeric"
   {...props}
 />
 
-export default function FormOdometer({ route, navigation }) {
+export default function FormExpenses({ route, navigation }) {
 
-  const { itemOdometer, getItemOdometer, appliedOdometer } = useAppContext();
+  const { settings, appliedSettings } = useAppContext();
   const [loaded, setLoaded] = useState(false);
-  const nameForma = route.params.key !== '' ? 'Редактирование пробега' : 'Новый пробег'
+  const nameForma = 'Редактирование затрат' 
   //const theme = useTheme()
 
   useEffect(() => {
-    getItemOdometer(route.params.key)
     setLoaded(!loaded)
   }, [])
 
   const formik = useFormik({
     enableReinitialize: true,
-    initialValues: { ...itemOdometer },
+    initialValues: { ...settings},
     validateOnChange: false,
     onSubmit: values => {
-      appliedOdometer(values)
+      appliedSettings(values)
       navigation.navigate({
-        name: 'ListOdometer',
+        name: 'FormOdometer',
       });
     }
   });
 
-  //console.log(dayjs(item.date).toDate())
+  console.log(settings)
   const theme = useTheme();
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
@@ -67,14 +66,14 @@ export default function FormOdometer({ route, navigation }) {
             contentInsetAdjustmentBehavior='always'
           >
             <InputField
-              value={String(formik.values.odometerStart)}
-              onChangeText={formik.handleChange('odometerStart')}
+              value={String(formik.values.averageFuel)}
+              onChangeText={formik.handleChange('averageFuel')}
               
-              label='Спидометр на начало' />
+              label='Средний расход' />
             <InputField
-              value={String(formik.values.odometerFinish)}
-              onChangeText={formik.handleChange('odometerFinish')}
-              label='Спидометр на конец' />
+              value={String(formik.values.priceFuel)}
+              onChangeText={formik.handleChange('priceFuel')}
+              label='Стоимость литра' />
           </ScrollView>
         </KeyboardAvoidingView> :
         <ActivityIndicator
