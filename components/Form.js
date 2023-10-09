@@ -58,29 +58,42 @@ const ViewDataField = props => {
     profit,
     profitPerOdometer,
     odometer,
-    priceFuel,
-    averageFuel,
-    setFieldValue,
     props.name,
   ]);
-
+  console.log(props.values)
   return (
     <View style={Styles.main} >
       <View style={Styles.stackRow} >
-      </View>
+        <Card
+          style={{
+            ...Styles.card,
+            // backgroundColor: theme.colors.surfaceVariant
+          }}
+        >
+          <Card.Title
+            title={<Text style={Styles.text} variant='titleMedium'>Затраты</Text>}
+          />
+          <Card.Content>
+            <Text style={Styles.text} variant='bodyMedium'>{expenses}</Text>
+          </Card.Content>
+        </Card>
 
-      <View style={Styles.stackRow} >
-        <Text {...props} >Затраты:</Text>
-        <Text {...props} >{expenses}</Text>
-      </View>
-
-      <View style={Styles.stackRow} >
-        <Text {...props} >Доход:</Text>
-        <Text {...props}>{profit}</Text>
-      </View>
-      <View style={Styles.stackRow} >
-        <Text {...props} >Доход на пробег:</Text>
-        <Text {...props} >{key}</Text>
+        <Card
+          style={{
+            ...Styles.card,
+            // backgroundColor: theme.colors.surfaceVariant
+          }}
+        >
+          <Card.Title
+            title={<Text style={Styles.text} variant='titleMedium'>Доход</Text>}
+          />
+          <Card.Content>
+            <View>
+              <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>На пробег: {profitPerOdometer}</Text>
+            </View>
+          </Card.Content>
+        </Card>
       </View>
     </View>
   )
@@ -203,13 +216,11 @@ export default function Form({ route, navigation }) {
               mode="outlined"
               presentationStyle="formSheet"
             />
-
-            <OdometerView values={formik.values} navigation={navigation} theme={theme} />
-
             <InputField
               value={formik.values.proceeds}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
+            <OdometerView values={formik.values} navigation={navigation} theme={theme} />
 
             <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
 
