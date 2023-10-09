@@ -29,14 +29,12 @@ export default function FormExpenses({ route, navigation }) {
     validateOnChange: false,
     onSubmit: values => {
       appliedSettings(values)
-      navigation.navigate({
-        name: 'FormOdometer',
-      });
+      navigation.goBack();
     }
   });
 
-  console.log(settings)
   const theme = useTheme();
+  
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
       <Appbar.Header
