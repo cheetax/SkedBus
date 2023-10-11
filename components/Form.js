@@ -37,36 +37,19 @@ const ViewDataField = props => {
   const {
     values: {
       expenses,
-      proceeds,
       profit,
       profitPerOdometer,
-      odometer,
-      priceFuel,
-      averageFuel,
-      key
     },
-    setFieldValue
   } = props;
 
-  React.useEffect(() => {
-    if (proceeds && expenses) {
-      setFieldValue('profit', Math.round(proceeds - expenses));
-    }
-  }, [
-    proceeds,
-    expenses,
-    profit,
-    profitPerOdometer,
-    odometer,
-    props.name,
-  ]);
-  console.log(props.values)
+  //console.log(props.values)
   return (
     <View style={Styles.main} >
       <View style={Styles.stackRow} >
         <Card
           style={{
             ...Styles.card,
+            marginRight: 8
             // backgroundColor: theme.colors.surfaceVariant
           }}
         >
@@ -83,6 +66,7 @@ const ViewDataField = props => {
             ...Styles.card,
             // backgroundColor: theme.colors.surfaceVariant
           }}
+
         >
           <Card.Title
             title={<Text style={Styles.text} variant='titleMedium'>Доход</Text>}
@@ -101,7 +85,7 @@ const ViewDataField = props => {
 
 const InputField = (props) => <TextInput
   keyboardType="numeric"
-  style={{ marginTop: 12, marginHorizontal: 2 }}
+  style={{ marginTop: 12 }}
   contentStyle={{ height: 56 }}
   outlineStyle={{ backgroundColor: 'none' }}
   mode="outlined"
@@ -119,6 +103,7 @@ const OdometerView = props => {
   return <Card
     style={{
       ...Styles.card,
+
       // backgroundColor: theme.colors.surfaceVariant
     }}
     onPress={() => navigation.navigate({
@@ -138,15 +123,21 @@ const OdometerView = props => {
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedListOfItems } = useAppContext();
+  const { item, getItem, appliedListOfItems, appliedItem } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
   //const theme = useTheme()
 
-  useEffect(() => {
-    getItem(route.params.key)
+  const get = async key => {
+    await getItem(key)
     setLoaded(!loaded)
-    // console.log(route.params.key, item  )
+   // console.log(key)
+  }
+
+  useEffect(() => {
+    //console.log(item)
+    get(route.params.key)
+    //console.log(item)
   }, [])
 
   const formik = useFormik({
@@ -161,6 +152,11 @@ export default function Form({ route, navigation }) {
     }
   });
 
+  useEffect(() => {
+    //console.log(formik.values)
+    if (loaded) appliedItem(formik.values)
+  }, [formik.values])
+
   // console.log(item)
   const theme = useTheme();
   return (
@@ -169,7 +165,10 @@ export default function Form({ route, navigation }) {
       >
         <Appbar.Action
           icon='close'
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            getItem('')
+            navigation.goBack()
+          }}
         />
         <Appbar.Content
           title={
@@ -249,7 +248,9 @@ const Styles = StyleSheet.create({
   card: {
     marginTop: 12,
     marginHorizontal: 2,
-    paddingRight: 16
+    paddingRight: 16,
+    marginBottom: 2,
+    flex: 1
   },
 
   forma: {
