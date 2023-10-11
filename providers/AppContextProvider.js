@@ -111,6 +111,15 @@ export const useCreateAppContext = function (props) {
             return i
         })
     }
+    const round = (value, decimals) => Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+    
+    const calcProfit = (item) => {
+        const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
+        const profit = item.proceeds - expenses
+        const profitPerOdometer = item.odometer.resultOdometer !== 0 ? round(profit / item.odometer.resultOdometer, 2) : '-'
+        return { expenses, profit, profitPerOdometer }
+    }
+
     const getItemOdometer = key => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
     const appliedListOfItems = i => setListOfItems(list => [
@@ -122,15 +131,15 @@ export const useCreateAppContext = function (props) {
     const appliedSettings = i => setSettings(settings => {
 
         setItem(item => {
-            const expenses = Math.round(i.averageFuel * i.priceFuel / 100 * item.odometer.resultOdometer)
-            const profit = item.proceeds - expenses
-            const profitPerOdometer = profit / item.odometer.resultOdometer
+            const calc = calcProfit({
+                ...item,
+                averageFuel: i.averageFuel,
+                priceFuel: i.priceFuel,
+            });
             return {
                 ...item,
                 ...i,
-                expenses,
-                profit,
-                profitPerOdometer
+                ...calc
             }
         })
         return i
@@ -146,15 +155,16 @@ export const useCreateAppContext = function (props) {
             data: newList
         }
         setItem(item => {
-            const expenses = Math.round(i.averageFuel * i.priceFuel / 100 * odometer.resultOdometer)
-            const profit = item.proceeds - expenses
-            const profitPerOdometer = profit / odometer.resultOdometer
+            const calc = calcProfit({
+                ...item,
+                averageFuel: i.averageFuel,
+                priceFuel: i.priceFuel,
+                odometer
+            });
             return {
                 ...item,
                 odometer,
-                expenses,
-                profit,
-                profitPerOdometer
+                ...calc
             }
         })
         return newList
@@ -171,31 +181,31 @@ export const useCreateAppContext = function (props) {
         }
 
         setItem(item => {
-            //console.log(item)
-            const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * odometer.resultOdometer)
-            const profit = item.proceeds - expenses
-            const profitPerOdometer = profit / odometer.resultOdometer
+            const calc = calcProfit({
+                ...item,
+                averageFuel: i.averageFuel,
+                priceFuel: i.priceFuel,
+                odometer
+            });
             return {
                 ...item,
                 odometer,
-                expenses,
-                profit,
-                profitPerOdometer
+                ...calc
             }
         })
         return newList
     })
 
     const appliedItem = i => setItem(item => {
-        //console.log(i)
-        const expenses = Math.round(i.averageFuel * i.priceFuel / 100 * i.odometer.resultOdometer)
-        const profit = i.proceeds - expenses
-        const profitPerOdometer = profit / i.odometer.resultOdometer
+        const calc = calcProfit({
+            ...item,
+            averageFuel: i.averageFuel,
+            priceFuel: i.priceFuel,
+            odometer: i.odometer
+        });
         return {
             ...i,
-            expenses,
-            profit,
-            profitPerOdometer
+            ...calc
         }
     })
 

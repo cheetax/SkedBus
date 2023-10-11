@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Card,
   Chip,
+  Divider
 } from 'react-native-paper';
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,41 +42,35 @@ const ViewDataField = props => {
       profitPerOdometer,
     },
   } = props;
-
-  //console.log(props.values)
   return (
     <View style={Styles.main} >
       <View style={Styles.stackRow} >
         <Card
           style={{
             ...Styles.card,
-            marginRight: 8
-            // backgroundColor: theme.colors.surfaceVariant
           }}
         >
           <Card.Title
-            title={<Text style={Styles.text} variant='titleMedium'>Затраты</Text>}
+            title={<Text style={Styles.text} variant='titleMedium'>Доход и затраты</Text>}
           />
           <Card.Content>
-            <Text style={Styles.text} variant='bodyMedium'>{expenses}</Text>
-          </Card.Content>
-        </Card>
-
-        <Card
-          style={{
-            ...Styles.card,
-            // backgroundColor: theme.colors.surfaceVariant
-          }}
-
-        >
-          <Card.Title
-            title={<Text style={Styles.text} variant='titleMedium'>Доход</Text>}
-          />
-          <Card.Content>
-            <View>
-              <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
-              <Text style={Styles.text} variant='bodyMedium'>На пробег: {profitPerOdometer}</Text>
+            <View style={Styles.stackRow} >
+              <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{expenses}</Text>
             </View>
+            <Divider style={Styles.dividerCard} />
+            <View style={Styles.stackRow} >
+              <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
+
+            </View>
+
+            <Divider style={Styles.dividerCard} />
+            <View style={Styles.stackRow} >
+              <Text style={Styles.text} variant='bodyMedium'>Доход на пробег:</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{profitPerOdometer}</Text>
+            </View>
+
           </Card.Content>
         </Card>
       </View>
@@ -85,7 +80,7 @@ const ViewDataField = props => {
 
 const InputField = (props) => <TextInput
   keyboardType="numeric"
-  style={{ marginTop: 12 }}
+  style={{ marginTop: 8 }}
   contentStyle={{ height: 56 }}
   outlineStyle={{ backgroundColor: 'none' }}
   mode="outlined"
@@ -103,8 +98,6 @@ const OdometerView = props => {
   return <Card
     style={{
       ...Styles.card,
-
-      // backgroundColor: theme.colors.surfaceVariant
     }}
     onPress={() => navigation.navigate({
       name: 'ListOdometer',
@@ -114,7 +107,7 @@ const OdometerView = props => {
     <Card.Title
       title={<Text style={Styles.text} variant='titleMedium'>Пробег</Text>}
       subtitle={<Text style={Styles.text} variant='bodyMedium'>Общий пробег: {values.odometer.resultOdometer}</Text>}
-      right={() => <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
+      right={() => <MaterialCommunityIcons style={{ marginRight: 8 }} name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
 
     />
 
@@ -131,13 +124,10 @@ export default function Form({ route, navigation }) {
   const get = async key => {
     await getItem(key)
     setLoaded(!loaded)
-   // console.log(key)
   }
 
   useEffect(() => {
-    //console.log(item)
     get(route.params.key)
-    //console.log(item)
   }, [])
 
   const formik = useFormik({
@@ -153,12 +143,11 @@ export default function Form({ route, navigation }) {
   });
 
   useEffect(() => {
-    //console.log(formik.values)
     if (loaded) appliedItem(formik.values)
   }, [formik.values])
 
-  // console.log(item)
   const theme = useTheme();
+
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
       <Appbar.Header
@@ -200,8 +189,7 @@ export default function Form({ route, navigation }) {
             <DatePickerInput
               style={{
                 height: 56,
-                marginTop: 12,
-                // backgroundColor: theme.colors.surface
+                marginTop: 8
               }}
               outlineStyle={{ backgroundColor: 'none' }}
               locale='ru'
@@ -246,11 +234,14 @@ const Styles = StyleSheet.create({
     marginVertical: 'auto',
   },
   card: {
-    marginTop: 12,
+    marginTop: 8,
     marginHorizontal: 2,
-    paddingRight: 16,
     marginBottom: 2,
     flex: 1
+  },
+  dividerCard: {
+    marginBottom: 8,
+    marginTop: 8
   },
 
   forma: {
@@ -263,7 +254,7 @@ const Styles = StyleSheet.create({
     paddingRight: 8,
   },
   inputField: {
-    marginTop: 12,
+    marginTop: 8,
   },
   inputFieldContent: {
     height: 56
