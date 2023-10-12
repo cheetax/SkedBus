@@ -6,6 +6,11 @@ import { BarChart } from "react-native-chart-kit";
 import dayjs from 'dayjs'
 
 const ViewChart = (props) => {
+
+    const {
+        listOfItems
+      } = useAppContext();
+
     // console.log(props.list)
     const data = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],

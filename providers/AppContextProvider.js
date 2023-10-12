@@ -110,8 +110,8 @@ export const useCreateAppContext = function (props) {
             return i
         })
     }
-    const round = (value, decimals) => Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    
+    const round = (value, decimals) => Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+
     const calcProfit = (item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
         const profit = item.proceeds - expenses
@@ -210,6 +210,11 @@ export const useCreateAppContext = function (props) {
     const deleteItemOfListOfItems = key => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
     ])
+
+    const getChartMounth = () => {
+
+        
+    }
 
     return {
         listOfItems,
