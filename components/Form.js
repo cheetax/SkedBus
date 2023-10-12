@@ -62,7 +62,6 @@ const ViewDataField = props => {
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
               <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
-
             </View>
 
             <Divider style={Styles.dividerCard} />

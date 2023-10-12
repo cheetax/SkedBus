@@ -183,8 +183,8 @@ export const useCreateAppContext = function (props) {
         setItem(item => {
             const calc = calcProfit({
                 ...item,
-                averageFuel: i.averageFuel,
-                priceFuel: i.priceFuel,
+                averageFuel: item.averageFuel,
+                priceFuel: item.priceFuel,
                 odometer
             });
             return {
@@ -232,6 +232,7 @@ export const useCreateAppContext = function (props) {
         getItemOdometer,
         listOdometer,
         deleteOdometer,
-        appliedItem
+        appliedItem,
+        round
     };
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, useTheme, } from 'react-native-paper';
+import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import dayjs from 'dayjs';
@@ -12,7 +12,8 @@ export default function Main({ navigation, route }) {
     listOfItems,
     isStartScroll,
     startScroll,
-    deleteItemOfListOfItems
+    deleteItemOfListOfItems,
+    round
   } = useAppContext();
 
   const editForm = key => navigation.navigate({
@@ -23,7 +24,7 @@ export default function Main({ navigation, route }) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <View style={[Styles.main, {backgroundColor: theme.colors.surface} ]} >
+    <View style={[Styles.main, { backgroundColor: theme.colors.surface }]} >
       <FAB
         style={Styles.fab}
         icon="plus"
@@ -43,7 +44,10 @@ export default function Main({ navigation, route }) {
           >
             <AccordionItem
               containerStyle={Styles.accordion}
-              customIcon={() => <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
+              customIcon={() => <View style={{ margin: 8 }} >
+                <MaterialCommunityIcons name={'chevron-right'} color={theme.colors.onSurface} size={26} />
+              </View>
+              }
               customTitle={() =>
                 <View style={Styles.accordionTitle} >
                   <Text style={Styles.text} variant='bodyLarge'>{dayjs(item.date).format('DD.MM.YY')}</Text>
@@ -57,37 +61,23 @@ export default function Main({ navigation, route }) {
               }
               customBody={() =>
                 <>
-                  <View style={Styles.stackRow}>
-                    <Card
-                      style={{
-                        ...Styles.card,
-                        backgroundColor: theme.colors.surfaceVariant
-                      }}
-                    //</View>mode='outlined'
-                    >
-                      <Card.Title
-                        title={<Text style={Styles.text} variant='bodyLarge'>Выручка</Text>}
-                      />
-                      <Card.Content>
-                        <Text style={Styles.text} variant='titleLarge'>{item.proceeds}</Text>
-                      </Card.Content>
-                    </Card>
-                    <Card
-                      style={{
-                        ...Styles.card,
-                        backgroundColor: theme.colors.surfaceVariant
-                      }}
-                    //mode='outlined' 
-                    >
-                      <Card.Title title={
-                        <Text variant='bodyLarge'>Расходы</Text>
-                      } />
-                      <Card.Content>
-                        <Text variant='titleLarge'>{item.expenses}</Text>
-                      </Card.Content>
-                    </Card>
-
-                  </View>
+                  <Divider style={Styles.dividerCard} />
+                  <View style={{ padding: 16 }} >
+                    <View style={Styles.stackRow} >
+                      <Text style={Styles.text} variant='bodySmall'>Выручка:</Text>
+                      <Text style={Styles.text} variant='bodySmall'>{item.proceeds}</Text>
+                    </View>
+                    <Divider style={Styles.dividerCard} />
+                    <View style={Styles.stackRow} >
+                      <Text style={Styles.text} variant='bodySmall'>Затраты:</Text>
+                      <Text style={Styles.text} variant='bodySmall'>{item.expenses}</Text>
+                    </View>
+                    <Divider style={Styles.dividerCard} />
+                    <View style={Styles.stackRow} >
+                      <Text style={Styles.text} variant='bodySmall'>Пробег:</Text>
+                      <Text style={Styles.text} variant='bodySmall'>{item.odometer.resultOdometer}</Text>
+                    </View>
+                  </View>                  
                   <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
                     <IconButton
                       icon="pencil-outline"
@@ -99,6 +89,7 @@ export default function Main({ navigation, route }) {
                       onPress={() => deleteItemOfListOfItems(item.key)}
                     />
                   </View>
+
                 </>
               }
             />
@@ -133,8 +124,12 @@ const Styles = StyleSheet.create({
   card: {
     flex: 1,
     marginVertical: 8,
-    marginRight: 8,
+    //marginRight: 8,
     marginLeft: 4
+  },
+  dividerCard: {
+    marginBottom: 8,
+    marginTop: 8
   },
   contentCard: {
     flex: 1,
@@ -157,6 +152,7 @@ const Styles = StyleSheet.create({
     padding: 0,
     height: 56,
     margin: 0,
+    paddingLeft: 16,
     //backgroundColor: 'red'
   },
 
@@ -164,6 +160,7 @@ const Styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     backgroundColor: 'none',
+
   },
 
   surface: {
@@ -171,7 +168,7 @@ const Styles = StyleSheet.create({
     marginTop: 6,
     marginBottom: 2,
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    //paddingHorizontal: 16,
     borderRadius: 12,
     marginHorizontal: 22
   },
@@ -179,12 +176,13 @@ const Styles = StyleSheet.create({
   accordionMain: {
     // marginHorizontal: 22,
     paddingBottom: 10,
-   // marginBottom: 8,
+    // marginBottom: 8,
     // paddingHorizontal: 4
   },
 
   stackRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     flex: 1
   }
 })

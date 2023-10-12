@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, FlatList } from 'react-native';;
-import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Touchable } from 'react-native';;
+import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu, TouchableRipple } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { useState } from "react";
 
@@ -38,7 +38,7 @@ export default function ListOdometer({ navigation, route }) {
             <IconButton onPress={openMenu} icon="dots-horizontal" style={Styles.iconButton} />
           }
         >
-          <Menu.Item leadingIcon="pencil" onPress={edit} title='Изменить' />
+          {/* <Menu.Item leadingIcon="pencil" onPress={edit} title='Изменить' /> */}
           <Menu.Item leadingIcon="delete" onPress={del} title='Удалить' />
         </Menu>
       </View>)
@@ -72,20 +72,24 @@ export default function ListOdometer({ navigation, route }) {
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
+        
         renderItem={({ item }) => (
-          <View  >
-            <View style={Styles.item} >
-              <View style={Styles.itemContent} >
-                <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
-                <View style={Styles.stackRow} >
-                  <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
-                  <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
+          <View>
+            <TouchableRipple onPress={() => editForm(item.key)}>
+              <View style={Styles.item} >
+                <View style={Styles.itemContent} >
+                  <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
+                  <View style={Styles.stackRow} >
+                    <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
+                    <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
+                  </View>
                 </View>
+                <MenuOdometer keyItem={item.key} />
               </View>
-              <MenuOdometer keyItem={item.key} />
-            </View>
+            </TouchableRipple>
             <Divider />
-          </View>)}
+          </View>)
+        }
       >
       </FlatList >
     </View >
