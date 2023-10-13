@@ -1,17 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList, Dimensions  } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { BarChart } from "react-native-chart-kit";
 import dayjs from 'dayjs'
+import Ru from 'dayjs/locale/ru';
+dayjs.locale(Ru);
 
 const ViewChart = (props) => {
+    //console.log(props.list)
+    const list = props.list
+    const labels = (() => {
+        if (list.length === 0) return []
+        switch (props.mode) {
+            case 'day':
+                // заполнить дни месяца со статистикой
+                // получаем первую запись базы
+                const last = dayjs(list[0].date).toDate()
+                const first = dayjs(list[list.length - 1].date).startOf('month').toDate()
+                console.log(first);
+                var dates = []
+                while (+first < +last) {
+                    dates.push(dayjs(first).format('DD.MMM'));
+                    first.setDate(first.getDate() + 1)
+                    console.log(first)
+                }
+                return dates.slice(0)
+        }
 
-    const {
-        listOfItems
-      } = useAppContext();
-
-    // console.log(props.list)
+    })()
+    console.log(labels)
     const data = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [
@@ -19,7 +37,7 @@ const ViewChart = (props) => {
                 data: [830, 762, 810, 700, 723, 493, 677, 641, 509, 213, 335, 198, 29]
             },
         ],
-      };
+    };
     return (
         <View>
             <BarChart
@@ -53,23 +71,25 @@ export default function Chart({ navigation, route }) {
             var result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode)
             )
             //console.log(dayjs(item.date).startOf(mode))
-            if (result) {                
+            if (result) {
                 result.proceeds = sum(result.proceeds, item.proceeds);
                 result.profit = sum(result.profit, item.profit);
-                result.odometer = sum(result.odometer, item.odometer);
+                result.odometer = sum(result.odometer, item.odometer.resultOdometer);
                 result.expenses = sum(result.expenses, item.expenses);
-                result.profitPerOdometer = (Number(result.profit)/Number(result.odometer)).toString()
+                result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
             }
             else {
-
                 acc.push({
                     period: dayjs(item.date).startOf(mode).toString() + '-' + dayjs(item.date).endOf(mode).toString(),
-                    ...item})
+                    ...item,
+                    odometer: item.odometer.resultOdometer
+                })
             }
             //console.log(listOfItems)
             return acc
 
         }, []))
+        console.log(listChart)
     }, [mode])
 
     return (
