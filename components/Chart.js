@@ -10,23 +10,32 @@ dayjs.locale(Ru);
 const ViewChart = (props) => {
     //console.log(props.list)
     const list = props.list
+
     const labels = (() => {
         if (list.length === 0) return []
+        var dates = []
+        const last = new Date(list[0].date)
+        let first = dayjs(list[list.length - 1].date).startOf('month')
+        console.log(list)
         switch (props.mode) {
             case 'day':
+            case 'month':
                 // заполнить дни месяца со статистикой
                 // получаем первую запись базы
-                const last = new Date(list[0].date)
-                const first = dayjs(list[list.length - 1].date).startOf('month').toDate()
-                console.log(first);
-                var dates = []
-                while (+first < +last) {
-                    dates.push(dayjs(first).format('DD.MMM'));
-                    first.setDate(first.getDate() + 1)
-                    console.log(first)
+                while (+first.toDate() < +last) {
+                    dates.push(first.format(props.mode === 'day' ? 'DD.MMM' : 'MMMM'));
+                    first = first.add(1, props.mode)
+                    //console.log(first)
                 }
-                return dates.slice(0)
+            case 'week':
+                while (+first.toDate() < +last) {
+                    dates.push(first.startOf(props.mode).format('DD.MMM') & '-' & first.endOf(props.mode).format('DD.MMM'));
+                    first = first.add(1, props.mode)
+                    console.log(first.startOf(props.mode).format('DD.MMM'))
+                    console.log(first.endOf(props.mode).format('DD.MMM'))
+                }
         }
+        return dates.slice(0)
 
     })()
     console.log(labels)
