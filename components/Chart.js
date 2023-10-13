@@ -5,34 +5,44 @@ import { useAppContext } from "../providers/AppContextProvider";
 import { BarChart } from "react-native-chart-kit";
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
+import { ScrollView } from "react-native-gesture-handler";
 dayjs.locale(Ru);
 
 const ViewChart = (props) => {
-    //console.log(props.list)
+    console.log(props.list)
     const list = props.list
 
     const labels = (() => {
         if (list.length === 0) return []
         var dates = []
         const last = new Date(list[0].date)
-        let first = dayjs(list[list.length - 1].date).startOf('month')
-        console.log(list)
+        let first = dayjs(list[list.length - 1].date).startOf(props.mode)
+        //console.log(list)
         switch (props.mode) {
             case 'day':
             case 'month':
                 // заполнить дни месяца со статистикой
                 // получаем первую запись базы
                 while (+first.toDate() < +last) {
-                    dates.push(first.format(props.mode === 'day' ? 'DD.MMM' : 'MMMM'));
+                    dates.push({
+                        label: first.format(props.mode === 'day' ? 'DD MMM' : 'MMM'),
+                        key: first.startOf('days')
+                    });
                     first = first.add(1, props.mode)
                     //console.log(first)
                 }
             case 'week':
                 while (+first.toDate() < +last) {
-                    dates.push(first.startOf(props.mode).format('DD.MMM') & '-' & first.endOf(props.mode).format('DD.MMM'));
+                    //console.log(first)
+                    //console.log(first.startOf(props.mode).format('DD.MMM'))
+                    //console.log(first.endOf(props.mode).format('DD.MMM'))
+                    dates.push({
+                        lebel: first.startOf(props.mode).month() === first.endOf(props.mode).month() ?
+                            first.startOf(props.mode).format('DD') + '-' + first.endOf(props.mode).format('DD MMM') :
+                            first.startOf(props.mode).format('DD MMM') + '-' + first.endOf(props.mode).format('DD MMM'),
+                        key: first.startOf(props.mode)
+                    });
                     first = first.add(1, props.mode)
-                    console.log(first.startOf(props.mode).format('DD.MMM'))
-                    console.log(first.endOf(props.mode).format('DD.MMM'))
                 }
         }
         return dates.slice(0)
@@ -40,27 +50,37 @@ const ViewChart = (props) => {
     })()
     console.log(labels)
     const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        labels: [labels.map(item => item.label)],
         datasets: [
             {
-                data: [830, 762, 810, 700, 723, 493, 677, 641, 509, 213, 335, 198, 29]
+                data: labels.map(item => {                    
+                    const result = list.find(i => i.key.toString() === item.key.toString())
+                    console.log(result)
+                    return result ? result.profit : 0
+                })
             },
         ],
     };
+    console.log(data)
     return (
         <View>
-            <BarChart
-                data={data}
-                width={Dimensions.get('window').width}
-                height={200}
-                yAxisSuffix={''}
-                //yAxisLabel={'$'}
-                chartConfig={{
-                    //backgroundGradientFrom: 'darkblue',
-                    //backgroundGradientTo: 'blue',
-                    color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
-                }}
-            />
+            <ScrollView style={{ flex: 1 }} horizontal={true}>
+                <BarChart
+                    data={data}
+                    width={Dimensions.get('window').width}
+                    height={200}
+                    yAxisSuffix={''}
+                    //yAxisLabel={'$'}
+                    chartConfig={{
+                        //backgroundGradientFrom: 'darkblue',
+                        //backgroundGradientTo: 'blue',
+                        barPercentage: 1,
+                        strokeWidth: 10,
+                        color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
+                    }}
+                />
+            </ScrollView>
+
         </View>)
 }
 
@@ -88,9 +108,9 @@ export default function Chart({ navigation, route }) {
                 result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
             }
             else {
-                acc.push({
-                    period: dayjs(item.date).startOf(mode).toString() + '-' + dayjs(item.date).endOf(mode).toString(),
+                acc.push({                    
                     ...item,
+                    key: dayjs(item.date).startOf(mode),
                     odometer: item.odometer.resultOdometer
                 })
             }
@@ -98,7 +118,7 @@ export default function Chart({ navigation, route }) {
             return acc
 
         }, []))
-        console.log(listChart)
+        //console.log(listChart)
     }, [mode])
 
     return (
