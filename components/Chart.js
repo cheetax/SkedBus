@@ -16,7 +16,7 @@ const ViewChart = (props) => {
             case 'day':
                 // заполнить дни месяца со статистикой
                 // получаем первую запись базы
-                const last = dayjs(list[0].date).toDate()
+                const last = new Date(list[0].date)
                 const first = dayjs(list[list.length - 1].date).startOf('month').toDate()
                 console.log(first);
                 var dates = []
