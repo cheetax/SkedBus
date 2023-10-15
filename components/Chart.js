@@ -62,23 +62,24 @@ const ViewChart = (props) => {
         ],
     };
     console.log(data)
+
     return (
         <View>
-            <ScrollView style={{ flex: 1 }} horizontal={true}>
+            <ScrollView style={{ flex: 1 }} horizontal>
                 <BarChart
                     data={data}
-                    width={Dimensions.get('window').width}
+                    width={data.labels.length * 40}
+                    style={{flex: 1}}
                     height={200}
-                    yAxisSuffix={''}
+                    //yAxisSuffix={''}
                     //withVerticalLabels={false}
                     withHorizontalLabels={false}
                     //yAxisLabel={'$'}
                     chartConfig={{
                         //backgroundGradientFrom: 'darkblue',
                         //backgroundGradientTo: 'blue',
-                        barPercentage: 0.2,
-                        strokeWidth: 1,
-                        
+                        barPercentage: 1,
+                        strokeWidth: 1,                        
                         color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
                     }}
                 />
