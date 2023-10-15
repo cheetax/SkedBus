@@ -50,7 +50,7 @@ const ViewChart = (props) => {
     })()
     console.log(labels)
     const data = {
-        labels: [labels.map(item => item.label)],
+        labels: labels.map(item => item.label),
         datasets: [
             {
                 data: labels.map(item => {                    
@@ -70,12 +70,15 @@ const ViewChart = (props) => {
                     width={Dimensions.get('window').width}
                     height={200}
                     yAxisSuffix={''}
+                    //withVerticalLabels={false}
+                    withHorizontalLabels={false}
                     //yAxisLabel={'$'}
                     chartConfig={{
                         //backgroundGradientFrom: 'darkblue',
                         //backgroundGradientTo: 'blue',
-                        barPercentage: 1,
-                        strokeWidth: 10,
+                        barPercentage: 0.2,
+                        strokeWidth: 1,
+                        
                         color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
                     }}
                 />
