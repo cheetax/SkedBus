@@ -11,76 +11,64 @@ dayjs.locale(Ru);
 const ViewChart = (props) => {
     console.log(props.list)
     const list = props.list
-
-    const labels = (() => {
-        if (list.length === 0) return []
-        var dates = []
-        const last = new Date(list[0].date)
-        let first = dayjs(list[list.length - 1].date).startOf(props.mode)
-        //console.log(list)
+    const widthScreen = Dimensions.get('window').width
+    const labels = list.map(item => {
+        const first = dayjs(item.date)
         switch (props.mode) {
             case 'day':
             case 'month':
                 // заполнить дни месяца со статистикой
                 // получаем первую запись базы
-                while (+first.toDate() < +last) {
-                    dates.push({
-                        label: first.format(props.mode === 'day' ? 'DD MMM' : 'MMM'),
-                        key: first.startOf('days')
-                    });
-                    first = first.add(1, props.mode)
-                    //console.log(first)
-                }
+                item.label = first.format(props.mode === 'day' ? 'DD MMM' : 'MMM')
+                //console.log(item)
+                return item
             case 'week':
-                while (+first.toDate() < +last) {
-                    //console.log(first)
-                    //console.log(first.startOf(props.mode).format('DD.MMM'))
-                    //console.log(first.endOf(props.mode).format('DD.MMM'))
-                    dates.push({
-                        lebel: first.startOf(props.mode).month() === first.endOf(props.mode).month() ?
-                            first.startOf(props.mode).format('DD') + '-' + first.endOf(props.mode).format('DD MMM') :
-                            first.startOf(props.mode).format('DD MMM') + '-' + first.endOf(props.mode).format('DD MMM'),
-                        key: first.startOf(props.mode)
-                    });
-                    first = first.add(1, props.mode)
-                }
+                item.label = first.startOf(props.mode).month() === first.endOf(props.mode).month() ?
+                    first.startOf(props.mode).format('DD') + '-' + first.endOf(props.mode).format('DD MMM') :
+                    first.startOf(props.mode).format('DD MMM') + '-' + first.endOf(props.mode).format('DD MMM')
+                //console.log(item)
+                return item
         }
-        return dates.slice(0)
-
-    })()
+    })
     console.log(labels)
     const data = {
         labels: labels.map(item => item.label),
         datasets: [
             {
-                data: labels.map(item => {                    
-                    const result = list.find(i => i.key.toString() === item.key.toString())
-                    console.log(result)
-                    return result ? result.profit : 0
-                })
+                data: labels.map(item => item.profit)
             },
         ],
     };
-    console.log(data)
-
+   
+    const widthData = (data.labels.length * 40) + 40
+    console.log(widthScreen)
     return (
         <View>
-            <ScrollView style={{ flex: 1 }} horizontal>
+            <ScrollView horizontal>
                 <BarChart
                     data={data}
-                    width={data.labels.length * 40}
-                    style={{flex: 1}}
+                    width={widthData < widthScreen ? widthScreen : widthData}
+                    //style={{ flex: 1 }}
                     height={200}
                     //yAxisSuffix={''}
                     //withVerticalLabels={false}
-                    withHorizontalLabels={false}
+                    //withHorizontalLabels={false}
+                    //fromZero={true}
                     //yAxisLabel={'$'}
                     chartConfig={{
-                        //backgroundGradientFrom: 'darkblue',
-                        //backgroundGradientTo: 'blue',
+                        backgroundGradientFrom: 'none',
+                        backgroundGradientTo: 'none',
+                        backgroundGradientFromOpacity: 0,
+                        backgroundGradientToOpacity: 0,
                         barPercentage: 1,
-                        strokeWidth: 1,                        
-                        color: (opacity = 3) => `rgba(255, 255, 255, ${opacity})`
+                        verticalLabelRotation: 90,
+                        propsForHorizontalLabels: {
+                        //    strokeWidth: 0,
+                         //   x: 0,
+                        //    y: 0
+                        },
+                        //strokeWidth: 1,
+                        color: (opacity = 100) => `rgba(0, 0, 0, ${opacity})`
                     }}
                 />
             </ScrollView>
@@ -112,7 +100,7 @@ export default function Chart({ navigation, route }) {
                 result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
             }
             else {
-                acc.push({                    
+                acc.push({
                     ...item,
                     key: dayjs(item.date).startOf(mode),
                     odometer: item.odometer.resultOdometer
