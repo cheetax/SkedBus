@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-import { BarChart } from "react-native-chart-kit";
+//import { BarChart } from "react-native-chart-kit";
+//import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 import { ScrollView } from "react-native-gesture-handler";
@@ -31,46 +32,33 @@ const ViewChart = (props) => {
         }
     })
     console.log(labels)
-    const data = {
-        labels: labels.map(item => item.label),
-        datasets: [
-            {
-                data: labels.map(item => item.profit)
-            },
-        ],
-    };
-   
-    const widthData = (data.labels.length * 40) + 40
-    console.log(widthScreen)
+    const data = labels.map((item, index) => {
+        return {
+            x: item.profit,
+            y: index + 1,
+            label: item.label
+        }
+    });
+
+    const widthData = (data.length * 40) + 40
+    console.log(data)
     return (
-        <View>
+        <View> 
             <ScrollView horizontal>
-                <BarChart
-                    data={data}
+            
+               {/*  <VictoryChart
+                    //data={data}
                     width={widthData < widthScreen ? widthScreen : widthData}
+                    theme={VictoryTheme.material}
                     //style={{ flex: 1 }}
                     height={200}
-                    //yAxisSuffix={''}
-                    //withVerticalLabels={false}
-                    //withHorizontalLabels={false}
-                    //fromZero={true}
-                    //yAxisLabel={'$'}
-                    chartConfig={{
-                        backgroundGradientFrom: 'none',
-                        backgroundGradientTo: 'none',
-                        backgroundGradientFromOpacity: 0,
-                        backgroundGradientToOpacity: 0,
-                        barPercentage: 1,
-                        verticalLabelRotation: 90,
-                        propsForHorizontalLabels: {
-                        //    strokeWidth: 0,
-                         //   x: 0,
-                        //    y: 0
-                        },
-                        //strokeWidth: 1,
-                        color: (opacity = 100) => `rgba(0, 0, 0, ${opacity})`
-                    }}
-                />
+                >
+
+
+                </VictoryChart> */}
+
+
+
             </ScrollView>
 
         </View>)
