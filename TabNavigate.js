@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./components/List";
-import Chart from "./components/Chart";
+import ChartView from "./components/ChartView";
 import { Appbar, Text, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
@@ -51,7 +51,7 @@ export default function TabNavigate({ navigation, route }) {
                 />
                 <Tab.Screen
                     name="Chart"
-                    component={Chart}
+                    component={ChartView}
                     options={{
                         tabBarIcon: ({ focused, color }) => (
                             <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
