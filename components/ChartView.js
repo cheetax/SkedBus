@@ -3,15 +3,34 @@ import { View, StyleSheet, FlatList, Dimensions, ScrollView } from 'react-native
 import { Text, SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
-import { Canvas } from "@shopify/react-native-skia";
+import { Canvas, } from "@shopify/react-native-skia";
+import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 dayjs.locale(Ru);
 
+const GRAPH_MARGIN = 20
+const GRAPH_BAR_WIDTH = 8
+
+const CanvasHeight = 350
+const CanvasWidth = 350
+const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
+const graphWidth = CanvasWidth - 2;
+
+
 const BarChart = (props) => {
 
-    const widthData = (data.length * 40) + 40
-    console.log(data)
+    //const widthData = (data.length * 40) + 40
+    //console.log(data)
+    const xDomain = data.map(xDataPoint => xDataPoint.label)
+    const xRange = [0, graphWidth]
+    const x = d3.scalePoint().domain(xDomain).range(xRange)
+
+    const yDomain = [
+        0,
+        d3.max((data, DataPoint) => DataPoint.value)
+    ]
+
     return (
         <View>
             <ScrollView horizontal>
@@ -38,9 +57,7 @@ export default function ChartView({ navigation, route }) {
 
             const data = listOfItems.reduce((acc, item) => {
 
-                var result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode)
-                )
-                //console.log(dayjs(item.date).startOf(mode))
+                var result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
                     result.profit = sum(result.profit, item.profit);
@@ -58,47 +75,42 @@ export default function ChartView({ navigation, route }) {
                 //console.log(listOfItems)
                 return acc.splice(0)
             }, [])
-            //console.log(listChart)
+            console.log(data)
 
-            console.log(props.list)
-            const list = props.list
-            const widthScreen = Dimensions.get('window').width
-            const labels = list.map(item => {
+            //console.log(props.list)
+            //const list = props.list
+            //const widthScreen = Dimensions.get('window').width
+            const labels = data.map(item => {
                 const first = dayjs(item.date)
-                switch (props.mode) {
+                switch (mode) {
                     case 'day':
                     case 'month':
                         // заполнить дни месяца со статистикой
                         // получаем первую запись базы
-                        item.label = first.format(props.mode === 'day' ? 'DD MMM' : 'MMM')
+                        item.label = first.format(mode === 'day' ? 'DD MMM' : 'MMM')
                         //console.log(item)
                         return item
                     case 'week':
-                        item.label = first.startOf(props.mode).month() === first.endOf(props.mode).month() ?
-                            first.startOf(props.mode).format('DD') + '-' + first.endOf(props.mode).format('DD MMM') :
-                            first.startOf(props.mode).format('DD MMM') + '-' + first.endOf(props.mode).format('DD MMM')
+                        item.label = first.startOf(mode).month() === first.endOf(mode).month() ?
+                            first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM') :
+                            first.startOf(mode).format('DD MMM') + '-' + first.endOf(mode).format('DD MMM')
                         //console.log(item)
                         return item
                 }
             })
             console.log(labels)
             return {
-                dataSets:
-                    [{
-                        values: labels.map((item, index) => {
-                            return {
-
-                                y: item.profit,
-                                x: index + 1,
-                                marker: item.label
-                            }
-                        })
-                    }]
+                DataPoint: labels.map((item, index) => {
+                    return {
+                        value: item.profit,
+                        label: item.label
+                    }
+                })
             }
         })
 
     }, [mode])
-    console.log(data)
+    console.log(listChart)
     return (
         <View style={Styles.main}>
             <SegmentedButtons
