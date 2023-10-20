@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList, Dimensions, ScrollView } from 'react-native';
-import { Text, SegmentedButtons } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Dimensions, ScrollView, Text } from 'react-native';
+import {  SegmentedButtons } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
-import { Canvas, } from "@shopify/react-native-skia";
+//import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
+import { Canvas, Path, Skia, useComputedValue, } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
+
 dayjs.locale(Ru);
 
 const GRAPH_MARGIN = 20
@@ -19,24 +21,57 @@ const graphWidth = CanvasWidth - 2;
 
 
 const BarChart = (props) => {
-
+    const data = props.data
     //const widthData = (data.length * 40) + 40
-    //console.log(data)
+    console.log(data)
     const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
-    const x = d3.scalePoint().domain(xDomain).range(xRange)
+    const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
 
     const yDomain = [
         0,
-        d3.max((data, DataPoint) => DataPoint.value)
+        d3.max(data, yDataPoint => yDataPoint.value)
     ]
 
+    const yRange = [0, graphHeight]
+    const y = d3.scaleLinear().domain(yDomain).range(yRange)
+
+    const graphPath = useComputedValue(() => {
+        const newPath = Skia.Path.Make()
+        //console.log(newPath)
+        data.forEach(dataPoint => {
+            const rect = Skia.XYWHRect(
+                x(dataPoint.label) - GRAPH_BAR_WIDTH / 2,
+                graphHeight,
+                GRAPH_BAR_WIDTH,
+                y(dataPoint.value) * -1
+            )
+
+            const roundedRect = Skia.RRectXY(rect, 8, 8)
+            newPath.addRect(roundedRect)
+        })
+
+        return newPath
+    }, [])
+
+    //console.log(graphPath)
     return (
         <View>
-            <ScrollView horizontal>
+            <Canvas style={Styles.canvas} >
+                    <Path path={graphPath} color="purple" />
+                    {/* {data.map(dataPoint => (
+                        <Text
+                            key={dataPoint.label}
+                            x={x(dataPoint.label) - 10}
+                            y={CanvasHeight - 25}
+                            text={dataPoint.label}
+                        />
+                    ))} */}
+                </Canvas>
 
-
-            </ScrollView>
+            {/* <ScrollView horizontal>
+                
+            </ScrollView> */}
 
         </View>)
 }
@@ -98,17 +133,12 @@ export default function ChartView({ navigation, route }) {
                         return item
                 }
             })
-            console.log(labels)
-            return {
-                DataPoint: labels.map((item, index) => {
-                    return {
-                        value: item.profit,
-                        label: item.label
-                    }
-                })
-            }
+            //console.log(labels)
+            return labels.map((item, index) => ({
+                value: item.profit,
+                label: item.label
+            }))
         })
-
     }, [mode])
     console.log(listChart)
     return (
@@ -130,8 +160,8 @@ export default function ChartView({ navigation, route }) {
                         label: 'Месяц'
                     },
                 ]}
-            />
-            <BarChart mode={mode} list={listChart} />
+            />            
+            <BarChart mode={mode} data={listChart} />
         </View>
     )
 }
@@ -143,5 +173,9 @@ const Styles = StyleSheet.create({
         flexDirection: 'column',
         //backgroundColor: '#f2f2f2',
         margin: 24
+    },
+    canvas: {
+        height: CanvasHeight,
+        width: CanvasWidth
     }
 })
