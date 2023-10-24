@@ -10,6 +10,7 @@ import FormExpenses from './components/FormExpenses';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import { useAppContext } from "./providers/AppContextProvider";
+import { ItemContextProvider } from "./providers/ItemContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
@@ -21,7 +22,7 @@ const Drawer = createDrawerNavigator();
 enableLayoutAnimations(false);
 
 
-const Navigator = () => Platform == 'Web' ? <Stack.Navigator
+const Navigator = () => Platform === 'Web' ? <Stack.Navigator
     screenOptions={{
         drawerStyle: {
             //backgroundColor: theme.colors.surface,
@@ -36,23 +37,8 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
         options={{ headerShown: false }}
     />
     <Stack.Screen
-        name="Form"
-        component={Form}
-        options={{ headerShown: false }}
-    />
-    <Stack.Screen
-        name="FormOdometer"
-        component={FormOdometer}
-        options={{ headerShown: false }}
-    />
-    <Stack.Screen
-        name="FormExpenses"
-        component={FormExpenses}
-        options={{ headerShown: false }}
-    />
-    <Stack.Screen
-        name="ListOdometer"
-        component={ListOdometer}
+        name="FormNavigate"
+        component={FormNavigate}
         options={{ headerShown: false }}
     />
 </Stack.Navigator> : <Drawer.Navigator
@@ -65,18 +51,46 @@ const Navigator = () => Platform == 'Web' ? <Stack.Navigator
     }}
     drawerContent={() => <DrawerItem />}>
     <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-    />
-</Drawer.Navigator>
-
-const Home = () => <Stack.Navigator>
-    <Stack.Screen
         name="Main"
         component={Main}
         options={{ headerShown: false }}
     />
+    <Stack.Screen
+        name="FormNavigate"
+        component={FormNavigate}
+        options={{ headerShown: false }}
+    />
+
+</Drawer.Navigator>
+
+const FormNavigate = () => <ItemContextProvider>
+    <Stack.Navigator>
+        <Stack.Screen
+            name="Form"
+            component={Form}
+            options={{ headerShown: false }}
+        />
+        <Stack.Screen
+            name="FormOdometer"
+            component={FormOdometer}
+            options={{ headerShown: false }}
+        />
+        <Stack.Screen
+            name="FormExpenses"
+            component={FormExpenses}
+            options={{ headerShown: false }}
+        />
+        <Stack.Screen
+            name="ListOdometer"
+            component={ListOdometer}
+            options={{ headerShown: false }}
+        />
+    </Stack.Navigator>
+</ItemContextProvider>
+
+
+const Home = () => <Stack.Navigator>
+    
     <Stack.Screen
         name="Form"
         component={Form}
@@ -97,6 +111,7 @@ const Home = () => <Stack.Navigator>
         component={ListOdometer}
         options={{ headerShown: false }}
     />
+
 </Stack.Navigator>
 
 export default function Navigate({ }) {

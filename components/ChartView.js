@@ -23,7 +23,7 @@ const graphWidth = CanvasWidth - 2;
 const BarChart = (props) => {
     const data = props.data
     //const widthData = (data.length * 40) + 40
-    console.log(data)
+    //console.log(data)
     const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
     const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
@@ -110,7 +110,7 @@ export default function ChartView({ navigation, route }) {
                 //console.log(listOfItems)
                 return acc.splice(0)
             }, [])
-            console.log(data)
+            //console.log(data)
 
             //console.log(props.list)
             //const list = props.list
@@ -140,7 +140,7 @@ export default function ChartView({ navigation, route }) {
             }))
         })
     }, [mode])
-    console.log(listChart)
+    console.log(mode)
     return (
         <View style={Styles.main}>
             <SegmentedButtons

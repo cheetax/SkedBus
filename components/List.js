@@ -16,10 +16,13 @@ export default function Main({ navigation, route }) {
     round
   } = useAppContext();
 
-  const editForm = key => navigation.navigate({
-    name: 'Form',
-    params: { key },
-  })
+  const editForm = key => {
+    console.log(navigation)
+    navigation.navigate('FormNavigate', {
+      screen: 'Form',
+      params: { key },
+    })
+  }
 
   const theme = useTheme();
   //console.log(listOfItems)
@@ -77,7 +80,7 @@ export default function Main({ navigation, route }) {
                       <Text style={Styles.text} variant='bodySmall'>Пробег:</Text>
                       <Text style={Styles.text} variant='bodySmall'>{item.odometer.resultOdometer}</Text>
                     </View>
-                  </View>                  
+                  </View>
                   <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
                     <IconButton
                       icon="pencil-outline"

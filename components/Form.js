@@ -14,6 +14,7 @@ import {
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
+import { useItemContext } from "../providers/ItemContextProvider";
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -115,7 +116,8 @@ const OdometerView = props => {
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedListOfItems, appliedItem } = useAppContext();
+  const { item, getItem, appliedItem } = useItemContext();
+  const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
   //const theme = useTheme()

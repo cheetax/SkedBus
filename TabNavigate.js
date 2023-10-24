@@ -35,7 +35,7 @@ export default function TabNavigate({ navigation, route }) {
 
             <Tab.Navigator
                 initialRouteName="List"
-                shifting={false}
+                shif7ting={false}
                 sceneAnimationEnabled={true}
             >
                 <Tab.Screen
