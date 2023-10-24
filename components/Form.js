@@ -123,6 +123,7 @@ export default function Form({ route, navigation }) {
   //const theme = useTheme()
 
   const get = async key => {
+    console.log(key)
     await getItem(key)
     setLoaded(!loaded)
   }

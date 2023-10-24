@@ -17,7 +17,7 @@ export default function Main({ navigation, route }) {
   } = useAppContext();
 
   const editForm = key => {
-   //console.log(navigation)
+    console.log(key)
     navigation.navigate('FormNavigate', {
       screen: 'Form',
       params: { key },

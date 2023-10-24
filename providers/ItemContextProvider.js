@@ -60,6 +60,7 @@ export const useCreateItemContext = function (props) {
     const [listOdometer, setListOdometer] = useState([])
 
     const getItem = key => {
+        console.log(key)
         setItem(item => {
             const i = key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem()
             setListOdometer(i.odometer.data)
