@@ -30,12 +30,14 @@ const BarChart = (props) => {
 
     const yDomain = [
         0,
-        d3.max(data, yDataPoint => yDataPoint.value)
+        d3.max(data, yDataPoint => {
+            console.log(yDataPoint)
+            return yDataPoint.value})
     ]
 
     const yRange = [0, graphHeight]
     const y = d3.scaleLinear().domain(yDomain).range(yRange)
-
+    //console.log(y)
     const graphPath = useComputedValue(() => {
         const newPath = Skia.Path.Make()
         //console.log(newPath)
@@ -135,7 +137,7 @@ export default function ChartView({ navigation, route }) {
             })
             //console.log(labels)
             return labels.map((item, index) => ({
-                value: item.profit,
+                value: Number(item.profit),
                 label: item.label
             }))
         })
