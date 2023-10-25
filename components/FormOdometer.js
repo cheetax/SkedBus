@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
-import { useAppContext } from "../providers/AppContextProvider";
+import { useItemContext } from "../providers/ItemContextProvider";
 
 const InputField = (props) => <TextInput keyboardType="numeric"
   style={{ marginTop: 12, marginHorizontal: 2 }}
@@ -14,7 +14,7 @@ const InputField = (props) => <TextInput keyboardType="numeric"
 
 export default function FormOdometer({ route, navigation }) {
 
-  const { itemOdometer, getItemOdometer, appliedOdometer } = useAppContext();
+  const { itemOdometer, getItemOdometer, appliedOdometer } = useItemContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование пробега' : 'Новый пробег'
   //const theme = useTheme()
