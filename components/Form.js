@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useFormik } from "formik";
 import {
   Appbar,
@@ -123,14 +124,14 @@ export default function Form({ route, navigation }) {
   //const theme = useTheme()
 
   const get = async key => {
-    console.log(key)
+    //console.log(navigation)
     await getItem(key)
-    setLoaded(!loaded)
+    setLoaded(true)
   }
 
   useEffect(() => {
     get(route.params.key)
-  }, [])
+  }, [route])
 
   const formik = useFormik({
     enableReinitialize: true,
