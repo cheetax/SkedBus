@@ -20,15 +20,15 @@ export const useItemContext = () => {
 
 export const useCreateItemContext = function (props) {
     //const 
-    const { listOfItems } = useAppContext();
+    const { listOfItems, settings, setSettings } = useAppContext();
    
     //const [isStartScroll, setIsStartScroll] = useState(false);
-    const [settings, setSettings] = useState(
-        {
-            priceFuel: '46',
-            averageFuel: '9.5'
-        }
-    )
+    // const [settings, setSettings] = useState(
+    //     {
+    //         priceFuel: '46',
+    //         averageFuel: '9.5'
+    //     }
+    // )
 
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
@@ -67,7 +67,7 @@ export const useCreateItemContext = function (props) {
             return i
         })
     }
-    const round = (value, decimals) => Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    const round = (value, decimals=2) => Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
 
     const calcProfit = (item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
@@ -159,11 +159,8 @@ export const useCreateItemContext = function (props) {
     })
 
     return {
-       // isStartScroll,
-        //startScroll,
-       // setIsDarkTheme,
-        settings,
-        appliedSettings,
+        //settings,
+        //appliedSettings,
         item,
         getItem,
         appliedOdometer,
@@ -172,6 +169,7 @@ export const useCreateItemContext = function (props) {
         listOdometer,
         deleteOdometer,
         appliedItem,
+        appliedSettings,
         round
     };
 }

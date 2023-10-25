@@ -5,12 +5,12 @@ import { Appbar, Text, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useAppContext } from "./providers/AppContextProvider";
+import { useScrollContext } from "./providers/ScrollContextProvider";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
-    const { isStartScroll } = useAppContext()
+    const { isStartScroll } = useScrollContext()
     const theme = useTheme()
     return (
         <View style={Styles.main} >
@@ -62,6 +62,7 @@ export default function TabNavigate({ navigation, route }) {
                 />
             </Tab.Navigator>
         </View>
+
     );
 }
 

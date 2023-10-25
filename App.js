@@ -4,12 +4,15 @@ import MainStack from './Navigate';
 //import { StatusBar } from "react-native";
 //import { NativeBaseProvider } from 'native-base'
 import { AppContextProvider } from "./providers/AppContextProvider";
+import { ScrollContextProvider } from "./providers/ScrollContextProvider";
 
 export default function App() {
   //StatusBar.setHidden(false)
   return (
     <AppContextProvider>
-      <MainStack />
+      <ScrollContextProvider>
+        <MainStack />
+      </ScrollContextProvider>
     </AppContextProvider>
   );
 }

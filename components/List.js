@@ -3,18 +3,19 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { useScrollContext } from "../providers/ScrollContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import dayjs from 'dayjs';
 
 export default function Main({ navigation, route }) {
 
   const {
-    listOfItems,
-    isStartScroll,
-    startScroll,
+    listOfItems,    
     deleteItemOfListOfItems,
     round
   } = useAppContext();
+
+  const { isStartScroll, startScroll} = useScrollContext();
 
   const editForm = key => {
     //console.log(key)

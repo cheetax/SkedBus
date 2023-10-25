@@ -117,7 +117,7 @@ const OdometerView = props => {
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedItem } = useItemContext();
+  const { item, getItem, appliedItem, round } = useItemContext();
   const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
@@ -188,7 +188,7 @@ export default function Form({ route, navigation }) {
               onClose={() => navigation.navigate({
                 name: 'FormExpenses'
               })}
-            >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
+            >Расходы на километр пробега: {round(formik.values.priceFuel * formik.values.averageFuel / 100)}</Chip>
             <DatePickerInput
               style={{
                 height: 56,
