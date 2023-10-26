@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList, Dimensions, ScrollView, Text } from 'react-native';
-import {  SegmentedButtons } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Dimensions, ScrollView, } from 'react-native';
+import { SegmentedButtons, } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
 //import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
-import { Canvas, Path, Skia, useComputedValue, } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia, useComputedValue, Text, useFont } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 
 dayjs.locale(Ru);
 
-const GRAPH_MARGIN = 20
-const GRAPH_BAR_WIDTH = 8
+const GRAPH_MARGIN = 8
+const GRAPH_BAR_WIDTH = 45
 
-const CanvasHeight = 350
-const CanvasWidth = 350
+const CanvasHeight = 100
+const CanvasWidth = 200
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
 const graphWidth = CanvasWidth - 2;
 
 
+
+
 const BarChart = (props) => {
+    //console.log(props.data.length, 'длинна')
+
+    if (props.data.length === 0) return <></>
+    const font = useFont(require('../font/Roboto-Bold.ttf'))
     const data = props.data
     //const widthData = (data.length * 40) + 40
-    //console.log(data)
+    //console.log(data, '0')
     const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
     const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
@@ -31,49 +37,56 @@ const BarChart = (props) => {
     const yDomain = [
         0,
         d3.max(data, yDataPoint => {
-            console.log(yDataPoint)
-            return yDataPoint.value})
+            //console.log(yDataPoint)
+            return yDataPoint.value
+        })
     ]
 
     const yRange = [0, graphHeight]
     const y = d3.scaleLinear().domain(yDomain).range(yRange)
-    //console.log(y)
+
+    //console.log(data, '1')
     const graphPath = useComputedValue(() => {
         const newPath = Skia.Path.Make()
-        //console.log(newPath)
-        data.forEach(dataPoint => {
+        //console.log(data, 2)
+
+        data.forEach((dataPoint) => {
+
             const rect = Skia.XYWHRect(
-                x(dataPoint.label) - GRAPH_BAR_WIDTH / 2,
+                x(dataPoint.label) - GRAPH_BAR_WIDTH,
                 graphHeight,
                 GRAPH_BAR_WIDTH,
-                y(dataPoint.value) * -1
+                y(dataPoint.value) * -1,
+
             )
 
-            const roundedRect = Skia.RRectXY(rect, 8, 8)
-            newPath.addRect(roundedRect)
+            const roundedRect = Skia.RRectXY(rect, 0, 0)
+            //console.log(roundedRect)
+            newPath.addRRect(roundedRect)
         })
 
         return newPath
-    }, [])
+    }, [data])
 
     //console.log(graphPath)
     return (
-        <View>
-            <Canvas style={Styles.canvas} >
+        <View style={Styles.container}>
+
+            <ScrollView horizontal>
+                <Canvas style={Styles.canvas} >
                     <Path path={graphPath} color="purple" />
-                    {/* {data.map(dataPoint => (
+                    {data.map((dataPoint) => (
                         <Text
                             key={dataPoint.label}
-                            x={x(dataPoint.label) - 10}
-                            y={CanvasHeight - 25}
+                            font={font}
+                            x={x(dataPoint.label) - 42}
+                            y={CanvasHeight - 2}
                             text={dataPoint.label}
                         />
-                    ))} */}
+                    ))}
                 </Canvas>
 
-            {/* <ScrollView horizontal>
-                
-            </ScrollView> */}
+            </ScrollView>
 
         </View>)
 }
@@ -112,11 +125,6 @@ export default function ChartView({ navigation, route }) {
                 //console.log(listOfItems)
                 return acc.splice(0)
             }, [])
-            //console.log(data)
-
-            //console.log(props.list)
-            //const list = props.list
-            //const widthScreen = Dimensions.get('window').width
             const labels = data.map(item => {
                 const first = dayjs(item.date)
                 switch (mode) {
@@ -142,7 +150,7 @@ export default function ChartView({ navigation, route }) {
             }))
         })
     }, [mode])
-    console.log(mode)
+    //console.log(mode)
     return (
         <View style={Styles.main}>
             <SegmentedButtons
@@ -162,7 +170,7 @@ export default function ChartView({ navigation, route }) {
                         label: 'Месяц'
                     },
                 ]}
-            />            
+            />
             <BarChart mode={mode} data={listChart} />
         </View>
     )
@@ -176,8 +184,15 @@ const Styles = StyleSheet.create({
         //backgroundColor: '#f2f2f2',
         margin: 24
     },
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        marginTop: 10
+    },
     canvas: {
         height: CanvasHeight,
-        width: CanvasWidth
+        width: CanvasWidth,
+        //backgroundColor: 'green'
     }
 })
