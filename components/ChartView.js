@@ -14,13 +14,10 @@ dayjs.locale(Ru);
 const GRAPH_MARGIN = 8
 const GRAPH_BAR_WIDTH = 45
 
-const CanvasHeight = 100
-const CanvasWidth = 200
+const CanvasHeight = 150
+//var CanvasWidth = 100
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
-const graphWidth = CanvasWidth - 2;
-
-
-
+//var graphWidth = CanvasWidth;
 
 const BarChart = (props) => {
     //console.log(props.data.length, 'длинна')
@@ -28,7 +25,8 @@ const BarChart = (props) => {
     if (props.data.length === 0) return <></>
     const font = useFont(require('../font/Roboto-Bold.ttf'))
     const data = props.data
-    //const widthData = (data.length * 40) + 40
+    const CanvasWidth = (data.length * 50) + 50;
+    const graphWidth = CanvasWidth - 2;
     //console.log(data, '0')
     const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
@@ -70,11 +68,10 @@ const BarChart = (props) => {
 
     //console.log(graphPath)
     return (
-        <View style={Styles.container}>
-
-            <ScrollView horizontal>
-                <Canvas style={Styles.canvas} >
-                    <Path path={graphPath} color="purple" />
+       
+            <ScrollView style={Styles.container} horizontal>
+                <Canvas style={{width: CanvasWidth, height: CanvasHeight}} >
+                    <Path path={graphPath} color="blue" />
                     {data.map((dataPoint) => (
                         <Text
                             key={dataPoint.label}
@@ -88,7 +85,7 @@ const BarChart = (props) => {
 
             </ScrollView>
 
-        </View>)
+        )
 }
 
 const sum = (a, b) => (Number(a) + Number(b)).toString()
@@ -190,9 +187,4 @@ const Styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginTop: 10
     },
-    canvas: {
-        height: CanvasHeight,
-        width: CanvasWidth,
-        //backgroundColor: 'green'
-    }
 })
