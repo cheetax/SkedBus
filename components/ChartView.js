@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, FlatList, Dimensions, ScrollView, } from 'react-native';
-import { SegmentedButtons, } from 'react-native-paper';
+import { View, StyleSheet, Platform, ScrollView, } from 'react-native';
+import { SegmentedButtons, useTheme } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
 //import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
-import { Canvas, Path, Skia, useComputedValue, Text, useFont } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia, useComputedValue,  useFont, Text, Glyphs } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
@@ -15,18 +15,17 @@ const GRAPH_MARGIN = 8
 const GRAPH_BAR_WIDTH = 45
 
 const CanvasHeight = 150
-//var CanvasWidth = 100
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
-//var graphWidth = CanvasWidth;
 
 const BarChart = (props) => {
-    //console.log(props.data.length, 'длинна')
 
     if (props.data.length === 0) return <></>
+    
+    const theme = useTheme();
     const font = useFont(require('../font/Roboto-Bold.ttf'))
     const data = props.data
-    const CanvasWidth = (data.length * 50) + 50;
-    const graphWidth = CanvasWidth - 2;
+    const CanvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
+    const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH
     //console.log(data, '0')
     const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
@@ -34,19 +33,13 @@ const BarChart = (props) => {
 
     const yDomain = [
         0,
-        d3.max(data, yDataPoint => {
-            //console.log(yDataPoint)
-            return yDataPoint.value
-        })
+        d3.max(data, yDataPoint => yDataPoint.value)
     ]
 
     const yRange = [0, graphHeight]
     const y = d3.scaleLinear().domain(yDomain).range(yRange)
-
-    //console.log(data, '1')
     const graphPath = useComputedValue(() => {
         const newPath = Skia.Path.Make()
-        //console.log(data, 2)
 
         data.forEach((dataPoint) => {
 
@@ -57,35 +50,30 @@ const BarChart = (props) => {
                 y(dataPoint.value) * -1,
 
             )
-
             const roundedRect = Skia.RRectXY(rect, 0, 0)
-            //console.log(roundedRect)
             newPath.addRRect(roundedRect)
         })
 
         return newPath
     }, [data])
 
-    //console.log(graphPath)
     return (
-       
-            <ScrollView style={Styles.container} horizontal>
-                <Canvas style={{width: CanvasWidth, height: CanvasHeight}} >
-                    <Path path={graphPath} color="blue" />
-                    {data.map((dataPoint) => (
+        <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
+            <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} >
+                <Path path={graphPath} color={theme.colors.outline} />
+                {data.map((dataPoint) => (                    
                         <Text
                             key={dataPoint.label}
                             font={font}
+                            color={theme.colors.onSurface}
                             x={x(dataPoint.label) - 42}
                             y={CanvasHeight - 2}
                             text={dataPoint.label}
                         />
-                    ))}
-                </Canvas>
 
-            </ScrollView>
-
-        )
+                ))}
+            </Canvas>
+        </ScrollView>)
 }
 
 const sum = (a, b) => (Number(a) + Number(b)).toString()
@@ -94,12 +82,10 @@ export default function ChartView({ navigation, route }) {
 
     const { listOfItems } = useAppContext();
     const [mode, setMode] = React.useState('day');
-
     const [listChart, setListChart] = useState([])
-    //const [data, setData] = useState([])
 
     useEffect(() => {
-        // const data = JSON.parse(JSON.stringify(listOfItems));
+
         setListChart(list => {
 
             const data = listOfItems.reduce((acc, item) => {
@@ -119,7 +105,6 @@ export default function ChartView({ navigation, route }) {
                         odometer: item.odometer.resultOdometer
                     })
                 }
-                //console.log(listOfItems)
                 return acc.splice(0)
             }, [])
             const labels = data.map(item => {
@@ -130,24 +115,20 @@ export default function ChartView({ navigation, route }) {
                         // заполнить дни месяца со статистикой
                         // получаем первую запись базы
                         item.label = first.format(mode === 'day' ? 'DD MMM' : 'MMM')
-                        //console.log(item)
                         return item
                     case 'week':
                         item.label = first.startOf(mode).month() === first.endOf(mode).month() ?
                             first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM') :
                             first.startOf(mode).format('DD MMM') + '-' + first.endOf(mode).format('DD MMM')
-                        //console.log(item)
                         return item
                 }
             })
-            //console.log(labels)
-            return labels.map((item, index) => ({
+            return labels.map((item,) => ({
                 value: Number(item.profit),
                 label: item.label
             }))
         })
-    }, [mode])
-    //console.log(mode)
+    }, [mode, listOfItems])
     return (
         <View style={Styles.main}>
             <SegmentedButtons
@@ -169,6 +150,9 @@ export default function ChartView({ navigation, route }) {
                 ]}
             />
             <BarChart mode={mode} data={listChart} />
+            <View>
+
+            </View>
         </View>
     )
 }
@@ -178,13 +162,10 @@ const Styles = StyleSheet.create({
     main: {
         flex: 1,
         flexDirection: 'column',
-        //backgroundColor: '#f2f2f2',
         margin: 24
     },
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        marginTop: 10
+        marginTop: 12
     },
 })
