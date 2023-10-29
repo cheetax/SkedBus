@@ -8,6 +8,7 @@ import { Canvas, Path, Skia, useComputedValue, useFont, Text, Glyphs, vec } from
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
+import { isNonNullChain } from "typescript";
 
 dayjs.locale(Ru);
 
@@ -21,10 +22,10 @@ console.log(FONT, '1')
 
 const BarChart = (props) => {
 
-    if (props.data.length === 0) return <></>
+    if (props.data.length === 0 || props.font === null ) return <></>
 
-    const theme = useTheme();  
-    
+    const theme = useTheme();
+
     const data = props.data
     const font = props.font
     console.log(font)
