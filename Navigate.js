@@ -118,14 +118,12 @@ const Home = () => <Stack.Navigator>
 export default function Navigate({ }) {
     enableLayoutAnimations(false)
     const { isDarkTheme } = useAppContext();
-    //console.log(MD3LightTheme)
     const theme = isDarkTheme ? MD3DarkTheme : {
         ...MD3LightTheme,
         colors: { ...MD3LightTheme.colors, surface: "rgba(254, 247, 255, 1)" }
     };
-    //theme = {...theme, colors: {surface: "rgba(254, 247, 255, 1)"}}
-    //console.log(theme)
-    NavigationBar.setButtonStyleAsync(isDarkTheme ? 'light' : 'dark')
+    NavigationBar.setBackgroundColorAsync(theme.colors.background)
+    NavigationBar.setButtonStyleAsync(isDarkTheme ? 'light' : 'dark')   
     return (
 
         <PaperProvider theme={theme}>
