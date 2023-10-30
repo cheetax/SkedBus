@@ -64,7 +64,7 @@ const BarChart = (props) => {
 
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
-            <View>
+            <View style={{ flex: 1, width: CanvasWidth, }} >
                 <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
                     <Path path={graphPath} color={theme.colors.outline} />
                 </Canvas>
@@ -153,7 +153,7 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart}/>
+            <BarChart mode={mode} data={listChart} />
         </View>
     )
 }
@@ -168,6 +168,5 @@ const Styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 12,
-        flexDirection: 'column',
     },
 })
