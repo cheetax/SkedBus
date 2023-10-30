@@ -9,6 +9,7 @@ import FormOdometer from "./components/FormOdometer";
 import FormExpenses from './components/FormExpenses';
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
+import * as NavigationBar from 'expo-navigation-bar';
 import { useAppContext } from "./providers/AppContextProvider";
 import { ItemContextProvider } from "./providers/ItemContextProvider";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -124,6 +125,7 @@ export default function Navigate({ }) {
     };
     //theme = {...theme, colors: {surface: "rgba(254, 247, 255, 1)"}}
     //console.log(theme)
+    NavigationBar.setButtonStyleAsync(isDarkTheme ? 'light' : 'dark')
     return (
 
         <PaperProvider theme={theme}>

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView, } from 'react-native';
-import { SegmentedButtons, useTheme } from 'react-native-paper';
+import { SegmentedButtons, useTheme, Text as TextRN } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
 //import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
-import { Canvas, Path, Skia, useComputedValue, useFont, Text, Glyphs, vec } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia, useComputedValue, useTouchHandler } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
-import { isNonNullChain } from "typescript";
 
 dayjs.locale(Ru);
 
@@ -17,28 +16,23 @@ const GRAPH_BAR_WIDTH = 45
 
 const CanvasHeight = 150
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
-const FONT = require('../font/Roboto-Bold.ttf')
-console.log(FONT, '1')
 
 const BarChart = (props) => {
 
-    if (props.data.length === 0 || props.font === null ) return <></>
+    if (props.data.length === 0) return <></>
 
     const theme = useTheme();
 
     const data = props.data
-    const font = props.font
-    console.log(font)
-    console.log(data)
-    const CanvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
-    const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH
-    //console.log(data, '0')
-    const xDomain = data.map(xDataPoint => {
-        console.log(font)
-        //console.log(font.getGlyphIDs('Hello'))
-        //const glyphs = font.getGlyphIDs(xDataPoint.label)
-        return xDataPoint.label
+    const onTouch = useTouchHandler({
+        onEnd: (touchInfo) => {
+            console.log(touchInfo)
+        }
     })
+
+    const CanvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
+    const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
+    const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
     const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
 
@@ -70,20 +64,20 @@ const BarChart = (props) => {
 
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
-            <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} >
-                <Path path={graphPath} color={theme.colors.outline} />
-                {data.map((dataPoint) => (
-                    <Text
-                        key={dataPoint.label}
-                        font={font}
-                        color={theme.colors.onSurface}
-                        x={x(dataPoint.label) - 42}
-                        y={CanvasHeight - 2}
-                        text={dataPoint.label}
-                    />
+            <View>
+                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
+                    <Path path={graphPath} color={theme.colors.outline} />
+                </Canvas>
+                <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
+                    {data.map((dataPoint) => (
+                        <TextRN
+                            key={dataPoint.label}
+                            style={{ width: GRAPH_BAR_WIDTH, marginRight: 8, textAlign: 'center', fontSize: 12, }}
+                        >{dataPoint.label}</TextRN>
 
-                ))}
-            </Canvas>
+                    ))}
+                </View>
+            </View>
         </ScrollView>)
 }
 
@@ -94,8 +88,6 @@ export default function ChartView({ navigation, route }) {
     const { listOfItems } = useAppContext();
     const [mode, setMode] = React.useState('day');
     const [listChart, setListChart] = useState([])
-    const font = useFont(FONT)
-    console.log(font)
     useEffect(() => {
 
         setListChart(list => {
@@ -161,10 +153,7 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart} font={font} />
-            <View>
-
-            </View>
+            <BarChart mode={mode} data={listChart}/>
         </View>
     )
 }
@@ -178,6 +167,7 @@ const Styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        marginTop: 12
+        marginTop: 12,
+        flexDirection: 'column',
     },
 })
