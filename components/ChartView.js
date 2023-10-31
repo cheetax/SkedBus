@@ -4,7 +4,7 @@ import { SegmentedButtons, useTheme, Text as TextRN } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 //import { BarChart } from "react-native-charts-wrapper";
 //import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
-import { Canvas, Path, Skia, useComputedValue, useTouchHandler } from "@shopify/react-native-skia";
+import { Canvas, Path, Skia, useComputedValue, useTouchHandler, Rect } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
@@ -21,7 +21,7 @@ const BarChart = (props) => {
 
     if (props.data.length === 0) return <></>
 
-    const theme = useTheme();
+    
 
     const data = props.data
     const onTouch = useTouchHandler({
@@ -43,30 +43,30 @@ const BarChart = (props) => {
 
     const yRange = [0, graphHeight]
     const y = d3.scaleLinear().domain(yDomain).range(yRange)
-    const graphPath = useComputedValue(() => {
-        const newPath = Skia.Path.Make()
 
-        data.forEach((dataPoint) => {
-
-            const rect = Skia.XYWHRect(
-                x(dataPoint.label) - GRAPH_BAR_WIDTH,
-                graphHeight,
-                GRAPH_BAR_WIDTH,
-                y(dataPoint.value) * -1,
-
-            )
-            const roundedRect = Skia.RRectXY(rect, 0, 0)
-            newPath.addRRect(roundedRect)
-        })
-
-        return newPath
-    }, [data])
+    const GraphPath = ({ data }) => data.map((item) => {
+        const rect = Skia.XYWHRect(
+            x(item.label) - GRAPH_BAR_WIDTH,
+            graphHeight,
+            GRAPH_BAR_WIDTH,
+            y(item.value) * -1,
+        )
+        const i = Skia.RRectXY(rect, 0, 0)
+        return <Rect
+            key={item.label}
+            x={i.rect.x}
+            y={i.rect.y}
+            height={i.rect.height}
+            width={i.rect.width}
+            color={item.color}
+        />
+    })
 
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flex: 1, width: CanvasWidth, }} >
                 <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
-                    <Path path={graphPath} color={theme.colors.outline} />
+                    <GraphPath data={data} />
                 </Canvas>
                 <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
                     {data.map((dataPoint) => (
@@ -88,6 +88,8 @@ export default function ChartView({ navigation, route }) {
     const { listOfItems } = useAppContext();
     const [mode, setMode] = React.useState('day');
     const [listChart, setListChart] = useState([])
+    const theme = useTheme();
+
     useEffect(() => {
 
         setListChart(list => {
@@ -129,7 +131,8 @@ export default function ChartView({ navigation, route }) {
             })
             return labels.map((item,) => ({
                 value: Number(item.profit),
-                label: item.label
+                label: item.label,
+                color: theme.colors.outline
             }))
         })
     }, [mode, listOfItems])
