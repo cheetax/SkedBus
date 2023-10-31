@@ -26,7 +26,7 @@ const BarChart = (props) => {
     const data = props.data
     const onTouch = useTouchHandler({
         onEnd: (touchInfo) => {
-            console.log(touchInfo)
+            //console.log(touchInfo)
         }
     })
 
@@ -51,14 +51,10 @@ const BarChart = (props) => {
             GRAPH_BAR_WIDTH,
             y(item.value) * -1,
         )
-        const i = Skia.RRectXY(rect, 0, 0)
         return <Rect
             key={item.label}
-            x={i.rect.x}
-            y={i.rect.y}
-            height={i.rect.height}
-            width={i.rect.width}
-            color={item.color}
+            rect={rect}
+            color={item.color}            
         />
     })
 
