@@ -17,53 +17,15 @@ const GRAPH_BAR_WIDTH = 45
 const CanvasHeight = 150
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
 
-const insideBounds = (rect, curX, curY) => {
-    return (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
-}
+const insideBounds = (rect, x, y) => x >= rect.x && x <= rect.x + rect.width && y <= rect.y && y >= rect.y + rect.height;
 
-const GraphPath = ({ data, selected, selectColor, color }) => data.map((item) => {
-    return <Rect
-        key={item.label}
-        rect={item.rect}
-        //color={color}
-        color={insideBounds(item.rect, selected.x, selected.y) && selected.isSelected ? selectColor : color}
-    /> 
-})
-
-const BarChart = (props) => {
+const BarChart = (props) => {    
 
     if (props.data.length === 0) return <></>
-
-    const CanvasWidth = (props.data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
-    const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
-    const xDomain = props.data.map(xDataPoint => xDataPoint.label)
-    const xRange = [0, graphWidth]
-    const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
-
-    const yDomain = [
-        0,
-        d3.max(props.data, yDataPoint => yDataPoint.value)
-    ]
-
-    const yRange = [0, graphHeight]
-    const y = d3.scaleLinear().domain(yDomain).range(yRange)
-
-    const dataRect = (data) => data.map((item) => {
-        return {
-            ...item,
-            rect: Skia.XYWHRect(
-            x(item.label) - GRAPH_BAR_WIDTH,
-            graphHeight,
-            GRAPH_BAR_WIDTH,
-            y(item.value) * -1)}
-    })
-
+    
     const theme = useTheme()
 
-    const { selectColor = 'red', color = theme.colors.outline } = props
-
-    const [data, setData] = useState(dataRect(props.data))
-
+    const { data, selectColor = 'red', color = theme.colors.outline } = props
     const [selected, setSelected] = useState({ x: 0, y: 0, isSelected: false })
 
     const onTouch = useTouchHandler({
@@ -75,16 +37,44 @@ const BarChart = (props) => {
         }
     })
 
-    useEffect(() => {
-        setData(dataRect(props.data))
-        setSelected({ x: 0, y: 0, isSelected: false })
-    }, [props.data])
+    const canvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
+    const graphWidth = canvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
+    const xDomain = data.map(xDataPoint => xDataPoint.label)
+
+    const xRange = [0, graphWidth]
+    const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
+
+    const yDomain = [
+        0,
+        d3.max(data, yDataPoint => yDataPoint.value)
+    ]
+    const yRange = [0, graphHeight]
+    const y = d3.scaleLinear().domain(yDomain).range(yRange)
+
+    data.forEach((item) => {
+        item.rect = Skia.XYWHRect(
+            x(item.label) - GRAPH_BAR_WIDTH,
+            graphHeight,
+            GRAPH_BAR_WIDTH,
+            y(item.value) * -1)
+        //console.log(item.rect.x, selected.x)
+        //console.log(insideBounds(item.rect, selected.x, selected.y))
+    })
+
+    const GraphPath = ({ data }) => data.map((item) =>
+        <Rect
+            key={item.label}
+            rect={item.rect}
+            color='blue'
+           //color={insideBounds(item.rect, selected.x, selected.y) ? selectColor : color}
+        />
+    )
 
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flex: 1, width: CanvasWidth, }} >
-                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
-                    <GraphPath data={data} selected={selected} selectColor={selectColor} color={color} />
+            <View style={{ flex: 1, width: canvasWidth, }} >
+                <Canvas style={{ width: canvasWidth, height: CanvasHeight }} onTouch={onTouch}>
+                    <GraphPath data={data} />
                 </Canvas>
                 <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
                     {data.map((dataPoint) => (
@@ -92,6 +82,7 @@ const BarChart = (props) => {
                             key={dataPoint.label}
                             style={{ width: GRAPH_BAR_WIDTH, marginRight: 8, textAlign: 'center', fontSize: 12, }}
                         >{dataPoint.label}</TextRN>
+
                     ))}
                 </View>
             </View>
@@ -150,10 +141,11 @@ export default function ChartView({ navigation, route }) {
             return labels.map((item) => ({
                 value: Number(item.profit),
                 label: item.label,
-                color: theme.colors.outline
-            }))
+            })
+            )
         })
     }, [mode, listOfItems])
+
     return (
         <View style={Styles.main}>
             <SegmentedButtons
