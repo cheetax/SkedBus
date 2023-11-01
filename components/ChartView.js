@@ -26,7 +26,7 @@ const BarChart = (props) => {
     const data = props.data
     const onTouch = useTouchHandler({
         onEnd: (touchInfo) => {
-            //console.log(touchInfo)
+            console.log(touchInfo)
         }
     })
 
@@ -117,12 +117,12 @@ export default function ChartView({ navigation, route }) {
                         // заполнить дни месяца со статистикой
                         // получаем первую запись базы
                         item.label = first.format(mode === 'day' ? 'DD MMM' : 'MMM')
-                        return item
+                        break
                     case 'week':
                         item.label = first.startOf(mode).month() === first.endOf(mode).month() ?
                             first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM') :
                             first.startOf(mode).format('DD MMM') + '-' + first.endOf(mode).format('DD MMM')
-                        return item
+                        break
                 }
             })
             return labels.map((item,) => ({
