@@ -21,7 +21,7 @@ const BarChart = (props) => {
 
     if (props.data.length === 0) return <></>
 
-    
+
 
     const data = props.data
     const onTouch = useTouchHandler({
@@ -54,7 +54,7 @@ const BarChart = (props) => {
         return <Rect
             key={item.label}
             rect={rect}
-            color={item.color}            
+            color={item.color}
         />
     })
 
@@ -124,8 +124,9 @@ export default function ChartView({ navigation, route }) {
                             first.startOf(mode).format('DD MMM') + '-' + first.endOf(mode).format('DD MMM')
                         break
                 }
+                return item
             })
-            return labels.map((item,) => ({
+            return labels.map((item) => ({
                 value: Number(item.profit),
                 label: item.label,
                 color: theme.colors.outline
