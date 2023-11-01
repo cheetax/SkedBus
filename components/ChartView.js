@@ -40,6 +40,8 @@ const BarChart = (props) => {
     const xRange = [0, graphWidth]
     const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
 
+
+
     const yDomain = [
         0,
         d3.max(props.data, yDataPoint => yDataPoint.value)
@@ -65,13 +67,15 @@ const BarChart = (props) => {
     const [data, setData] = useState(dataRect(props.data))
 
     const [selected, setSelected] = useState({ x: 0, y: 0, isSelected: false })
-
+    //const onT = props.onTouch('Тест')
     const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
             if (type !== 2) return
             setSelected({
                 x, y, isSelected: true
+
             })
+            props.onTouch(data.find((item) => insideBounds(item.rect, x , y)))
         }
     })
 
@@ -106,6 +110,10 @@ export default function ChartView({ navigation, route }) {
     const [mode, setMode] = React.useState('day');
     const [listChart, setListChart] = useState([])
     const theme = useTheme();
+
+    const onTouch = (e) => {
+        console.log(e.label)
+    }
 
     useEffect(() => {
 
@@ -174,7 +182,7 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart} />
+            <BarChart mode={mode} data={listChart} onTouch={onTouch} />
         </View>
     )
 }
