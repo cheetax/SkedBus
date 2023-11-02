@@ -18,24 +18,23 @@ const GraphPath = ({ data, selected, selectColor, color }) => data.map((item) =>
     return <Rect
         key={item.label}
         rect={item.rect}
-        //color={color}
         color={insideBounds(item.rect, selected.x, selected.y) && selected.isSelected ? selectColor : color}
     /> 
 })
 
-export const BarChart = (props) => {
+export const BarChart = ({data=[], selectColor='green', color= 'grey', onTouch=() => {} }) => {   
 
-    if (props.data.length === 0) return <></>
+    if (data.length === 0) return <></>
 
-    const CanvasWidth = (props.data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
+    const CanvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
     const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
-    const xDomain = props.data.map(xDataPoint => xDataPoint.label)
+    const xDomain = data.map(xDataPoint => xDataPoint.label)
     const xRange = [0, graphWidth]
     const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
 
     const yDomain = [
         0,
-        d3.max(props.data, yDataPoint => yDataPoint.value)
+        d3.max(data, yDataPoint => yDataPoint.value)
     ]
 
     const yRange = [0, graphHeight]
@@ -51,38 +50,35 @@ export const BarChart = (props) => {
             y(item.value) * -1)}
     })
 
-    const theme = useTheme()
-
-    const { selectColor = 'red', color = theme.colors.outline } = props
-
-    const [data, setData] = useState(dataRect(props.data))
+    const [dataChart, setData] = useState(dataRect(data))
 
     const [selected, setSelected] = useState({ x: 0, y: 0, isSelected: false })
-    //const onT = props.onTouch('Тест')
-    const onTouch = useTouchHandler({
+
+    const onTouchHandler = useTouchHandler({
         onEnd: ({ x, y, type }) => {
             if (type !== 2) return
             setSelected({
                 x, y, isSelected: true
 
             })
-            props.onTouch(data.find((item) => insideBounds(item.rect, x , y)))
+            const result = dataChart.find((item) => insideBounds(item.rect, x , y))
+            if (result) onTouch(result)
         }
     })
 
     useEffect(() => {
-        setData(dataRect(props.data))
+        setData(dataRect(data))
         setSelected({ x: 0, y: 0, isSelected: false })
-    }, [props.data])
+    }, [data])
 
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flex: 1, width: CanvasWidth, }} >
-                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
-                    <GraphPath data={data} selected={selected} selectColor={selectColor} color={color} />
+                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouchHandler}>
+                    <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
-                    {data.map((dataPoint) => (
+                    {dataChart.map((dataPoint) => (
                         <TextRN
                             key={dataPoint.label}
                             style={{ width: GRAPH_BAR_WIDTH, marginRight: 8, textAlign: 'center', fontSize: 12, }}

@@ -64,7 +64,6 @@ export default function ChartView({ navigation, route }) {
             return labels.map((item) => ({
                 value: Number(item.profit),
                 label: item.label,
-                color: theme.colors.outline
             }))
         })
     }, [mode, listOfItems])
@@ -88,7 +87,7 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart} onTouch={onTouch} />
+            <BarChart mode={mode} data={listChart} onTouch={onTouch}  />
         </View>
     )
 }
