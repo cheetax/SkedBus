@@ -17,7 +17,7 @@ export default function ChartView({ navigation, route }) {
     const [listChart, setListChart] = useState([])
     const theme = useTheme();
 
-    const onTouch = (e) => {
+    const onSelect = (e) => {
         console.log(e.label)
     }
 
@@ -87,7 +87,13 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart} onTouch={onTouch}  />
+            <BarChart
+                mode={mode}
+                data={listChart}
+                onSelect={onSelect}
+                selectColor={theme.colors.onSurfaceVariant}
+                color={theme.colors.outlineVariant}
+            />
         </View>
     )
 }

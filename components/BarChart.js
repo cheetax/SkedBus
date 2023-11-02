@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView, } from 'react-native';
-import { useTheme, Text as TextRN } from 'react-native-paper';
+import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 
@@ -18,11 +18,11 @@ const GraphPath = ({ data, selected, selectColor, color }) => data.map((item) =>
     return <Rect
         key={item.label}
         rect={item.rect}
-        color={insideBounds(item.rect, selected.x, selected.y) && selected.isSelected ? selectColor : color}
-    /> 
+        color={item.isSelected ? selectColor : color}
+    />
 })
 
-export const BarChart = ({data=[], selectColor='green', color= 'grey', onTouch=() => {} }) => {   
+export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onSelect = () => { } }) => {
 
     if (data.length === 0) return <></>
 
@@ -44,44 +44,55 @@ export const BarChart = ({data=[], selectColor='green', color= 'grey', onTouch=(
         return {
             ...item,
             rect: Skia.XYWHRect(
-            x(item.label) - GRAPH_BAR_WIDTH,
-            graphHeight,
-            GRAPH_BAR_WIDTH,
-            y(item.value) * -1)}
+                x(item.label) - GRAPH_BAR_WIDTH,
+                graphHeight,
+                GRAPH_BAR_WIDTH,
+                y(item.value) * -1),
+            isSeleted: false
+        }
     })
 
     const [dataChart, setData] = useState(dataRect(data))
 
-    const [selected, setSelected] = useState({ x: 0, y: 0, isSelected: false })
+    const [selected, setSelected] = useState({ x: 0, y: 0 })
 
-    const onTouchHandler = useTouchHandler({
+    const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
             if (type !== 2) return
-            setSelected({
-                x, y, isSelected: true
+            setData((data) => data.map((item) => {
+                const result = insideBounds(item.rect, x, y)
+                if (result) onSelect(item)
+                return {
+                    ...item,
+                    isSelected: result
+                }
+            }))
+            setSelected({ x, y })
 
-            })
-            const result = dataChart.find((item) => insideBounds(item.rect, x , y))
-            if (result) onTouch(result)
         }
     })
 
     useEffect(() => {
         setData(dataRect(data))
-        setSelected({ x: 0, y: 0, isSelected: false })
+        setSelected({ x: 0, y: 0 })
     }, [data])
-
     return (
         <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
             <View style={{ flex: 1, width: CanvasWidth, }} >
-                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouchHandler}>
+                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
                     <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
                     {dataChart.map((dataPoint) => (
                         <TextRN
                             key={dataPoint.label}
-                            style={{ width: GRAPH_BAR_WIDTH, marginRight: 8, textAlign: 'center', fontSize: 12, }}
+                            style={{
+                                width: GRAPH_BAR_WIDTH,
+                                marginRight: 8,
+                                textAlign: 'center',
+                                fontSize: 12,
+                                fontWeight: dataPoint.isSelected ? "bold" : 'normal'
+                            }}
                         >{dataPoint.label}</TextRN>
                     ))}
                 </View>
@@ -89,7 +100,7 @@ export const BarChart = ({data=[], selectColor='green', color= 'grey', onTouch=(
         </ScrollView>)
 }
 
- const Styles = StyleSheet.create({
+const Styles = StyleSheet.create({
 
     main: {
         flex: 1,
