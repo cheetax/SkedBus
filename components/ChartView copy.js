@@ -1,93 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, } from 'react-native';
-import { SegmentedButtons, useTheme, Text as TextRN } from 'react-native-paper';
+import { View, StyleSheet, } from 'react-native';
+import { SegmentedButtons, useTheme } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-//import { BarChart } from "react-native-charts-wrapper";
-//import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
-import { Canvas, Path, Skia, useComputedValue, useTouchHandler, Rect } from "@shopify/react-native-skia";
-import * as d3 from 'd3'
+import { BarChart } from "./BarChart";
+
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 
 dayjs.locale(Ru);
 
 const GRAPH_MARGIN = 8
-const GRAPH_BAR_WIDTH = 45
-
 const CanvasHeight = 150
-const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
-
-const insideBounds = (rect, x, y) => x >= rect.x && x <= rect.x + rect.width && y <= rect.y && y >= rect.y + rect.height;
-
-const BarChart = (props) => {    
-
-    if (props.data.length === 0) return <></>
-    
-    const theme = useTheme()
-
-    const { data, selectColor = 'red', color = theme.colors.outline } = props
-    const [selected, setSelected] = useState({ x: 0, y: 0, isSelected: false })
-
-    const onTouch = useTouchHandler({
-        onEnd: ({ x, y, type }) => {
-            if (type !== 2) return
-            setSelected({
-                x, y, isSelected: true
-            })
-        }
-    })
-
-    const canvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
-    const graphWidth = canvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
-    const xDomain = data.map(xDataPoint => xDataPoint.label)
-
-    const xRange = [0, graphWidth]
-    const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
-
-    const yDomain = [
-        0,
-        d3.max(data, yDataPoint => yDataPoint.value)
-    ]
-    const yRange = [0, graphHeight]
-    const y = d3.scaleLinear().domain(yDomain).range(yRange)
-
-    data.forEach((item) => {
-        item.rect = Skia.XYWHRect(
-            x(item.label) - GRAPH_BAR_WIDTH,
-            graphHeight,
-            GRAPH_BAR_WIDTH,
-            y(item.value) * -1)
-        //console.log(item.rect.x, selected.x)
-        //console.log(insideBounds(item.rect, selected.x, selected.y))
-    })
-
-    const GraphPath = ({ data }) => data.map((item) =>
-        <Rect
-            key={item.label}
-            rect={item.rect}
-            color='blue'
-           //color={insideBounds(item.rect, selected.x, selected.y) ? selectColor : color}
-        />
-    )
-
-    return (
-        <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flex: 1, width: canvasWidth, }} >
-                <Canvas style={{ width: canvasWidth, height: CanvasHeight }} onTouch={onTouch}>
-                    <GraphPath data={data} />
-                </Canvas>
-                <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
-                    {data.map((dataPoint) => (
-                        <TextRN
-                            key={dataPoint.label}
-                            style={{ width: GRAPH_BAR_WIDTH, marginRight: 8, textAlign: 'center', fontSize: 12, }}
-                        >{dataPoint.label}</TextRN>
-
-                    ))}
-                </View>
-            </View>
-        </ScrollView>)
-}
 
 const sum = (a, b) => (Number(a) + Number(b)).toString()
 
@@ -166,7 +89,7 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart mode={mode} data={listChart} />
+            <BarChart mode={mode} data={listChart}  />
         </View>
     )
 }
