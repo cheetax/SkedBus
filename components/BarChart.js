@@ -7,7 +7,7 @@ import * as d3 from 'd3'
 const GRAPH_MARGIN = 8
 const GRAPH_BAR_WIDTH = 45
 
-const CanvasHeight = 150
+const CanvasHeight = 120
 const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
 
 const insideBounds = (rect, curX, curY) => {
@@ -77,12 +77,18 @@ export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onS
         setSelected({ x: 0, y: 0 })
     }, [data])
     return (
-        <ScrollView style={Styles.container} horizontal showsHorizontalScrollIndicator={false}>
-            <View style={{ flex: 1, width: CanvasWidth, }} >
+        <ScrollView style={{...Styles.container}} horizontal showsHorizontalScrollIndicator={false}>
+            <View style={{
+                width: CanvasWidth,
+            }} >
                 <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
                     <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
-                <View style={{ marginLeft: GRAPH_MARGIN, flex: 1, flexDirection: 'row', width: graphWidth, }} >
+                <View style={{
+                    marginLeft: GRAPH_MARGIN,
+                    flexDirection: 'row',
+                    width: graphWidth,
+                }} >
                     {dataChart.map((dataPoint) => (
                         <TextRN
                             key={dataPoint.label}
@@ -103,12 +109,10 @@ export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onS
 const Styles = StyleSheet.create({
 
     main: {
-        flex: 1,
         flexDirection: 'column',
         margin: 24
     },
     container: {
-        flex: 1,
         marginTop: 12,
     },
 })

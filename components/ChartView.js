@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
-import { SegmentedButtons, useTheme, Text } from 'react-native-paper';
+import { SegmentedButtons, useTheme, Text, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { BarChart } from "./BarChart";
 import dayjs from 'dayjs'
@@ -20,7 +20,7 @@ export default function ChartView({ navigation, route }) {
 
     const onSelect = (item) => {
         setSelectItem(item)
-       // console.log(e.label)
+        // console.log(e.label)
     }
 
     useEffect(() => {
@@ -90,13 +90,19 @@ export default function ChartView({ navigation, route }) {
                     },
                 ]}
             />
-            <BarChart
-                mode={mode}
-                data={listChart}
-                onSelect={onSelect}
-                selectColor={theme.colors.onSurfaceVariant}
-                color={theme.colors.outlineVariant}
-            />
+            <Card
+                style={{ ...Styles.card, }}
+            >
+                <BarChart
+                    mode={mode}
+                    data={listChart}
+                    onSelect={onSelect}
+                    selectColor={theme.colors.onSurfaceVariant}
+                    color={theme.colors.outlineVariant}
+                />
+
+            </Card>
+
             {selectItem ? <View>
                 <Text>{selectItem.value}</Text>
             </View> : <></>}
@@ -114,5 +120,11 @@ const Styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 12,
+    },
+    card: {
+        marginTop: 8,
+        marginHorizontal: 2,
+        marginBottom: 2,
+       // flex: 1
     },
 })
