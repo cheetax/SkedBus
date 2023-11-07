@@ -13,12 +13,12 @@ const sum = (a, b) => (Number(a) + Number(b)).toString()
 export default function ChartView({ navigation, route }) {
 
     const { listOfItems } = useAppContext();
-    const [mode, setMode] = React.useState('day');
+    const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])
     const [selectItem, setSelectItem] = useState({})
     const theme = useTheme();
 
-    const onSelect = (item) => {
+    const onSelect = item => {
         setSelectItem(item)
         // console.log(e.label)
     }
@@ -70,6 +70,7 @@ export default function ChartView({ navigation, route }) {
             }))
         })
     }, [mode, listOfItems])
+
     return (
         <View style={Styles.main}>
             <SegmentedButtons

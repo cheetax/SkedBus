@@ -4,17 +4,11 @@ import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
 
-const GRAPH_MARGIN = 8
-const GRAPH_BAR_WIDTH = 45
-
-const CanvasHeight = 120
-const graphHeight = CanvasHeight - 2 * GRAPH_MARGIN;
-
 const insideBounds = (rect, curX, curY) => {
     return (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
 }
 
-const GraphPath = ({ data, selected, selectColor, color }) => data.map((item) => {
+const GraphPath = ({ data, selectColor, color }) => data.map((item) => {
     return <Rect
         key={item.label}
         rect={item.rect}
@@ -22,23 +16,45 @@ const GraphPath = ({ data, selected, selectColor, color }) => data.map((item) =>
     />
 })
 
-export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onSelect = () => { } }) => {
+export const BarChart = ({
+    data = [],
+    selectColor = 'green',
+    color = 'grey',
+    onSelect,
+    GRAPH_MARGIN = 8,
+    GRAPH_BAR_WIDTH = 45,
+    canvasHeight = 120,
+}) => {
 
     if (data.length === 0) return <></>
 
-    const CanvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN));
-    const graphWidth = CanvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
-    const xDomain = data.map(xDataPoint => xDataPoint.label)
-    const xRange = [0, graphWidth]
-    const x = d3.scalePoint().domain(xDomain).range(xRange).padding(1)
+    const paramsChart = () => {
+        const canvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN))
+        const graphWidth = canvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
+        const graphHeight = canvasHeight - 2 * GRAPH_MARGIN
+        const xRange = [0, graphWidth]
+        const xDomain = data.map(xDataPoint => xDataPoint.label)
+        const yDomain = [
+            0,
+            d3.max(data, yDataPoint => yDataPoint.value)
+        ];
+        const yRange = [0, graphHeight];
+        return {
+            canvasWidth,
+            graphWidth,
+            graphHeight,
+            x: d3.scalePoint().domain(xDomain).range(xRange).padding(1),
+            y: d3.scaleLinear().domain(yDomain).range(yRange)
+        }
+    }
 
-    const yDomain = [
-        0,
-        d3.max(data, yDataPoint => yDataPoint.value)
-    ]
-
-    const yRange = [0, graphHeight]
-    const y = d3.scaleLinear().domain(yDomain).range(yRange)
+    const [{
+        canvasWidth,
+        graphWidth,
+        graphHeight,
+        x,
+        y
+    }, setParams] = useState(paramsChart())
 
     const dataRect = (data) => data.map((item) => {
         return {
@@ -58,6 +74,8 @@ export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onS
 
     const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
+            //console.log(onSelect)
+            if (!onSelect) return
             if (type !== 2) return
             setData((data) => data.map((item) => {
                 const result = insideBounds(item.rect, x, y)
@@ -68,20 +86,30 @@ export const BarChart = ({ data = [], selectColor = 'green', color = 'grey', onS
                 }
             }))
             setSelected({ x, y })
-
         }
     })
 
     useEffect(() => {
+        setParams(paramsChart())
+    }, [data])
+
+    useEffect(() => {
         setData(dataRect(data))
         setSelected({ x: 0, y: 0 })
-    }, [data])
+    }, [
+        canvasWidth,
+        graphWidth,
+        graphHeight,
+        x,
+        y
+    ])
+
     return (
-        <ScrollView style={{...Styles.container}} horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView style={{ ...Styles.container }} horizontal showsHorizontalScrollIndicator={false}>
             <View style={{
-                width: CanvasWidth,
+                width: canvasWidth,
             }} >
-                <Canvas style={{ width: CanvasWidth, height: CanvasHeight }} onTouch={onTouch}>
+                <Canvas style={{ width: canvasWidth, height: canvasHeight }} onTouch={onTouch}>
                     <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{
