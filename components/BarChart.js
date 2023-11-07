@@ -28,6 +28,9 @@ export const BarChart = ({
 
     if (data.length === 0) return <></>
 
+
+    const [selected, setSelected] = useState({ x: 0, y: 0 })
+
     const paramsChart = () => {
         const canvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN))
         const graphWidth = canvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
@@ -57,20 +60,21 @@ export const BarChart = ({
     }, setParams] = useState(paramsChart())
 
     const dataRect = (data) => data.map((item) => {
+        console.log(x)
+        const rect = Skia.XYWHRect(
+            x(item.label) - GRAPH_BAR_WIDTH,
+            graphHeight,
+            GRAPH_BAR_WIDTH,
+            y(item.value) * -1);
+        const { x, y } = selected
         return {
             ...item,
-            rect: Skia.XYWHRect(
-                x(item.label) - GRAPH_BAR_WIDTH,
-                graphHeight,
-                GRAPH_BAR_WIDTH,
-                y(item.value) * -1),
-            isSeleted: false
+            rect,
+            isSelected: insideBounds(rect, x, y)
         }
     })
 
-    const [dataChart, setData] = useState(dataRect(data))
-
-    const [selected, setSelected] = useState({ x: 0, y: 0 })
+    const [dataChart, setData] = useState([])
 
     const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
@@ -91,17 +95,18 @@ export const BarChart = ({
 
     useEffect(() => {
         setParams(paramsChart())
+        setSelected({ x: 0, y: 0 })
     }, [data])
 
     useEffect(() => {
         setData(dataRect(data))
-        setSelected({ x: 0, y: 0 })
     }, [
         canvasWidth,
         graphWidth,
         graphHeight,
         x,
-        y
+        y,
+        selected
     ])
 
     return (
