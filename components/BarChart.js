@@ -21,20 +21,22 @@ export const BarChart = ({
     selectColor = 'green',
     color = 'grey',
     onSelect,
-    GRAPH_MARGIN = 8,
-    GRAPH_BAR_WIDTH = 45,
+    graph_span = 8,
+    graph_bar_width = 45,
     canvasHeight = 120,
+    style = Styles.graph,
+    styleLabels
 }) => {
 
     if (data.length === 0) return <></>
 
 
-    const [selected, setSelected] = useState({ x: 0, y: 0 })
+    const [selected, setSelected] = useState({ x: 0, y: 0, selItem: {} })
 
     const paramsChart = () => {
-        const canvasWidth = (data.length * (GRAPH_BAR_WIDTH + GRAPH_MARGIN))
-        const graphWidth = canvasWidth + GRAPH_BAR_WIDTH + GRAPH_MARGIN
-        const graphHeight = canvasHeight - 2 * GRAPH_MARGIN
+        const canvasWidth = (data.length * (graph_bar_width + graph_span))
+        const graphWidth = canvasWidth + graph_bar_width + graph_span
+        const graphHeight = canvasHeight //- 2 * graph_span
         const xRange = [0, graphWidth]
         const xDomain = data.map(xDataPoint => xDataPoint.label)
         const yDomain = [
@@ -60,17 +62,15 @@ export const BarChart = ({
     }, setParams] = useState(paramsChart())
 
     const dataRect = (data) => data.map((item) => {
-        console.log(x)
         const rect = Skia.XYWHRect(
-            x(item.label) - GRAPH_BAR_WIDTH,
+            x(item.label) - graph_bar_width - graph_span,
             graphHeight,
-            GRAPH_BAR_WIDTH,
+            graph_bar_width,
             y(item.value) * -1);
-        const { x, y } = selected
         return {
             ...item,
             rect,
-            isSelected: insideBounds(rect, x, y)
+           // isSelected: insideBounds(rect, selected.x, selected.y)
         }
     })
 
@@ -78,25 +78,27 @@ export const BarChart = ({
 
     const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
-            //console.log(onSelect)
             if (!onSelect) return
             if (type !== 2) return
             setData((data) => data.map((item) => {
                 const result = insideBounds(item.rect, x, y)
-                if (result) onSelect(item)
+                if (result) setSelected({ x, y, selItem: item })
                 return {
                     ...item,
                     isSelected: result
                 }
-            }))
-            setSelected({ x, y })
+            }))         
         }
     })
 
     useEffect(() => {
         setParams(paramsChart())
-        setSelected({ x: 0, y: 0 })
+        setSelected({ x: 0, y: 0, selItem: {} })
     }, [data])
+
+    useEffect(() => {
+       if (selected.selItem) onSelect(selected.selItem)
+    }, [selected.selItem])
 
     useEffect(() => {
         setData(dataRect(data))
@@ -106,31 +108,31 @@ export const BarChart = ({
         graphHeight,
         x,
         y,
-        selected
+      //  selected
     ])
 
     return (
-        <ScrollView style={{ ...Styles.container }} horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView style={{ ...style }} horizontal showsHorizontalScrollIndicator={false}>
             <View style={{
-                width: canvasWidth,
+                width: canvasWidth - graph_span,
             }} >
-                <Canvas style={{ width: canvasWidth, height: canvasHeight }} onTouch={onTouch}>
+                <Canvas style={{ width: canvasWidth, height: canvasHeight, marginLeft: 0 }} onTouch={onTouch}>
                     <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{
-                    marginLeft: GRAPH_MARGIN,
+                    ...styleLabels,
                     flexDirection: 'row',
-                    width: graphWidth,
                 }} >
                     {dataChart.map((dataPoint) => (
                         <TextRN
                             key={dataPoint.label}
                             style={{
-                                width: GRAPH_BAR_WIDTH,
-                                marginRight: 8,
+                                width: graph_bar_width ,
+                                marginRight: graph_span,
                                 textAlign: 'center',
                                 fontSize: 12,
-                                fontWeight: dataPoint.isSelected ? "bold" : 'normal'
+                                fontWeight: dataPoint.isSelected ? "bold" : 'normal',
+                               // borderWidth: 1
                             }}
                         >{dataPoint.label}</TextRN>
                     ))}
@@ -140,13 +142,6 @@ export const BarChart = ({
 }
 
 const Styles = StyleSheet.create({
-
-    main: {
-        flexDirection: 'column',
-        margin: 24
-    },
-    container: {
-        marginTop: 12,
-    },
+    graph: {}
 })
 

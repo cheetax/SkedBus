@@ -15,13 +15,30 @@ export default function ChartView({ navigation, route }) {
     const { listOfItems } = useAppContext();
     const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])
-    const [selectItem, setSelectItem] = useState({})
+    const [selectItem, setSelectItem] = useState()
+    const format = {
+        day: (first) => first.startOf(mode).format('DD MMM'),
+        week: (first) => first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM'),
+        month: (first) => first.startOf(mode).format('MMM')
+    }
+    const buttons = [
+        {
+            value: 'day',
+            label: 'День',
+        },
+        {
+            value: 'week',
+            label: 'Неделя',
+        },
+        {
+            value: 'month',
+            label: 'Месяц'
+        },
+    ]
+
     const theme = useTheme();
 
-    const onSelect = item => {
-        setSelectItem(item)
-        // console.log(e.label)
-    }
+    const onSelect = item => setSelectItem(item)
 
     useEffect(() => {
 
@@ -29,7 +46,7 @@ export default function ChartView({ navigation, route }) {
 
             const data = listOfItems.reduce((acc, item) => {
 
-                var result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
+                const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
                     result.profit = sum(result.profit, item.profit);
@@ -40,59 +57,29 @@ export default function ChartView({ navigation, route }) {
                 else {
                     acc.push({
                         ...item,
-                        key: dayjs(item.date).startOf(mode),
                         odometer: item.odometer.resultOdometer
                     })
                 }
                 return acc.splice(0)
             }, [])
-            const labels = data.map(item => {
-                const first = dayjs(item.date)
-                switch (mode) {
-                    case 'day':
-                    case 'month':
-                        // заполнить дни месяца со статистикой
-                        // получаем первую запись базы
-                        item.label = first.format(mode === 'day' ? 'DD MMM' : 'MMM')
-                        break
-                    case 'week':
-                        item.label = first.startOf(mode).month() === first.endOf(mode).month() ?
-                            first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM') :
-                            first.startOf(mode).format('DD MMM') + '-' + first.endOf(mode).format('DD MMM')
-                        break
-                }
-                return item
-            })
-            return labels.map((item) => ({
+            return data.map(item => ({
                 ...item,
                 value: Number(item.profit),
-                label: item.label,
+                label: format[mode](dayjs(item.date))
             }))
         })
     }, [mode, listOfItems])
-
+    console.log(selectItem)
     return (
         <View style={Styles.main}>
             <SegmentedButtons
                 value={mode}
                 onValueChange={setMode}
-                buttons={[
-                    {
-                        value: 'day',
-                        label: 'День',
-                    },
-                    {
-                        value: 'week',
-                        label: 'Неделя',
-                    },
-                    {
-                        value: 'month',
-                        label: 'Месяц'
-                    },
-                ]}
+                buttons={buttons}
             />
             <Card
                 style={{ ...Styles.card, }}
+
             >
                 <BarChart
                     mode={mode}
@@ -100,13 +87,19 @@ export default function ChartView({ navigation, route }) {
                     onSelect={onSelect}
                     selectColor={theme.colors.onSurfaceVariant}
                     color={theme.colors.outlineVariant}
-                />
+                    style={{ marginVertical: 10, marginHorizontal: 16 }}
+                    styleLabels={{ marginTop: 4 }}
 
+                />
+                <Card.Title
+                    title="Статистика"
+                    subtitle={selectItem.date ? <View>
+                        <Text>Информация за {selectItem.label}</Text>
+                    </View> : <></>}
+                ></Card.Title>
             </Card>
 
-            {selectItem ? <View>
-                <Text>{selectItem.value}</Text>
-            </View> : <></>}
+
         </View>
     )
 }
@@ -126,6 +119,6 @@ const Styles = StyleSheet.create({
         marginTop: 8,
         marginHorizontal: 2,
         marginBottom: 2,
-       // flex: 1
+        // flex: 1
     },
 })
