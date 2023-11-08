@@ -21,6 +21,11 @@ export default function ChartView({ navigation, route }) {
         week: (first) => first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM'),
         month: (first) => first.startOf(mode).format('MMM')
     }
+    const formatDate = {
+        day: (first) => first.startOf(mode).format('DD MMMM YYYY'),
+        week: (first) => first.startOf(mode).format('DD MMMM') + '-' + first.endOf(mode).format('DD MMMM'),
+        month: (first) => first.startOf(mode).format('MMMM YYYY')
+    }
     const buttons = [
         {
             value: 'day',
@@ -94,7 +99,7 @@ export default function ChartView({ navigation, route }) {
                 <Card.Title
                     title="Статистика"
                     subtitle={selectItem.date ? <View>
-                        <Text>Информация за {selectItem.label}</Text>
+                        <Text>Информация за {formatDate[mode](dayjs(selectItem.date))}</Text>
                     </View> : <></>}
                 ></Card.Title>
             </Card>
