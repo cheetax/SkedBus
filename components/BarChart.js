@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, ScrollView, } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect } from "@shopify/react-native-skia";
@@ -32,6 +32,7 @@ export const BarChart = ({
 
 
     const [selected, setSelected] = useState({ x: 0, y: 0, selItem: undefined })
+    const _myScroll = useRef(null)
 
     const paramsChart = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
@@ -70,7 +71,7 @@ export const BarChart = ({
         return {
             ...item,
             rect,
-           // isSelected: insideBounds(rect, selected.x, selected.y)
+            // isSelected: insideBounds(rect, selected.x, selected.y)
         }
     })
 
@@ -80,7 +81,7 @@ export const BarChart = ({
         onEnd: ({ x, y, type }) => {
             if (!onSelect) return
             if (type !== 2) return
-            setSelected({ x, y, selItem: undefined })
+            setSelected({ x, y, selItem: null })
             setData((data) => data.map((item) => {
                 const result = insideBounds(item.rect, x, y)
                 if (result) setSelected({ x, y, selItem: item })
@@ -88,18 +89,19 @@ export const BarChart = ({
                     ...item,
                     isSelected: result
                 }
-            }))         
+            }))
         }
     })
 
     useEffect(() => {
         setParams(paramsChart())
-        setSelected({ x: 0, y: 0, selItem: undefined })
+        setSelected({ x: 0, y: 0, selItem: null });
+        _myScroll.current.scrollTo({x: 0, y: 0, animated: true});
     }, [data])
 
     useEffect(() => {
-       if (!onSelect) return 
-       onSelect(selected.selItem)
+        if (!onSelect) return
+        onSelect(selected.selItem)
     }, [selected.selItem])
 
     useEffect(() => {
@@ -110,11 +112,16 @@ export const BarChart = ({
         graphHeight,
         x,
         y,
-      //  selected
+        //  selected
     ])
 
     return (
-        <ScrollView style={{ ...style }} horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+            style={{ ...style }}
+            ref={_myScroll}
+            contentOffset={{ x: 0, y: 0 }}
+            horizontal
+            showsHorizontalScrollIndicator={false}>
             <View style={{
                 width: canvasWidth - graph_span,
             }} >
@@ -130,12 +137,12 @@ export const BarChart = ({
                         <TextRN
                             key={dataPoint.label}
                             style={{
-                                width: graph_bar_width ,
+                                width: graph_bar_width,
                                 marginRight: graph_span,
                                 textAlign: 'center',
                                 fontSize: 12,
                                 fontWeight: dataPoint.isSelected ? "bold" : 'normal',
-                               // borderWidth: 1
+                                // borderWidth: 1
                             }}
                         >{dataPoint.label}</TextRN>
                     ))}

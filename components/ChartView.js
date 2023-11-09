@@ -15,7 +15,7 @@ export default function ChartView({ navigation, route }) {
     const { listOfItems, round } = useAppContext();
     const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])
-    const [selectItem, setSelectItem] = useState()
+    const [selectItem, setSelectItem] = useState(null)
     const format = {
         day: (first) => first.startOf(mode).format('DD MMM'),
         week: (first) => first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM'),
@@ -52,14 +52,14 @@ export default function ChartView({ navigation, route }) {
             const data = listOfItems.reduce((acc, item) => {
 
                 const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
-                console.log(result)
+               // console.log(result)
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
                     result.profit = sum(result.profit, item.profit);
                     result.odometer = sum(result.odometer, item.odometer.resultOdometer);
                     result.expenses = sum(result.expenses, item.expenses);
-                    result.profitPerOdometer = round(sum(result.profitPerOdometer, item.profitPerOdometer));
-                    //result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
+                    //result.profitPerOdometer = round(sum(result.profitPerOdometer, item.profitPerOdometer));
+                    result.profitPerOdometer = round(Number(result.profit) / Number(result.odometer)).toString()
                 }
                 else {
                     acc.push({
@@ -100,12 +100,8 @@ export default function ChartView({ navigation, route }) {
                 />
                 <Card.Title
                     title="Статистика"
-                    /* subtitle={selectItem ? <View>
-                        <Text>{formatDate[mode](dayjs(selectItem.date))}</Text>
-                    </View> : <></>} */
                 />
                 <Card.Content>
-                    {/* {selectItem ? <View style={{}}> */}
                     <View style={Styles.stackRow} >
                             <Text style={Styles.text} variant='bodyMedium'>Выручка:</Text>
                             <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.proceeds : '-'}</Text>
@@ -128,8 +124,6 @@ export default function ChartView({ navigation, route }) {
                             <Text style={Styles.text} variant='bodyMedium'>Доход на пробег:</Text>
                             <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profitPerOdometer : '-'}</Text>
                         </View>
-                    {/* </View> : <></>} */}
-
                 </Card.Content>
             </Card>
 
