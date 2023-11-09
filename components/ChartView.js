@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from 'react-native';
-import { SegmentedButtons, useTheme, Text, Card } from 'react-native-paper';
+import { SegmentedButtons, useTheme, Text, Card, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { BarChart } from "./BarChart";
 import dayjs from 'dayjs'
@@ -8,11 +8,11 @@ import Ru from 'dayjs/locale/ru';
 
 dayjs.locale(Ru);
 
-const sum = (a, b) => (Number(a) + Number(b)).toString()
+const sum = (a, b) => (Number(a) + Number(b))//.toString()
 
 export default function ChartView({ navigation, route }) {
 
-    const { listOfItems } = useAppContext();
+    const { listOfItems, round } = useAppContext();
     const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])
     const [selectItem, setSelectItem] = useState()
@@ -22,9 +22,9 @@ export default function ChartView({ navigation, route }) {
         month: (first) => first.startOf(mode).format('MMM')
     }
     const formatDate = {
-        day: (first) => first.startOf(mode).format('DD MMMM YYYY'),
-        week: (first) => first.startOf(mode).format('DD MMMM') + '-' + first.endOf(mode).format('DD MMMM'),
-        month: (first) => first.startOf(mode).format('MMMM YYYY')
+        day: (first) => 'За ' + first.startOf(mode).format('DD MMMM YYYY'),
+        week: (first) => 'С ' + first.startOf(mode).format('DD MMMM YY') + ' по ' + first.endOf(mode).format('DD MMMM YY'),
+        month: (first) => 'За ' + first.startOf(mode).format('MMMM YYYY')
     }
     const buttons = [
         {
@@ -52,12 +52,14 @@ export default function ChartView({ navigation, route }) {
             const data = listOfItems.reduce((acc, item) => {
 
                 const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
+                console.log(result)
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
                     result.profit = sum(result.profit, item.profit);
                     result.odometer = sum(result.odometer, item.odometer.resultOdometer);
                     result.expenses = sum(result.expenses, item.expenses);
-                    result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
+                    result.profitPerOdometer = round(sum(result.profitPerOdometer, item.profitPerOdometer));
+                    //result.profitPerOdometer = (Number(result.profit) / Number(result.odometer)).toString()
                 }
                 else {
                     acc.push({
@@ -74,7 +76,7 @@ export default function ChartView({ navigation, route }) {
             }))
         })
     }, [mode, listOfItems])
-    console.log(selectItem)
+    //console.log(selectItem)
     return (
         <View style={Styles.main}>
             <SegmentedButtons
@@ -98,10 +100,37 @@ export default function ChartView({ navigation, route }) {
                 />
                 <Card.Title
                     title="Статистика"
-                    subtitle={selectItem.date ? <View>
-                        <Text>Информация за {formatDate[mode](dayjs(selectItem.date))}</Text>
-                    </View> : <></>}
-                ></Card.Title>
+                    /* subtitle={selectItem ? <View>
+                        <Text>{formatDate[mode](dayjs(selectItem.date))}</Text>
+                    </View> : <></>} */
+                />
+                <Card.Content>
+                    {/* {selectItem ? <View style={{}}> */}
+                    <View style={Styles.stackRow} >
+                            <Text style={Styles.text} variant='bodyMedium'>Выручка:</Text>
+                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.proceeds : '-'}</Text>
+                        </View>
+                        <View style={Styles.stackRow} >
+                            <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
+                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.expenses : '-'}</Text>
+                        </View>
+                        <Divider style={Styles.dividerCard} />
+                        <View style={Styles.stackRow} >
+                            <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
+                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profit : '-'}</Text>
+                        </View>
+                        <Divider style={Styles.dividerCard} />
+                        <View style={Styles.stackRow} >
+                            <Text style={Styles.text} variant='bodyMedium'>Пробег:</Text>
+                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.odometer : '-'}</Text>
+                        </View>
+                        <View style={Styles.stackRow} >
+                            <Text style={Styles.text} variant='bodyMedium'>Доход на пробег:</Text>
+                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profitPerOdometer : '-'}</Text>
+                        </View>
+                    {/* </View> : <></>} */}
+
+                </Card.Content>
             </Card>
 
 
@@ -126,4 +155,17 @@ const Styles = StyleSheet.create({
         marginBottom: 2,
         // flex: 1
     },
+    dividerCard: {
+        marginBottom: 8,
+        marginTop: 8
+    },
+    text: {
+        paddingHorizontal: 0,
+        paddingRight: 8,
+    },
+    stackRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        //flex: 1
+    }
 })

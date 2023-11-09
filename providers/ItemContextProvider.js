@@ -19,16 +19,7 @@ export const useItemContext = () => {
 }
 
 export const useCreateItemContext = function (props) {
-    //const 
     const { listOfItems, settings, setSettings } = useAppContext();
-   
-    //const [isStartScroll, setIsStartScroll] = useState(false);
-    // const [settings, setSettings] = useState(
-    //     {
-    //         priceFuel: '46',
-    //         averageFuel: '9.5'
-    //     }
-    // )
 
     const newItem = () => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
@@ -50,10 +41,6 @@ export const useCreateItemContext = function (props) {
         odometerFinish: '', //спидометр финиш
         key: keyGenerator()
     })
-
-    //const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
-
-    //const startScroll = (a) => setIsStartScroll(a !== 0)
 
     const [item, setItem] = useState(newItem())
     const [itemOdometer, setItemOdometer] = useState(newItemOdometer())
@@ -159,8 +146,6 @@ export const useCreateItemContext = function (props) {
     })
 
     return {
-        //settings,
-        //appliedSettings,
         item,
         getItem,
         appliedOdometer,

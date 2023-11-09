@@ -19,7 +19,6 @@ export const useAppContext = () => {
 export const useCreateAppContext = function (props) {
     const [listOfItems, setListOfItems] = useState([]);
     const [isDarkTheme, setIsDarkTheme] = useState();
-    const [isStartScroll, setIsStartScroll] = useState(false);
     const [settings, setSettings] = useState(
         {
             priceFuel: '46',
@@ -28,8 +27,6 @@ export const useCreateAppContext = function (props) {
     )    
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
-
-    const startScroll = (a) => setIsStartScroll(a !== 0)
 
     const showData = async () => {
         var data = await AsyncStorage.getItem('dataCalcCost');
@@ -54,7 +51,7 @@ export const useCreateAppContext = function (props) {
         setData({ listOfItems, settings, isDarkTheme });
     }, [listOfItems, isDarkTheme]);
     
-    const round = (value, decimals) => Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    const round = (value, decimals=2) => Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
     
     const appliedListOfItems = i => setListOfItems(list => [
         i,

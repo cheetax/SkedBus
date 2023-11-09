@@ -31,12 +31,12 @@ export const BarChart = ({
     if (data.length === 0) return <></>
 
 
-    const [selected, setSelected] = useState({ x: 0, y: 0, selItem: {} })
+    const [selected, setSelected] = useState({ x: 0, y: 0, selItem: undefined })
 
     const paramsChart = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
         const graphWidth = canvasWidth + graph_bar_width + graph_span
-        const graphHeight = canvasHeight //- 2 * graph_span
+        const graphHeight = canvasHeight//- 2 * graph_span
         const xRange = [0, graphWidth]
         const xDomain = data.map(xDataPoint => xDataPoint.label)
         const yDomain = [
@@ -80,6 +80,7 @@ export const BarChart = ({
         onEnd: ({ x, y, type }) => {
             if (!onSelect) return
             if (type !== 2) return
+            setSelected({ x, y, selItem: undefined })
             setData((data) => data.map((item) => {
                 const result = insideBounds(item.rect, x, y)
                 if (result) setSelected({ x, y, selItem: item })
@@ -93,11 +94,12 @@ export const BarChart = ({
 
     useEffect(() => {
         setParams(paramsChart())
-        setSelected({ x: 0, y: 0, selItem: {} })
+        setSelected({ x: 0, y: 0, selItem: undefined })
     }, [data])
 
     useEffect(() => {
-       if (selected.selItem) onSelect(selected.selItem)
+       if (!onSelect) return 
+       onSelect(selected.selItem)
     }, [selected.selItem])
 
     useEffect(() => {
@@ -122,6 +124,7 @@ export const BarChart = ({
                 <View style={{
                     ...styleLabels,
                     flexDirection: 'row',
+                    height: 30
                 }} >
                     {dataChart.map((dataPoint) => (
                         <TextRN
