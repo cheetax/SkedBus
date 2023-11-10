@@ -79,7 +79,7 @@ export default function ChartView({ navigation, route }) {
         })
     }, [mode, listOfItems])
 
-   // console.log(route)
+    // console.log(route)
     return (
         <View style={[Styles.main, { backgroundColor: theme.colors.surface }]}>
             <SegmentedButtons
@@ -92,7 +92,7 @@ export default function ChartView({ navigation, route }) {
                 style={{ ...Styles.card, ...Styles.surface }}
 
             >
-                {/*   <BarChart
+                <BarChart
                     mode={mode}
                     data={listChart}
                     onSelect={onSelect}
@@ -101,7 +101,7 @@ export default function ChartView({ navigation, route }) {
                     style={{ marginVertical: 10, marginHorizontal: 16 }}
                     styleLabels={{ marginTop: 4 }}
 
-                /> */}
+                />
                 <Card.Title
                     title="Статистика"
                 />

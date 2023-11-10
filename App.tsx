@@ -1,13 +1,10 @@
 import 'react-native-gesture-handler';
-import React from "react";
+import React, { FC } from "react";
 import MainStack from './Navigate';
-//import { StatusBar } from "react-native";
-//import { NativeBaseProvider } from 'native-base'
 import { AppContextProvider } from "./providers/AppContextProvider";
 import { ScrollContextProvider } from "./providers/ScrollContextProvider";
 
-export default function App() {
-  //StatusBar.setHidden(false)
+const App : FC = () => {
   return (
     <AppContextProvider>
       <ScrollContextProvider>
@@ -16,4 +13,5 @@ export default function App() {
     </AppContextProvider>
   );
 }
-//registerRootComponent(Main);
+
+export default App;
