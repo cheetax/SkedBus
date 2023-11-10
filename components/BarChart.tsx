@@ -1,14 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, FC, ReactElement } from "react";
 import { View, StyleSheet, ScrollView, } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
+import { type } from "os";
 
-const insideBounds = (rect, curX, curY) => {
+type Rect = {
+    x: number;
+    width: number;
+    y: number;
+    height: number;
+}
+
+type GraphPath = ( data:[], selectColor: string, color: string ) => JSX.Element[]
+
+const insideBounds = (rect: Rect, curX: number, curY: number) => {
     return (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
 }
 
-const GraphPath = ({ data, selectColor, color }) => data.map((item) => {
+const GraphPathView : GraphPath  = ( data:[], selectColor: string, color: string ) => data.map((item) => {
     return <Rect
         key={item.label}
         rect={item.rect}
@@ -96,7 +106,7 @@ export const BarChart = ({
     useEffect(() => {
         setParams(paramsChart())
         setSelected({ x: 0, y: 0, selItem: null });
-        _myScroll.current.scrollTo({x: 0, y: 0, animated: true});
+        _myScroll.current.scrollTo({ x: 0, y: 0, animated: true });
     }, [data])
 
     useEffect(() => {
@@ -126,7 +136,7 @@ export const BarChart = ({
                 width: canvasWidth - graph_span,
             }} >
                 <Canvas style={{ width: canvasWidth, height: canvasHeight, marginLeft: 0 }} onTouch={onTouch}>
-                    <GraphPath data={dataChart} selected={selected} selectColor={selectColor} color={color} />
+                    <GraphPathView data={dataChart} selected={selected} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{
                     ...styleLabels,
