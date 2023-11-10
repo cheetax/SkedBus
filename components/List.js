@@ -3,23 +3,28 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { useScrollContext } from "../providers/ScrollContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import dayjs from 'dayjs';
 
 export default function Main({ navigation, route }) {
 
   const {
-    listOfItems,
-    isStartScroll,
-    startScroll,
+    listOfItems,    
     deleteItemOfListOfItems,
     round
   } = useAppContext();
 
-  const editForm = key => navigation.navigate({
-    name: 'Form',
-    params: { key },
-  })
+  const { isStartScroll, startScroll} = useScrollContext();
+
+  const editForm = key => {
+    //console.log(key)
+    navigation.navigate('FormNavigate', {
+      screen: 'Form',
+      initial: true,
+      params: { key },
+    })
+  }
 
   const theme = useTheme();
   //console.log(listOfItems)
@@ -77,7 +82,7 @@ export default function Main({ navigation, route }) {
                       <Text style={Styles.text} variant='bodySmall'>Пробег:</Text>
                       <Text style={Styles.text} variant='bodySmall'>{item.odometer.resultOdometer}</Text>
                     </View>
-                  </View>                  
+                  </View>
                   <View style={{ ...Styles.stackRow, justifyContent: 'flex-end' }} >
                     <IconButton
                       icon="pencil-outline"

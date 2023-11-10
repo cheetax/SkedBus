@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useFormik } from "formik";
 import {
   Appbar,
@@ -14,6 +15,7 @@ import {
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
+import { useItemContext } from "../providers/ItemContextProvider";
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -115,19 +117,21 @@ const OdometerView = props => {
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedListOfItems, appliedItem } = useAppContext();
+  const { item, getItem, appliedItem, round } = useItemContext();
+  const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
   //const theme = useTheme()
 
   const get = async key => {
+    //console.log(navigation)
     await getItem(key)
-    setLoaded(!loaded)
+    setLoaded(true)
   }
 
   useEffect(() => {
     get(route.params.key)
-  }, [])
+  }, [route])
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -184,7 +188,7 @@ export default function Form({ route, navigation }) {
               onClose={() => navigation.navigate({
                 name: 'FormExpenses'
               })}
-            >Расходы на километр пробега: {formik.values.priceFuel * formik.values.averageFuel / 100}</Chip>
+            >Расходы на километр пробега: {round(formik.values.priceFuel * formik.values.averageFuel / 100)}</Chip>
             <DatePickerInput
               style={{
                 height: 56,
