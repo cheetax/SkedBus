@@ -10,7 +10,7 @@ import { useScrollContext } from "./providers/ScrollContextProvider";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigate({ navigation, route }) {
-    const { isStartScroll } = useScrollContext()
+    const { isScrolling, setScreen } = useScrollContext()
     const theme = useTheme()
     return (
         <View style={Styles.main} >
@@ -20,7 +20,7 @@ export default function TabNavigate({ navigation, route }) {
                 mode="small"
                 theme={theme}
                 style={{
-                    backgroundColor: isStartScroll ? theme.colors.elevation.level2 : theme.colors.surface
+                    backgroundColor: isScrolling ? theme.colors.elevation.level2 : theme.colors.surface
                 }}
             >
                 <Appbar.Action
@@ -48,8 +48,12 @@ export default function TabNavigate({ navigation, route }) {
                         tabBarLabel: 'Смены',
                         headerShown: false
                     }}
+                    listeners={{
+                        focus: () => setScreen('main') 
+                    }}
                 />
                 <Tab.Screen
+
                     name="Chart"
                     component={ChartView}
                     options={{
@@ -58,6 +62,9 @@ export default function TabNavigate({ navigation, route }) {
                         ),
                         tabBarLabel: 'Статистика',
                         headerShown: false
+                    }}
+                    listeners={{
+                        focus: () => setScreen('chart') 
                     }}
                 />
             </Tab.Navigator>

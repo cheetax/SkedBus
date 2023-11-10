@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
@@ -10,12 +10,11 @@ import dayjs from 'dayjs';
 export default function Main({ navigation, route }) {
 
   const {
-    listOfItems,    
-    deleteItemOfListOfItems,
-    round
+    listOfItems,
+    deleteItemOfListOfItems
   } = useAppContext();
 
-  const { isStartScroll, startScroll} = useScrollContext();
+  const { isScrolling, startScroll, setScreen } = useScrollContext();
 
   const editForm = key => {
     //console.log(key)
@@ -34,7 +33,7 @@ export default function Main({ navigation, route }) {
         style={Styles.fab}
         icon="plus"
         size="medium"
-        visible={!isStartScroll}
+        visible={!isScrolling}
         onPress={() => editForm('')}>
       </FAB>
       <FlatList

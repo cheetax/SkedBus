@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ContextScroll = React.createContext(null);
 
@@ -14,12 +14,25 @@ export const useScrollContext = () => {
 }
 
 export const useCreateScrollContext = (props) => {
-    const [isStartScroll, setIsStartScroll] = useState(false);
-    const startScroll = (a) => setIsStartScroll(a !== 0)
+    const [screen, setScreen] = useState('main')
+    
+    const [isStartScroll, setIsStartScroll] =  useState({
+        main: false,
+        chart: false
+    });
+    const [isScrolling, setIsScrolling] = useState(isStartScroll[screen]);
+
+    const startScroll = (a) => setIsStartScroll({[screen]: a !== 0})
+
+    useEffect(() => {
+        setIsScrolling(isStartScroll[screen])
+        //console.log(screen)
+    },[screen, isStartScroll ])    
 
     return {
-        isStartScroll,
-        startScroll
+        isScrolling,
+        startScroll,
+        setScreen,        
     };
 }
 

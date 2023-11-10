@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import { View, StyleSheet } from 'react-native';
 import { SegmentedButtons, useTheme, Text, Card, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { useScrollContext } from "../providers/ScrollContextProvider";
 import { BarChart } from "./BarChart";
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
@@ -13,6 +14,7 @@ const sum = (a, b) => (Number(a) + Number(b))//.toString()
 export default function ChartView({ navigation, route }) {
 
     const { listOfItems, round } = useAppContext();
+    const { setScreen } = useScrollContext();
     const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])
     const [selectItem, setSelectItem] = useState(null)
@@ -52,7 +54,7 @@ export default function ChartView({ navigation, route }) {
             const data = listOfItems.reduce((acc, item) => {
 
                 const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
-               // console.log(result)
+                // console.log(result)
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
                     result.profit = sum(result.profit, item.profit);
@@ -76,19 +78,21 @@ export default function ChartView({ navigation, route }) {
             }))
         })
     }, [mode, listOfItems])
-    //console.log(selectItem)
+
+   // console.log(route)
     return (
-        <View style={Styles.main}>
+        <View style={[Styles.main, { backgroundColor: theme.colors.surface }]}>
             <SegmentedButtons
+                style={Styles.surface}
                 value={mode}
                 onValueChange={setMode}
                 buttons={buttons}
             />
             <Card
-                style={{ ...Styles.card, }}
+                style={{ ...Styles.card, ...Styles.surface }}
 
             >
-                <BarChart
+                {/*   <BarChart
                     mode={mode}
                     data={listChart}
                     onSelect={onSelect}
@@ -97,33 +101,33 @@ export default function ChartView({ navigation, route }) {
                     style={{ marginVertical: 10, marginHorizontal: 16 }}
                     styleLabels={{ marginTop: 4 }}
 
-                />
+                /> */}
                 <Card.Title
                     title="Статистика"
                 />
                 <Card.Content>
                     <View style={Styles.stackRow} >
-                            <Text style={Styles.text} variant='bodyMedium'>Выручка:</Text>
-                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.proceeds : '-'}</Text>
-                        </View>
-                        <View style={Styles.stackRow} >
-                            <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
-                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.expenses : '-'}</Text>
-                        </View>
-                        <Divider style={Styles.dividerCard} />
-                        <View style={Styles.stackRow} >
-                            <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
-                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profit : '-'}</Text>
-                        </View>
-                        <Divider style={Styles.dividerCard} />
-                        <View style={Styles.stackRow} >
-                            <Text style={Styles.text} variant='bodyMedium'>Пробег:</Text>
-                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.odometer : '-'}</Text>
-                        </View>
-                        <View style={Styles.stackRow} >
-                            <Text style={Styles.text} variant='bodyMedium'>Доход на пробег:</Text>
-                            <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profitPerOdometer : '-'}</Text>
-                        </View>
+                        <Text style={Styles.text} variant='bodyMedium'>Выручка:</Text>
+                        <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.proceeds : '-'}</Text>
+                    </View>
+                    <View style={Styles.stackRow} >
+                        <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
+                        <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.expenses : '-'}</Text>
+                    </View>
+                    <Divider style={Styles.dividerCard} />
+                    <View style={Styles.stackRow} >
+                        <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
+                        <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profit : '-'}</Text>
+                    </View>
+                    <Divider style={Styles.dividerCard} />
+                    <View style={Styles.stackRow} >
+                        <Text style={Styles.text} variant='bodyMedium'>Пробег:</Text>
+                        <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.odometer : '-'}</Text>
+                    </View>
+                    <View style={Styles.stackRow} >
+                        <Text style={Styles.text} variant='bodyMedium'>Доход на пробег:</Text>
+                        <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.profitPerOdometer : '-'}</Text>
+                    </View>
                 </Card.Content>
             </Card>
 
@@ -137,7 +141,10 @@ const Styles = StyleSheet.create({
     main: {
         flex: 1,
         flexDirection: 'column',
-        margin: 24
+        //  margin: 24,
+    },
+    surface: {
+        marginHorizontal: 22
     },
     container: {
         flex: 1,
