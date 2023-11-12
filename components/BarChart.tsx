@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, FC } from "react";
 import { View, StyleSheet, ScrollView, StyleProp, ViewStyle } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
-import * as d3 from 'd3'
+import d3 from 'd3'
 
 type MyRect = {
     x: number;
@@ -40,8 +40,6 @@ interface InsideBoundsProps {
 interface DataRectProps {
     data: ItemChart[]
 }
-
-
 
 const insideBounds: FC<InsideBoundsProps> = ({ rect, curX, curY }) => (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
 
@@ -81,7 +79,7 @@ export const BarChart = (
 
     type ParamsChart = () => Chart
 
-    const paramsChart : ParamsChart = () => {
+    const paramsChart  = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
         const graphWidth = canvasWidth + graph_bar_width + graph_span
         const graphHeight = canvasHeight //- 2 * graph_span
@@ -107,7 +105,7 @@ export const BarChart = (
         graphHeight,
         x,
         y
-    }, setParams] = useState<Chart>(paramsChart())
+    }, setParams] = useState(paramsChart())
 
     const dataRect: DataRect = (data) => data.map((item) => {
         const rect = Skia.XYWHRect(
