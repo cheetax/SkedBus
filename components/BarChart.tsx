@@ -1,24 +1,52 @@
-import React, { useState, useEffect, useRef, FC, ReactElement } from "react";
-import { View, StyleSheet, ScrollView, } from 'react-native';
+import React, { useState, useEffect, useRef, FC } from "react";
+import { View, StyleSheet, ScrollView, StyleProp, ViewStyle } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
-import { Canvas, Skia, useTouchHandler, Rect } from "@shopify/react-native-skia";
+import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
 import * as d3 from 'd3'
-import { type } from "os";
 
-type Rect = {
+type MyRect = {
     x: number;
     width: number;
     y: number;
     height: number;
 }
 
-type GraphPath = ( data:[], selectColor: string, color: string ) => JSX.Element[]
-
-const insideBounds = (rect: Rect, curX: number, curY: number) => {
-    return (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
+type ItemChart = {
+    label: string,
+    value: number,
+    rect: SkRect,
+    isSelected?: boolean
 }
 
-const GraphPathView : GraphPath  = ( data:[], selectColor: string, color: string ) => data.map((item) => {
+type DataRect = (data: ItemChart[]) => ItemChart[]
+
+type Selected = {
+    x: number,
+    y: number,
+    selItem: ItemChart | undefined
+}
+
+interface GraphPathProps {
+    data: ItemChart[],
+    selectColor?: string
+    color?: string
+}
+interface InsideBoundsProps {
+    rect: SkRect,
+    curX: number,
+    curY: number
+}
+
+interface DataRectProps {
+    data: ItemChart[]
+}
+
+
+
+const insideBounds: FC<InsideBoundsProps> = ({ rect, curX, curY }) => (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
+
+const GraphPathView: FC<GraphPathProps> = ({ data, selectColor, color }) => data.map((item) => {
+
     return <Rect
         key={item.label}
         rect={item.rect}
@@ -26,33 +54,42 @@ const GraphPathView : GraphPath  = ( data:[], selectColor: string, color: string
     />
 })
 
-export const BarChart = ({
-    data = [],
-    selectColor = 'green',
-    color = 'grey',
-    onSelect,
-    graph_span = 8,
-    graph_bar_width = 45,
-    canvasHeight = 120,
-    style = Styles.graph,
-    styleLabels
-}) => {
+export const BarChart = (
+    data: ItemChart[] = [],
+    selectColor: string = 'green',
+    color: string = 'grey',
+    onSelect?: FC,
+    graph_span: number = 8,
+    graph_bar_width: number = 45,
+    canvasHeight: number = 120,
+    style?: StyleProp<ViewStyle>,
+    styleLabels?: StyleProp<ViewStyle>
+) => {
 
     if (data.length === 0) return <></>
 
-
-    const [selected, setSelected] = useState({ x: 0, y: 0, selItem: undefined })
+    const [selected, setSelected] = useState<Selected>({ x: 0, y: 0, selItem: undefined })
     const _myScroll = useRef(null)
 
-    const paramsChart = () => {
+    type Chart = {
+        canvasWidth: number,
+        graphWidth: number,
+        graphHeight : number,
+        x: FC //d3.scalePoint().domain(xDomain).range(xRange).padding(1),
+        y: FC //d3.scaleLinear().domain(yDomain).range(yRange)
+    }
+
+    type ParamsChart = () => Chart
+
+    const paramsChart : ParamsChart = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
         const graphWidth = canvasWidth + graph_bar_width + graph_span
-        const graphHeight = canvasHeight//- 2 * graph_span
+        const graphHeight = canvasHeight //- 2 * graph_span
         const xRange = [0, graphWidth]
-        const xDomain = data.map(xDataPoint => xDataPoint.label)
+        const xDomain = data.map((xDataPoint: ItemChart) => xDataPoint.label)
         const yDomain = [
             0,
-            d3.max(data, yDataPoint => yDataPoint.value)
+            d3.max(data, (yDataPoint: ItemChart) => yDataPoint.value)
         ];
         const yRange = [0, graphHeight];
         return {
@@ -70,9 +107,9 @@ export const BarChart = ({
         graphHeight,
         x,
         y
-    }, setParams] = useState(paramsChart())
+    }, setParams] = useState<Chart>(paramsChart())
 
-    const dataRect = (data) => data.map((item) => {
+    const dataRect: DataRect = (data) => data.map((item) => {
         const rect = Skia.XYWHRect(
             x(item.label) - graph_bar_width - graph_span,
             graphHeight,
@@ -85,7 +122,7 @@ export const BarChart = ({
         }
     })
 
-    const [dataChart, setData] = useState([])
+    const [dataChart, setData] = useState<ItemChart[]>([])
 
     const onTouch = useTouchHandler({
         onEnd: ({ x, y, type }) => {
@@ -136,7 +173,7 @@ export const BarChart = ({
                 width: canvasWidth - graph_span,
             }} >
                 <Canvas style={{ width: canvasWidth, height: canvasHeight, marginLeft: 0 }} onTouch={onTouch}>
-                    <GraphPathView data={dataChart} selected={selected} selectColor={selectColor} color={color} />
+                    <GraphPathView data={dataChart} selectColor={selectColor} color={color} />
                 </Canvas>
                 <View style={{
                     ...styleLabels,
