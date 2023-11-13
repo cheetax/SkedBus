@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, FlatList } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';

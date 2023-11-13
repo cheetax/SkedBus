@@ -79,7 +79,7 @@ export default function ChartView({ navigation, route }) {
         })
     }, [mode, listOfItems])
 
-   // console.log(route)
+    // console.log(route)
     return (
         <View style={[Styles.main, { backgroundColor: theme.colors.surface }]}>
             <SegmentedButtons
@@ -92,20 +92,21 @@ export default function ChartView({ navigation, route }) {
                 style={{ ...Styles.card, ...Styles.surface }}
 
             >
-                {/*   <BarChart
+                <BarChart
                     mode={mode}
-                    data={listChart}
+                    data={listChart}                    
                     onSelect={onSelect}
                     selectColor={theme.colors.onSurfaceVariant}
                     color={theme.colors.outlineVariant}
-                    style={{ marginVertical: 10, marginHorizontal: 16 }}
-                    styleLabels={{ marginTop: 4 }}
+                    style={{ marginVertical: 10, marginHorizontal: 16, }}
+                    styleLabels={{ marginTop: 4, }}
 
-                /> */}
+                />
                 <Card.Title
                     title="Статистика"
                 />
                 <Card.Content>
+                    <View></View>
                     <View style={Styles.stackRow} >
                         <Text style={Styles.text} variant='bodyMedium'>Выручка:</Text>
                         <Text style={Styles.text} variant='bodyMedium'>{selectItem ? selectItem.proceeds : '-'}</Text>
