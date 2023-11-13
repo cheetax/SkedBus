@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, FC, } from "react";
-import { View, StyleSheet, ScrollView, StyleProp, ViewStyle } from 'react-native';
+import { View, ScrollView, StyleProp, ViewStyle } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
-import  {max, scalePoint, scaleLinear, ScalePoint, ScaleLinear } from 'd3'
+import { scalePoint, scaleLinear, ScalePoint, ScaleLinear } from 'd3-scale'
+import { max } from "d3-array";
 
 type ItemChart = {
     label: string,
@@ -103,19 +104,15 @@ export const BarChart: FC<BarCharProps> = (
         y
     }, setParams] = useState<Params>(paramsChart())
 
-    const dataRect: DataRect = (data) => data.map((item) => {
-        console.log(x(item.label))
-        const rect = Skia.XYWHRect(
+    const dataRect: DataRect = data => data.map((item) => ({
+        ...item,
+        rect: Skia.XYWHRect(
             x(item.label)! - graph_bar_width - graph_span,
             graphHeight,
             graph_bar_width,
-            y(item.value) * -1);
-        return {
-            ...item,
-            rect,
-            isSelected: false
-        }
-    })
+            y(item.value) * -1),
+        isSelected: false
+    }))
 
     const [dataChart, setData] = useState<ItemChart[]>([])
 
@@ -193,8 +190,4 @@ export const BarChart: FC<BarCharProps> = (
             </View>
         </ScrollView >)
 }
-
-const Styles = StyleSheet.create({
-    graph: {}
-})
 
