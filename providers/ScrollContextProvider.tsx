@@ -1,13 +1,10 @@
 import React, { useEffect, useState, createContext, ReactNode } from "react";
+import { ContextProviderProps } from "./models/Models";
 
 interface ScrollContext {
     isScrolling: boolean,
     startScroll?: (a: number) => void,
     setScreen?: (screen: string) => void,        
-}
-
-interface ScrollContextProviderProps{
-    children: ReactNode
 }
 
 interface IsStartScroll {
@@ -16,7 +13,7 @@ interface IsStartScroll {
 
 const ContextScroll = createContext<ScrollContext>({isScrolling: false});
 
-export const ScrollContextProvider = ({ children}: ScrollContextProviderProps ) => {
+export const ScrollContextProvider = ({ children}: ContextProviderProps ) => {
     const context = useCreateScrollContext();
     return <ContextScroll.Provider value={context}>{children}</ContextScroll.Provider>;
 };
