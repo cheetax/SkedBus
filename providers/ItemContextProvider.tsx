@@ -1,8 +1,7 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { useAppContext } from "./AppContextProvider";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { type } from "os";
 import { ContextProviderProps } from "./models/Models";
 
 const ContextItem = createContext(null);
@@ -15,7 +14,7 @@ export const ItemContextProvider = ({ children }: ContextProviderProps) => {
 };
 
 export const useItemContext = () => {
-    const context = React.useContext(ContextItem);
+    const context = useContext(ContextItem);
     if (!context) throw new Error('Use app context within provider!');
     return context;
 }
