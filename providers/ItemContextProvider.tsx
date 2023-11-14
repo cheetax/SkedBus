@@ -5,8 +5,8 @@ import 'dayjs/locale/ru';
 import { ContextProviderProps, Func } from "./models/Models";
 
 type OdometerItem = {
-    odometerStart: number | string, //спидометр старт
-    odometerFinish: number | string, //спидометр финиш
+    odometerStart: number  //спидометр старт
+    odometerFinish: number //спидометр финиш
     key: string
 }
 type Odometer = {
@@ -59,7 +59,7 @@ export const useCreateItemContext = () => {
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings.priceFuel,
         averageFuel: settings.averageFuel,
-        proceeds: '', //выручка
+        proceeds: NaN, //выручка
         profit: '', //доход
         profitPerOdometer: '', //доход на километр
         odometer: {
@@ -71,8 +71,8 @@ export const useCreateItemContext = () => {
     })
 
     const newItemOdometer = () : OdometerItem => ({
-        odometerStart: '', //спидометр старт
-        odometerFinish: '', //спидометр финиш
+        odometerStart: NaN, //спидометр старт
+        odometerFinish: NaN, //спидометр финиш
         key: keyGenerator()
     })
 
