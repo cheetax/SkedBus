@@ -9,3 +9,5 @@ export const InputField = (props: TextInputProps): ReactNode => <TextInput
     mode="outlined"
     {...props}
 />
+
+export const NanToString = (t: number): number | string => Number.isNaN(t) ? '' : t

@@ -18,10 +18,10 @@ type Item = {
     priceFuel: number,
     averageFuel: number,
     proceeds: number, //выручка
-    profit: number | string, //доход
+    profit: number , //доход
     profitPerOdometer: number | string, //доход на километр
     odometer: Odometer,     //Данные о пробеге
-    expenses: number | string,     //затраты
+    expenses: number,     //затраты
     key: string
 }
 interface ItemContext {
@@ -60,13 +60,13 @@ export const useCreateItemContext = () => {
         priceFuel: settings.priceFuel,
         averageFuel: settings.averageFuel,
         proceeds: NaN, //выручка
-        profit: '', //доход
-        profitPerOdometer: '', //доход на километр
+        profit: NaN, //доход
+        profitPerOdometer: '-', //доход на километр
         odometer: {
             resultOdometer: 0,
             data: []
         },     //пробег
-        expenses: '',     //затраты
+        expenses: NaN,     //затраты
         key: keyGenerator()
     })
 

@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
-import { InputField } from "./InputField";
+import { InputField, NanToString } from "./InputField";
 
 export default function FormOdometer({ route, navigation }) {
 
@@ -60,12 +60,12 @@ export default function FormOdometer({ route, navigation }) {
             contentInsetAdjustmentBehavior='always'
           >
             <InputField
-              value={String(formik.values.odometerStart)}
+              value={NanToString(formik.values.odometerStart)}
               onChangeText={formik.handleChange('odometerStart')}
               
               label='Спидометр на начало' />
             <InputField
-              value={String(formik.values.odometerFinish)}
+              value={NanToString(formik.values.odometerFinish)}
               onChangeText={formik.handleChange('odometerFinish')}
               label='Спидометр на конец' />
           </ScrollView>

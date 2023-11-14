@@ -10,7 +10,7 @@ import {
   Chip,
   Divider
 } from 'react-native-paper';
-import { InputField } from "./InputField";
+import { InputField, NanToString } from "./InputField";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
@@ -105,6 +105,8 @@ const OdometerView = props => {
   </Card >
 }
 
+//const nanToString = (t) => t === NaN ? '' : t
+
 export default function Form({ route, navigation }) {
 
   const { item, getItem, appliedItem, round } = useItemContext();
@@ -197,7 +199,7 @@ export default function Form({ route, navigation }) {
               presentationStyle="formSheet"
             />
             <InputField
-              value={formik.values.proceeds}
+              value={NanToString(formik.values.proceeds)}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
             <OdometerView values={formik.values} navigation={navigation} theme={theme} />
