@@ -3,10 +3,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
+
+
 const Context = React.createContext(null);
 
-export const AppContextProvider = ({ children, ...props }) => {
-    const context = useCreateAppContext(props);
+export const AppContextProvider = ({ children}) => {
+    const context = useCreateAppContext();
     return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 

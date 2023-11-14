@@ -25,7 +25,7 @@ export const useScrollContext = ():ScrollContext => {
 }
 
 export const useCreateScrollContext = ():ScrollContext => {
-    const [screen, setScreenState] = useState('main')
+    const [screen, setScreenState] = useState<string>('main')
 
     const setScreen: Func<string> = (screen) => setScreenState(screen)
     
