@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ContextProviderProps, Func, Item } from "./models/Models";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
-
-
 const Context = React.createContext(null);
 
-export const AppContextProvider = ({ children}) => {
+export const AppContextProvider = ({ children}: ContextProviderProps) => {
     const context = useCreateAppContext();
     return <Context.Provider value={context}>{children}</Context.Provider>;
 };
@@ -18,8 +17,8 @@ export const useAppContext = () => {
     return context;
 }
 
-export const useCreateAppContext = function (props) {
-    const [listOfItems, setListOfItems] = useState([]);
+export const useCreateAppContext =  () => {
+    const [listOfItems, setListOfItems] = useState<Item[]>([]);
     const [isDarkTheme, setIsDarkTheme] = useState();
     const [settings, setSettings] = useState(
         {
@@ -61,7 +60,7 @@ export const useCreateAppContext = function (props) {
     ].sort((a, b) => dayjs(b.date).toDate() - dayjs(a.date).toDate())
     );    
 
-    const deleteItemOfListOfItems = key => setListOfItems(list => [
+    const deleteItemOfListOfItems = (key: string) => setListOfItems(list => [
         ...list.filter(listOfItems => listOfItems.key != key)
     ])    
     

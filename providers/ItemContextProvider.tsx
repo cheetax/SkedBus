@@ -2,28 +2,8 @@ import React, { useState, createContext, useContext } from "react";
 import { useAppContext } from "./AppContextProvider";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { ContextProviderProps, Func } from "./models/Models";
+import { ContextProviderProps, Func, Item, OdometerItem } from "./models/Models";
 
-type OdometerItem = {
-    odometerStart: number  //спидометр старт
-    odometerFinish: number //спидометр финиш
-    key: string
-}
-type Odometer = {
-    resultOdometer: number
-    data: OdometerItem[]
-}
-type Item = {
-    date: Date //dayjs().format('DD.MM.YY'),
-    priceFuel: number,
-    averageFuel: number,
-    proceeds: number, //выручка
-    profit: number , //доход
-    profitPerOdometer: number | string, //доход на километр
-    odometer: Odometer,     //Данные о пробеге
-    expenses: number,     //затраты
-    key: string
-}
 interface ItemContext {
     item?: Item,
     getItem?: Func<string>,
