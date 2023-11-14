@@ -1,5 +1,7 @@
-import React, {ReactNode} from 'react'
+import { ReactNode } from 'react'
 
-export interface ContextProviderProps{
+export interface ContextProviderProps {
     children: ReactNode
 }
+
+export type Func<T> = (t: T) => T | void

@@ -3,14 +3,7 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native
 import { useFormik } from "formik";
 import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
-
-const InputField = (props) => <TextInput keyboardType="numeric"
-  style={{ marginTop: 12, marginHorizontal: 2 }}
-  contentStyle={{ height: 56 }}
-  outlineStyle={{ backgroundColor: 'none' }}
-  mode="outlined"
-  {...props}
-/>
+import { InputField } from "./InputField";
 
 export default function FormOdometer({ route, navigation }) {
 

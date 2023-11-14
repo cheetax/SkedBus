@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useFormik } from "formik";
 import {
   Appbar,
-  TextInput,
   Text,
   useTheme,
   ActivityIndicator,
@@ -12,6 +10,7 @@ import {
   Chip,
   Divider
 } from 'react-native-paper';
+import { InputField } from "./InputField";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
@@ -78,15 +77,6 @@ const ViewDataField = props => {
     </View>
   )
 }
-
-const InputField = (props) => <TextInput
-  keyboardType="numeric"
-  style={{ marginTop: 8 }}
-  contentStyle={{ height: 56 }}
-  outlineStyle={{ backgroundColor: 'none' }}
-  mode="outlined"
-  {...props}
-/>
 
 const OdometerView = props => {
   const {
