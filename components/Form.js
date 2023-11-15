@@ -15,6 +15,7 @@ import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
 import { useItemContext } from "../providers/ItemContextProvider";
+import { round } from "../helpers";
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -57,12 +58,12 @@ const ViewDataField = props => {
           <Card.Content>
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{expenses}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{NanToString(expenses)}</Text>
             </View>
             <Divider style={Styles.dividerCard} />
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{NanToString(profit)}</Text>
             </View>
 
             <Divider style={Styles.dividerCard} />
@@ -109,7 +110,7 @@ const OdometerView = props => {
 
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedItem, round } = useItemContext();
+  const { item, getItem, appliedItem } = useItemContext();
   const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'

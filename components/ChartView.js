@@ -4,6 +4,7 @@ import { SegmentedButtons, useTheme, Text, Card, Divider } from 'react-native-pa
 import { useAppContext } from "../providers/AppContextProvider";
 import { useScrollContext } from "../providers/ScrollContextProvider";
 import { BarChart } from "./BarChart";
+import { round } from "../helpers";
 import dayjs from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 
@@ -13,7 +14,7 @@ const sum = (a, b) => (Number(a) + Number(b))//.toString()
 
 export default function ChartView({ navigation, route }) {
 
-    const { listOfItems, round } = useAppContext();
+    const { listOfItems} = useAppContext();
     const { setScreen } = useScrollContext();
     const [mode, setMode] = useState('day');
     const [listChart, setListChart] = useState([])

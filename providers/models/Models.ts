@@ -28,4 +28,9 @@ export type Item = {
     key: string
 }
 
+export type Settings = {
+    priceFuel: number,
+    averageFuel: number
+}
+
 

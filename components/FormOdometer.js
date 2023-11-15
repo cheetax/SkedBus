@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
+import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
 import { InputField, NanToString } from "./InputField";
 

@@ -1,8 +1,9 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { useAppContext } from "./AppContextProvider";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { ContextProviderProps, Func, Item, OdometerItem } from "./models/Models";
+import { round } from "../helpers";
+import { ContextProviderProps, Func, Item, OdometerItem, Settings } from "./models/Models";
 
 interface ItemContext {
     item?: Item,
@@ -13,8 +14,7 @@ interface ItemContext {
     listOdometer?: OdometerItem[],
     deleteOdometer?: Func<string>,
     appliedItem?: Func<Item>,
-    appliedSettings?: Func<Item>,
-    round?: Func<number>
+    appliedSettings?: Func<Settings>,
 }
 const ContextItem = createContext<ItemContext>({});
 
@@ -33,12 +33,12 @@ export const useItemContext = ():ItemContext => {
 
 export const useCreateItemContext = () => {
 
-    const { listOfItems, settings, setSettings } = useAppContext();
+    const { listOfItems, settings, saveSettings} = useAppContext();
 
     const newItem = (): Item => ({
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
-        priceFuel: settings.priceFuel,
-        averageFuel: settings.averageFuel,
+        priceFuel: settings?.priceFuel ?? 0,
+        averageFuel: settings?.averageFuel ?? 0,
         proceeds: NaN, //выручка
         profit: NaN, //доход
         profitPerOdometer: '-', //доход на километр
@@ -62,13 +62,13 @@ export const useCreateItemContext = () => {
 
     const getItem: Func<string> = key => {
         // console.log(key)
-        setItem(item => {
-            const i = key !== '' ? listOfItems.filter(list => list.key === key)[0] : newItem()
+        setItem((Item) => {
+            const i = key !== '' ? listOfItems?.filter(list => list.key === key)[0] : newItem()
             setListOdometer(i.odometer.data)
             return i
         })
     }
-    const round = (value: number, decimals: number = 2): number => Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
+    
 
     const calcProfit = (item: Item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
@@ -79,8 +79,8 @@ export const useCreateItemContext = () => {
 
     const getItemOdometer = (key: string) => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
-    const appliedSettings = (i: Item) => setSettings(settings => {
-
+    const appliedSettings = (i: Settings) => {
+        saveSettings(i)
         setItem(item => {
             const calc = calcProfit({
                 ...item,
@@ -92,9 +92,8 @@ export const useCreateItemContext = () => {
                 ...i,
                 ...calc
             }
-        })
-        return i
-    })
+        })}
+        
 
     const appliedOdometer = (i: OdometerItem) => setListOdometer(list => {
         const newList = [
@@ -155,7 +154,7 @@ export const useCreateItemContext = () => {
             ...i,
             ...calc
         }
-    })
+    })    
 
     return {
         item,
@@ -167,6 +166,5 @@ export const useCreateItemContext = () => {
         deleteOdometer,
         appliedItem,
         appliedSettings,
-        round
     };
 }
