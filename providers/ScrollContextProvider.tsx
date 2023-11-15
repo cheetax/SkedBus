@@ -1,37 +1,33 @@
 import React, { useEffect, useState, createContext, ReactNode } from "react";
+import { ContextProviderProps, Func } from "./models/Models";
 
 interface ScrollContext {
     isScrolling: boolean,
-    startScroll?: (a: number) => void,
-    setScreen?: (screen: string) => void,        
-}
-
-interface ScrollContextProviderProps{
-    children: ReactNode
+    startScroll: (t: number) => void,
+    setScreen?: Func<string>,        
 }
 
 interface IsStartScroll {
     [key: string]: boolean
 }
 
-const ContextScroll = createContext<ScrollContext>({isScrolling: false});
+const ContextScroll = createContext<ScrollContext>({isScrolling: false, startScroll: () =>{}});
 
-export const ScrollContextProvider = ({ children}: ScrollContextProviderProps ) => {
+export const ScrollContextProvider = ({ children}: ContextProviderProps ): ReactNode => {
     const context = useCreateScrollContext();
     return <ContextScroll.Provider value={context}>{children}</ContextScroll.Provider>;
 };
 
-export const useScrollContext = () => {
+export const useScrollContext = ():ScrollContext => {
     const context = React.useContext(ContextScroll);
     if (!context) throw new Error('Use app context within provider!');
     return context;
 }
 
+export const useCreateScrollContext = ():ScrollContext => {
+    const [screen, setScreenState] = useState<string>('main')
 
-export const useCreateScrollContext = () => {
-    const [screen, setScreenState] = useState('main')
-
-    const setScreen = (screen: string) => setScreenState(screen)
+    const setScreen: Func<string> = (screen) => setScreenState(screen)
     
     const [isStartScroll, setIsStartScroll] =  useState<IsStartScroll>({
         main: false,
@@ -39,9 +35,7 @@ export const useCreateScrollContext = () => {
     });
     const [isScrolling, setIsScrolling] = useState<boolean>(isStartScroll[screen]);
 
-    const startScroll = (a: number) => setIsStartScroll({[screen]: a !== 0})
-
-
+    const startScroll: Func<number> = (a) => setIsStartScroll({[screen]: a !== 0})
 
     useEffect(() => {
         setIsScrolling(isStartScroll[screen])

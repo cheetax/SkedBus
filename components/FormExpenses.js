@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, TextInput, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
+import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-import { useCreateItemContext, useItemContext } from "../providers/ItemContextProvider";
-
-const InputField = (props) => <TextInput keyboardType="numeric"
-  style={{ marginTop: 12, marginHorizontal: 2 }}
-  contentStyle={{ height: 56 }}
-  outlineStyle={{ backgroundColor: 'none' }}
-  mode="outlined"
-  {...props}
-/>
+import { InputField } from "./InputField";
+import {  useItemContext } from "../providers/ItemContextProvider";
 
 export default function FormExpenses({ route, navigation }) {
 

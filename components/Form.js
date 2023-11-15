@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { useFormik } from "formik";
 import {
   Appbar,
-  TextInput,
   Text,
   useTheme,
   ActivityIndicator,
@@ -12,10 +10,12 @@ import {
   Chip,
   Divider
 } from 'react-native-paper';
+import { InputField, NanToString } from "./InputField";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
 import { useItemContext } from "../providers/ItemContextProvider";
+import { round } from "../helpers";
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -58,12 +58,12 @@ const ViewDataField = props => {
           <Card.Content>
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{expenses}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{NanToString(expenses)}</Text>
             </View>
             <Divider style={Styles.dividerCard} />
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{profit}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{NanToString(profit)}</Text>
             </View>
 
             <Divider style={Styles.dividerCard} />
@@ -78,15 +78,6 @@ const ViewDataField = props => {
     </View>
   )
 }
-
-const InputField = (props) => <TextInput
-  keyboardType="numeric"
-  style={{ marginTop: 8 }}
-  contentStyle={{ height: 56 }}
-  outlineStyle={{ backgroundColor: 'none' }}
-  mode="outlined"
-  {...props}
-/>
 
 const OdometerView = props => {
   const {
@@ -115,9 +106,11 @@ const OdometerView = props => {
   </Card >
 }
 
+//const nanToString = (t) => t === NaN ? '' : t
+
 export default function Form({ route, navigation }) {
 
-  const { item, getItem, appliedItem, round } = useItemContext();
+  const { item, getItem, appliedItem } = useItemContext();
   const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
@@ -207,7 +200,7 @@ export default function Form({ route, navigation }) {
               presentationStyle="formSheet"
             />
             <InputField
-              value={formik.values.proceeds}
+              value={NanToString(formik.values.proceeds)}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
             <OdometerView values={formik.values} navigation={navigation} theme={theme} />

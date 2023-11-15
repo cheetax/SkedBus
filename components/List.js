@@ -14,7 +14,7 @@ export default function Main({ navigation, route }) {
     deleteItemOfListOfItems
   } = useAppContext();
 
-  const { isScrolling, startScroll, setScreen } = useScrollContext();
+  const { isScrolling, startScroll } = useScrollContext();
 
   const editForm = key => {
     //console.log(key)

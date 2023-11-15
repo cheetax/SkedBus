@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FC, } from "react";
+import React, { useState, useEffect, useRef, FC, ReactNode } from "react";
 import { View, ScrollView, StyleProp, ViewStyle } from 'react-native';
 import { Text as TextRN } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
@@ -12,7 +12,7 @@ type ItemChart = {
     isSelected?: boolean
 }
 
-type DataRect = (data: ItemChart[]) => ItemChart[]
+type DataRect<T> = (data: T) => T
 
 type Selected = {
     x: number,
@@ -20,7 +20,7 @@ type Selected = {
     selItem: ItemChart | undefined
 }
 
-type Params = {
+interface Params {
     canvasWidth: number,
     graphWidth: number,
     graphHeight: number,
@@ -28,7 +28,11 @@ type Params = {
     y: ScaleLinear<number, number>
 }
 
-type ParamsChart = () => Params
+type ParamsChart<T> = () => T
+
+type GraphPathView<T> = (props: T) => ReactNode
+
+type OnSelect<T> = (props: T) => void
 
 interface GraphPathProps {
     data: ItemChart[],
@@ -36,11 +40,13 @@ interface GraphPathProps {
     color?: string
 }
 
+type BarChart<T> = (props: T) => ReactNode
+
 interface BarCharProps {
     data: ItemChart[],
     selectColor: string,
     color: string,
-    onSelect?: FC,
+    onSelect?: OnSelect<ItemChart>,
     graph_span: number,
     graph_bar_width: number,
     canvasHeight: number,
@@ -50,7 +56,7 @@ interface BarCharProps {
 
 const insideBounds = (rect: SkRect, curX: number, curY: number) => (curX >= rect.x && curX <= rect.x + rect.width && curY <= rect.y && curY >= rect.y + rect.height);
 
-const GraphPathView: FC<GraphPathProps> = ({ data, selectColor, color }) => data.map((item) => {
+const GraphPathView: GraphPathView<GraphPathProps> = ({ data, selectColor, color }) => data.map((item) => {
 
     return <Rect
         key={item.label}
@@ -59,24 +65,24 @@ const GraphPathView: FC<GraphPathProps> = ({ data, selectColor, color }) => data
     />
 })
 
-export const BarChart: FC<BarCharProps> = (
-    { data = [],
-        selectColor = 'green',
-        color = 'grey',
-        onSelect,
-        graph_span = 8,
-        graph_bar_width = 45,
-        canvasHeight = 120,
-        style,
-        styleLabels }
-) => {
+export const BarChart: BarChart<BarCharProps> = ({
+    data = [],
+    selectColor = 'green',
+    color = 'grey',
+    onSelect,
+    graph_span = 8,
+    graph_bar_width = 45,
+    canvasHeight = 120,
+    style,
+    styleLabels
+}) => {
 
     if (data.length === 0) return <></>
 
     const [selected, setSelected] = useState<Selected>({ x: 0, y: 0, selItem: undefined })
     const _myScroll = useRef<ScrollView>(null)
 
-    const paramsChart: ParamsChart = () => {
+    const paramsChart: ParamsChart<Params> = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
         const graphWidth = canvasWidth + graph_bar_width + graph_span
         const graphHeight = canvasHeight //- 2 * graph_span
@@ -104,7 +110,7 @@ export const BarChart: FC<BarCharProps> = (
         y
     }, setParams] = useState<Params>(paramsChart())
 
-    const dataRect: DataRect = data => data.map((item) => ({
+    const dataRect: DataRect<ItemChart[]> = data => data.map((item) => ({
         ...item,
         rect: Skia.XYWHRect(
             x(item.label)! - graph_bar_width - graph_span,
