@@ -2,14 +2,22 @@ import React from "react";
 import List from "./components/List";
 import ChartView from "./components/ChartView";
 import { Appbar, Text, useTheme } from 'react-native-paper';
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
+import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useScrollContext } from "./providers/ScrollContextProvider";
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function TabNavigate({ navigation, route }) {
+type RootStackParamList = {
+    Home: undefined;
+    Main: { userId: string };
+    Feed: { sort: 'latest' | 'top' } | undefined;
+};
+type Props = DrawerScreenProps<RootStackParamList, 'Main'>
+
+const TabNavigate = ({ navigation }: Props) => {
     const { isScrolling, setScreen } = useScrollContext()
     const theme = useTheme()
     return (
@@ -35,7 +43,7 @@ export default function TabNavigate({ navigation, route }) {
 
             <Tab.Navigator
                 initialRouteName="List"
-                shif7ting={false}
+                shifting={false}
                 sceneAnimationEnabled={true}
             >
                 <Tab.Screen
@@ -46,10 +54,9 @@ export default function TabNavigate({ navigation, route }) {
                             <MaterialCommunityIcons name={focused ? "home" : 'home-outline'} color={color} size={26} />
                         ),
                         tabBarLabel: 'Смены',
-                        headerShown: false
                     }}
                     listeners={{
-                        focus: () => setScreen('main') 
+                        focus: () => setScreen('main')
                     }}
                 />
                 <Tab.Screen
@@ -61,10 +68,9 @@ export default function TabNavigate({ navigation, route }) {
                             <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
                         ),
                         tabBarLabel: 'Статистика',
-                        headerShown: false
                     }}
                     listeners={{
-                        focus: () => setScreen('chart') 
+                        focus: () => setScreen('chart')
                     }}
                 />
             </Tab.Navigator>
@@ -73,7 +79,7 @@ export default function TabNavigate({ navigation, route }) {
     );
 }
 
-
+export default TabNavigate;
 
 const Styles = StyleSheet.create({
     main: {

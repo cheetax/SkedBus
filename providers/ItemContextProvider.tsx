@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, useEffect } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { useAppContext } from "./AppContextProvider";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
@@ -14,9 +14,9 @@ interface ItemContext {
     listOdometer?: OdometerItem[],
     deleteOdometer?: Func<string>,
     appliedItem?: Func<Item>,
-    appliedSettings?: Func<Settings>,
+    appliedSettings: Func<Settings>,
 }
-const ContextItem = createContext<ItemContext>({});
+const ContextItem = createContext<ItemContext>({appliedSettings: () => {}});
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 
