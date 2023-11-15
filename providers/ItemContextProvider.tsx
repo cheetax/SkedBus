@@ -7,7 +7,7 @@ import { ContextProviderProps, Func, Item, OdometerItem, Settings } from "./mode
 
 interface ItemContext {
     item?: Item,
-    getItem?: Func<string>,
+    getItem: Func<string>,
     appliedOdometer?: Func<OdometerItem>,
     itemOdometer?: OdometerItem,
     getItemOdometer?: Func<string>,
@@ -16,7 +16,7 @@ interface ItemContext {
     appliedItem?: Func<Item>,
     appliedSettings: Func<Settings>,
 }
-const ContextItem = createContext<ItemContext>({appliedSettings: () => {}});
+const ContextItem = createContext<ItemContext>({appliedSettings: () => {}, getItem: () => {}});
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 

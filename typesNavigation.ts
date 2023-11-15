@@ -1,15 +1,14 @@
 export type RootStackParamList = {
-  Home: undefined;
   Main: undefined;
-  Form: undefined
+  Form: {key: string, name: string}
   FormNavigate: undefined
   FormOdometer: undefined
-  FormExpenses: undefined
-  ListOdometer: undefined
+  FormExpenses: {name: string}
+  ListOdometer: {name: string}
 };
 
 export type ButtonTabParamList = {
-  List: undefined;
+  List: {name: string};
   Chart: undefined;
 }
 

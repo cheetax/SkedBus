@@ -118,7 +118,7 @@ export default function Form({ route, navigation } : Props) {
   const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
   //const theme = useTheme()
 
-  const get = async key => {
+  const get = async (key: string) => {
     //console.log(navigation)
     await getItem(key)
     setLoaded(true)
@@ -135,7 +135,7 @@ export default function Form({ route, navigation } : Props) {
     onSubmit: values => {
       appliedListOfItems(values)
       navigation.navigate({
-        name: 'List',
+        name: 'List', key: '',
       });
     }
   });
@@ -162,7 +162,7 @@ export default function Form({ route, navigation } : Props) {
             <Text
               variant='titleLarge'>{nameForma} </Text>}
         />
-        <Appbar.Action icon='check' onPress={formik.handleSubmit} />
+        <Appbar.Action icon='check' onPress={() => formik.handleSubmit()} />
       </Appbar.Header>
       {loaded ?
         <KeyboardAvoidingView
@@ -181,7 +181,7 @@ export default function Form({ route, navigation } : Props) {
               mode="outlined"
               closeIcon="pencil-outline"
               onClose={() => navigation.navigate({
-                name: 'FormExpenses'
+                name: 'FormExpenses', key: ''
               })}
             >Расходы на километр пробега: {round(formik.values.priceFuel * formik.values.averageFuel / 100)}</Chip>
             <DatePickerInput

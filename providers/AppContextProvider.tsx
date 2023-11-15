@@ -10,7 +10,7 @@ interface AppContext {
     isDarkTheme?: boolean,
     toggleTheme?: () => void,
     setIsDarkTheme?: Func<boolean>,
-    appliedListOfItems?: Func<Item>,
+    appliedListOfItems: Func<Item>,
     deleteItemOfListOfItems?: Func<string>,
     settings: Settings,
     saveSettings: Func<Settings>
@@ -27,7 +27,12 @@ const settingsDef: Settings = {
     averageFuel: 9.5
 }
 
-const Context = React.createContext<AppContext>({ listOfItems: [], settings: settingsDef, saveSettings: (s) => {}});
+const Context = React.createContext<AppContext>({ 
+    listOfItems: [], 
+    settings: settingsDef, 
+    saveSettings: (s) => {},
+    appliedListOfItems: ()=> {}
+});
 
 export const AppContextProvider = ({ children }: ContextProviderProps) => {
     const context = useCreateAppContext();
