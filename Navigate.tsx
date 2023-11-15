@@ -16,19 +16,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { enableLayoutAnimations } from 'react-native-reanimated';
+import { RootStackParamList } from './typesNavigation';
 import DrawerItem from "./components/DrawerItem";
 
-type RootStackParamList = {
-    Home: undefined;
-    Main: { userId: string };
-    Form: { userId: string }
-    FormNavigate: { userId: string }
-    FormOdometer: { userId: string }
-    FormExpenses: { userId: string }
-    ListOdometer: { userId: string }
-    
-    //Feed: { sort: 'latest' | 'top' } | undefined;
-  };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();

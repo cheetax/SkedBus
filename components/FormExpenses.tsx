@@ -6,12 +6,7 @@ import { useAppContext } from "../providers/AppContextProvider";
 import { InputField } from "./InputField";
 import {  useItemContext } from "../providers/ItemContextProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
-
-type RootStackParamList = {
-  Home: undefined;
-  FormExpenses: { userId: string };
-  Feed: { sort: 'latest' | 'top' } | undefined;
-};
+import { RootStackParamList } from "../typesNavigation";
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormExpenses'>
 

@@ -15,7 +15,9 @@ import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
 import { useItemContext } from "../providers/ItemContextProvider";
+import { RootStackParamList } from "../typesNavigation";
 import { round } from "../helpers";
+import { DrawerScreenProps } from "@react-navigation/drawer";
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -105,10 +107,10 @@ const OdometerView = props => {
 
   </Card >
 }
-
+type Props = DrawerScreenProps<RootStackParamList, 'Form'>
 //const nanToString = (t) => t === NaN ? '' : t
 
-export default function Form({ route, navigation }) {
+export default function Form({ route, navigation } : Props) {
 
   const { item, getItem, appliedItem } = useItemContext();
   const { appliedListOfItems } = useAppContext();

@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React from "react";
 import { StatusBar } from 'react-native';
 import { Drawer, Switch, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 
-const DrawerItem: FC = () => {
+const DrawerItem = () => {
     const { toggleTheme, isDarkTheme } = useAppContext();
     return (
         <Card
@@ -12,7 +12,7 @@ const DrawerItem: FC = () => {
             <Drawer.Item
                 onPress={toggleTheme}
                 label="Темная тема"
-                right={(props) => <Switch value={isDarkTheme} onChange={toggleTheme} />}
+                right={() => <Switch value={isDarkTheme} onChange={toggleTheme} />}
             >
             </Drawer.Item>
             <Drawer.Item

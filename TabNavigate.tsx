@@ -2,24 +2,20 @@ import React from "react";
 import List from "./components/List";
 import ChartView from "./components/ChartView";
 import { Appbar, Text, useTheme } from 'react-native-paper';
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useScrollContext } from "./providers/ScrollContextProvider";
+import { RootStackParamList, ButtonTabParamList } from "./typesNavigation";
 
-const Tab = createMaterialBottomTabNavigator();
-
-type RootStackParamList = {
-    Home: undefined;
-    Main: { userId: string };
-    Feed: { sort: 'latest' | 'top' } | undefined;
-};
+const Tab = createMaterialBottomTabNavigator<ButtonTabParamList>();
 type Props = DrawerScreenProps<RootStackParamList, 'Main'>
 
-const TabNavigate = ({ navigation }: Props) => {
+const TabNavigate = ({route, navigation }: Props) => {
     const { isScrolling, setScreen } = useScrollContext()
     const theme = useTheme()
+    
     return (
         <View style={Styles.main} >
             <Appbar.Header
