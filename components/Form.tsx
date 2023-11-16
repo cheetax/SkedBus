@@ -10,14 +10,16 @@ import {
   Chip,
   Divider
 } from 'react-native-paper';
-import { InputField, NanToString } from "./InputField";
+import { InputField } from "./InputField";
 import { DatePickerInput, registerTranslation } from 'react-native-paper-dates';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppContext } from "../providers/AppContextProvider";
 import { useItemContext } from "../providers/ItemContextProvider";
-import { RootStackParamList } from "../typesNavigation";
-import { round } from "../helpers";
+import { round, ZeroToString } from "../helpers";
 import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootStackParamList } from "../typesNavigation";
+import type { Item } from "../providers/models/Models";
+
 
 registerTranslation('ru', {
   save: 'Записать',
@@ -38,7 +40,17 @@ registerTranslation('ru', {
   close: 'Закрыть'
 })
 
-const ViewDataField = props => {
+type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+
+interface ViewDataProps {
+  values: Item
+}
+
+interface OdometerViewProps extends Props {
+  values: Item,
+  color: string
+}
+const ViewDataField = (props: ViewDataProps) => {
   const {
     values: {
       expenses,
@@ -60,12 +72,12 @@ const ViewDataField = props => {
           <Card.Content>
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Затраты:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{NanToString(expenses)}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{ZeroToString(expenses)}</Text>
             </View>
             <Divider style={Styles.dividerCard} />
             <View style={Styles.stackRow} >
               <Text style={Styles.text} variant='bodyMedium'>Доход:</Text>
-              <Text style={Styles.text} variant='bodyMedium'>{NanToString(profit)}</Text>
+              <Text style={Styles.text} variant='bodyMedium'>{ZeroToString(profit)}</Text>
             </View>
 
             <Divider style={Styles.dividerCard} />
@@ -81,11 +93,11 @@ const ViewDataField = props => {
   )
 }
 
-const OdometerView = props => {
+const OdometerView = (props: OdometerViewProps) => {
   const {
     values,
     navigation,
-    theme
+    color
   } = props
   // console.log(props)
 
@@ -93,24 +105,23 @@ const OdometerView = props => {
     style={{
       ...Styles.card,
     }}
-    onPress={() => navigation.navigate({
-      name: 'ListOdometer',
-      params: { key: values.key }
+    onPress={() => navigation.navigate('ListOdometer', {
+      params: { key: values.key  }
     })}
   >
     <Card.Title
       title={<Text style={Styles.text} variant='titleMedium'>Пробег</Text>}
       subtitle={<Text style={Styles.text} variant='bodyMedium'>Общий пробег: {values.odometer.resultOdometer}</Text>}
-      right={() => <MaterialCommunityIcons style={{ marginRight: 8 }} name={'chevron-right'} color={theme.colors.onSurface} size={26} />}
+      right={() => <MaterialCommunityIcons style={{ marginRight: 8 }} name={'chevron-right'} color={color} size={26} />}
 
     />
 
   </Card >
 }
-type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+
 //const nanToString = (t) => t === NaN ? '' : t
 
-export default function Form({ route, navigation } : Props) {
+export default function Form({ route, navigation }: Props) {
 
   const { item, getItem, appliedItem } = useItemContext();
   const { appliedListOfItems } = useAppContext();
@@ -199,15 +210,14 @@ export default function Form({ route, navigation } : Props) {
               }}
               inputMode="start"
               mode="outlined"
-              presentationStyle="formSheet"
             />
             <InputField
-              value={NanToString(formik.values.proceeds)}
+              value={ZeroToString(formik.values.proceeds)}
               onChangeText={formik.handleChange('proceeds')}
               label='Выручка' />
-            <OdometerView values={formik.values} navigation={navigation} theme={theme} />
+            <OdometerView values={formik.values} navigation={navigation} route={route} color={theme.colors.onSurface} />
 
-            <ViewDataField values={formik.values} setFieldValue={formik.setFieldValue} name='viewData' variant='headlineMedium' />
+            <ViewDataField values={formik.values} />
 
           </ScrollView>
         </KeyboardAvoidingView> :

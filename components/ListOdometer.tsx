@@ -1,32 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, StyleSheet, FlatList, Touchable } from 'react-native';;
 import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu, TouchableRipple } from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
-import { useState } from "react";
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootStackParamList } from "../typesNavigation";
 
-export default function ListOdometer({ navigation, route }) {
+type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+
+interface MenuOdometerProps {
+  keyItem: string
+}
+
+export default function ListOdometer({ navigation, route }: Props) {
   const {
     listOdometer,
     deleteOdometer
   } = useItemContext();
 
   const [isStartScroll, setIsStartScroll] = useState(false);
-  const startScroll = (a) => setIsStartScroll(a !== 0)
+  const startScroll = (a: number) => setIsStartScroll(a !== 0)
 
-  const editForm = key => navigation.navigate({
-    name: 'FormOdometer',
+  const editForm = (key: string) => navigation.navigate('FormOdometer', {
     params: { key },
   })
 
-  const MenuOdometer = props => {
+
+  const MenuOdometer = (props: MenuOdometerProps) => {
     const [visible, setVisible] = useState(false)
 
     const openMenu = () => setVisible(true)
     const closeMenu = () => setVisible(false)
-    const edit = () => {
-      setVisible(false)
-      editForm(props.keyItem)
-    }
+    
     const del = () => deleteOdometer(props.keyItem)
 
     return (
@@ -67,8 +71,7 @@ export default function ListOdometer({ navigation, route }) {
         icon="plus"
         size="medium"
         visible={!isStartScroll}
-        onPress={() => editForm('')}>
-      </FAB>
+        onPress={() => editForm('')}/>
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}

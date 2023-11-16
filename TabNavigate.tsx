@@ -7,12 +7,12 @@ import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navig
 import type { DrawerScreenProps } from '@react-navigation/drawer';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useScrollContext } from "./providers/ScrollContextProvider";
-import { RootStackParamList, ButtonTabParamList } from "./typesNavigation";
+import { RootStackParamList } from "./typesNavigation";
 
-const Tab = createMaterialBottomTabNavigator<ButtonTabParamList>();
+const Tab = createMaterialBottomTabNavigator();
 type Props = DrawerScreenProps<RootStackParamList, 'Main'>
 
-const TabNavigate = ({route, navigation }: Props) => {
+const TabNavigate = ({ navigation }: Props) => {
     const { isScrolling, setScreen } = useScrollContext()
     const theme = useTheme()
     

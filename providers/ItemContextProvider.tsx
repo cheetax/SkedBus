@@ -6,17 +6,48 @@ import { round } from "../helpers";
 import { ContextProviderProps, Func, Item, OdometerItem, Settings } from "./models/Models";
 
 interface ItemContext {
-    item?: Item,
+    item: Item,
     getItem: Func<string>,
-    appliedOdometer?: Func<OdometerItem>,
-    itemOdometer?: OdometerItem,
-    getItemOdometer?: Func<string>,
+    appliedOdometer: Func<OdometerItem>,
+    itemOdometer: OdometerItem,
+    getItemOdometer: Func<string>,
     listOdometer?: OdometerItem[],
-    deleteOdometer?: Func<string>,
-    appliedItem?: Func<Item>,
+    deleteOdometer: Func<string>,
+    appliedItem: Func<Item>,
     appliedSettings: Func<Settings>,
 }
-const ContextItem = createContext<ItemContext>({appliedSettings: () => {}, getItem: () => {}});
+
+const itemDefault: Item = {
+    date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
+    priceFuel: 0,
+    averageFuel: 0,
+    proceeds: 0, //выручка
+    profit: 0, //доход
+    profitPerOdometer: '-', //доход на километр
+    odometer: {
+        resultOdometer: 0,
+        data: []
+    },     //пробег
+    expenses: 0,     //затраты
+    key: ''
+}
+
+const itemOdometerDefault = {
+    odometerStart: 0, //спидометр старт
+    odometerFinish: 0, //спидометр финиш
+    key: ''
+}
+
+const ContextItem = createContext<ItemContext>({
+    item: itemDefault,
+    itemOdometer: itemOdometerDefault,
+    appliedItem: () => { },
+    appliedSettings: () => { },
+    getItem: () => { },
+    deleteOdometer: () => { }, 
+    getItemOdometer: () =>{},
+    appliedOdometer: () => {}
+});
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
 
@@ -25,7 +56,7 @@ export const ItemContextProvider = ({ children }: ContextProviderProps) => {
     return <ContextItem.Provider value={context}>{children}</ContextItem.Provider>;
 };
 
-export const useItemContext = ():ItemContext => {
+export const useItemContext = (): ItemContext => {
     const context = useContext(ContextItem);
     if (!context) throw new Error('Use app context within provider!');
     return context;
@@ -33,26 +64,18 @@ export const useItemContext = ():ItemContext => {
 
 export const useCreateItemContext = () => {
 
-    const { listOfItems, settings, saveSettings} = useAppContext();
+    const { listOfItems, settings, saveSettings } = useAppContext();
 
     const newItem = (): Item => ({
+        ...itemDefault,
         date: dayjs().toDate(), //dayjs().format('DD.MM.YY'),
         priceFuel: settings?.priceFuel ?? 0,
         averageFuel: settings?.averageFuel ?? 0,
-        proceeds: NaN, //выручка
-        profit: NaN, //доход
-        profitPerOdometer: '-', //доход на километр
-        odometer: {
-            resultOdometer: 0,
-            data: []
-        },     //пробег
-        expenses: NaN,     //затраты
         key: keyGenerator()
     })
 
-    const newItemOdometer = () : OdometerItem => ({
-        odometerStart: NaN, //спидометр старт
-        odometerFinish: NaN, //спидометр финиш
+    const newItemOdometer = (): OdometerItem => ({
+        ...itemOdometerDefault,
         key: keyGenerator()
     })
 
@@ -68,7 +91,7 @@ export const useCreateItemContext = () => {
             return i
         })
     }
-    
+
 
     const calcProfit = (item: Item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
@@ -92,8 +115,9 @@ export const useCreateItemContext = () => {
                 ...i,
                 ...calc
             }
-        })}
-        
+        })
+    }
+
 
     const appliedOdometer = (i: OdometerItem) => setListOdometer(list => {
         const newList = [
@@ -154,7 +178,7 @@ export const useCreateItemContext = () => {
             ...i,
             ...calc
         }
-    })    
+    })
 
     return {
         item,
