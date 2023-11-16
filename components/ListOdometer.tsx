@@ -20,7 +20,7 @@ export default function ListOdometer({ navigation }: Props) {
   const [isStartScroll, setIsStartScroll] = useState(false);
   const startScroll = (a: number) => setIsStartScroll(a !== 0)
 
-  const editForm = (key: string) => navigation.navigate('FormOdometer', { key, params: { key } })
+  const editForm = (key: string) => navigation.navigate('FormOdometer', { key })
 
 
   const MenuOdometer = (props: MenuOdometerProps) => {

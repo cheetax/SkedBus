@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
+import { Appbar, Text, useTheme, ActivityIndicator, } from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
 import { InputField } from "./InputField";
 import { ZeroToString } from "../helpers";
@@ -27,9 +27,7 @@ export default function FormOdometer({ route, navigation }: Props) {
     validateOnChange: false,
     onSubmit: values => {
       appliedOdometer(values)
-      navigation.navigate('ListOdometer', {
-        
-      });
+      navigation.navigate('ListOdometer', {});
     }
   });
 
@@ -66,7 +64,7 @@ export default function FormOdometer({ route, navigation }: Props) {
             <InputField
               value={ZeroToString(formik.values.odometerStart)}
               onChangeText={formik.handleChange('odometerStart')}
-              
+
               label='Спидометр на начало' />
             <InputField
               value={ZeroToString(formik.values.odometerFinish)}
