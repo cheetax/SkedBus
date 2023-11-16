@@ -11,7 +11,7 @@ interface AppContext {
     toggleTheme?: () => void,
     setIsDarkTheme?: Func<boolean>,
     appliedListOfItems: Func<Item>,
-    deleteItemOfListOfItems?: Func<string>,
+    deleteItemOfListOfItems: Func<string>,
     settings: Settings,
     saveSettings: Func<Settings>
 }
@@ -31,7 +31,8 @@ const Context = React.createContext<AppContext>({
     listOfItems: [], 
     settings: settingsDef, 
     saveSettings: (s) => {},
-    appliedListOfItems: ()=> {}
+    appliedListOfItems: ()=> {},
+    deleteItemOfListOfItems: () => {}
 });
 
 export const AppContextProvider = ({ children }: ContextProviderProps) => {

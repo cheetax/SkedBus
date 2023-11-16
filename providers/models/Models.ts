@@ -1,5 +1,7 @@
 import { ReactNode } from 'react'
 
+export type Modify<T, R> = Omit<T, keyof R> & R;
+
 export interface ContextProviderProps {
     children: ReactNode
 }
