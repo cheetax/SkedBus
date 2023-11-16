@@ -2,32 +2,45 @@ import React, { useState, useEffect, } from "react";
 import { View, StyleSheet } from 'react-native';
 import { SegmentedButtons, useTheme, Text, Card, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
-import { useScrollContext } from "../providers/ScrollContextProvider";
-import { BarChart } from "./BarChart";
+import { BarChart, ItemChart } from "./BarChart";
 import { round } from "../helpers";
-import dayjs from 'dayjs'
+import type { Item, Modify } from "../providers/models/Models";
+
+//import { DrawerScreenProps } from "@react-navigation/drawer";
+//import { RootStackParamList } from "../typesNavigation";
+import dayjs, { Dayjs, OpUnitType } from 'dayjs'
 import Ru from 'dayjs/locale/ru';
 
 dayjs.locale(Ru);
 
-const sum = (a, b) => (Number(a) + Number(b))//.toString()
+const sum = (a: number | string, b: number | string) => (Number(a) + Number(b))//.toString()
 
-export default function ChartView({ navigation, route }) {
+type ItemChartData = Modify<Item, {
+    odometer: number,
+    label?: string,
+    value?: number
+}>
 
-    const { listOfItems} = useAppContext();
-    const { setScreen } = useScrollContext();
+
+interface Format {
+    [key: string]: (t: Dayjs) => string
+}
+
+export default function ChartView() {
+
+    const { listOfItems } = useAppContext();
     const [mode, setMode] = useState('day');
-    const [listChart, setListChart] = useState([])
-    const [selectItem, setSelectItem] = useState(null)
-    const format = {
-        day: (first) => first.startOf(mode).format('DD MMM'),
-        week: (first) => first.startOf(mode).format('DD') + '-' + first.endOf(mode).format('DD MMM'),
-        month: (first) => first.startOf(mode).format('MMM')
+    const [listChart, setListChart] = useState<ItemChartData[]>([])
+    const [selectItem, setSelectItem] = useState<ItemChartData>()
+    const format : Format = {
+        day: (first: Dayjs) => first.startOf(mode as OpUnitType).format('DD MMM'),
+        week: (first: Dayjs) => first.startOf(mode as OpUnitType).format('DD') + '-' + first.endOf(mode as OpUnitType).format('DD MMM'),
+        month: (first: Dayjs) => first.startOf(mode as OpUnitType).format('MMM'),
     }
     const formatDate = {
-        day: (first) => 'За ' + first.startOf(mode).format('DD MMMM YYYY'),
-        week: (first) => 'С ' + first.startOf(mode).format('DD MMMM YY') + ' по ' + first.endOf(mode).format('DD MMMM YY'),
-        month: (first) => 'За ' + first.startOf(mode).format('MMMM YYYY')
+        'day': (first: Dayjs) => 'За ' + first.startOf(mode as OpUnitType).format('DD MMMM YYYY'),
+        week: (first: Dayjs) => 'С ' + first.startOf(mode as OpUnitType).format('DD MMMM YY') + ' по ' + first.endOf(mode as OpUnitType).format('DD MMMM YY'),
+        month: (first: Dayjs) => 'За ' + first.startOf(mode as OpUnitType).format('MMMM YYYY')
     }
     const buttons = [
         {
@@ -46,15 +59,15 @@ export default function ChartView({ navigation, route }) {
 
     const theme = useTheme();
 
-    const onSelect = item => setSelectItem(item)
+    const onSelect = (item: ItemChart) => setSelectItem(item as ItemChartData)
 
     useEffect(() => {
 
-        setListChart(list => {
+        setListChart(_list => {
 
-            const data = listOfItems.reduce((acc, item) => {
+            const data: ItemChartData[] = listOfItems.reduce<ItemChartData[]>((acc, item) => {
 
-                const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode))
+                const result = acc.find(itemACC => dayjs(itemACC.date).isSame(dayjs(item.date), mode as OpUnitType))
                 // console.log(result)
                 if (result) {
                     result.proceeds = sum(result.proceeds, item.proceeds);
@@ -94,8 +107,8 @@ export default function ChartView({ navigation, route }) {
 
             >
                 <BarChart
-                    mode={mode}
-                    data={listChart}                    
+                    //mode={mode}
+                    data={listChart as ItemChart[]}
                     onSelect={onSelect}
                     selectColor={theme.colors.onSurfaceVariant}
                     color={theme.colors.outlineVariant}

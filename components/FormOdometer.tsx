@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
+import { Appbar, Text, useTheme, ActivityIndicator, } from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
-import { InputField, NanToString } from "./InputField";
+import { InputField } from "./InputField";
+import { ZeroToString } from "../helpers";
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootStackParamList } from "../typesNavigation";
 
-export default function FormOdometer({ route, navigation }) {
+type Props = DrawerScreenProps<RootStackParamList, 'FormOdometer'>
+
+export default function FormOdometer({ route, navigation }: Props) {
 
   const { itemOdometer, getItemOdometer, appliedOdometer } = useItemContext();
   const [loaded, setLoaded] = useState(false);
   const nameForma = route.params.key !== '' ? 'Редактирование пробега' : 'Новый пробег'
-  //const theme = useTheme()
 
   useEffect(() => {
     getItemOdometer(route.params.key)
@@ -23,9 +27,7 @@ export default function FormOdometer({ route, navigation }) {
     validateOnChange: false,
     onSubmit: values => {
       appliedOdometer(values)
-      navigation.navigate({
-        name: 'ListOdometer',
-      });
+      navigation.navigate('ListOdometer', {});
     }
   });
 
@@ -44,7 +46,7 @@ export default function FormOdometer({ route, navigation }) {
             <Text
               variant='titleLarge'>{nameForma} </Text>}
         />
-        <Appbar.Action icon='check' onPress={formik.handleSubmit} />
+        <Appbar.Action icon='check' onPress={() => formik.handleSubmit()} />
       </Appbar.Header>
       {loaded ?
         <KeyboardAvoidingView
@@ -60,12 +62,12 @@ export default function FormOdometer({ route, navigation }) {
             contentInsetAdjustmentBehavior='always'
           >
             <InputField
-              value={NanToString(formik.values.odometerStart)}
+              value={ZeroToString(formik.values.odometerStart)}
               onChangeText={formik.handleChange('odometerStart')}
-              
+
               label='Спидометр на начало' />
             <InputField
-              value={NanToString(formik.values.odometerFinish)}
+              value={ZeroToString(formik.values.odometerFinish)}
               onChangeText={formik.handleChange('odometerFinish')}
               label='Спидометр на конец' />
           </ScrollView>

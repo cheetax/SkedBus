@@ -5,12 +5,16 @@ import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { InputField } from "./InputField";
 import {  useItemContext } from "../providers/ItemContextProvider";
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootStackParamList } from "../typesNavigation";
 
-export default function FormExpenses({ route, navigation }) {
+type Props = DrawerScreenProps<RootStackParamList, 'FormExpenses'>
+
+const FormExpenses = ({ navigation } : Props) => {
 
   const { settings } = useAppContext();
   const { appliedSettings } = useItemContext();
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
   const nameForma = 'Редактирование затрат' 
   //const theme = useTheme()
 
@@ -43,7 +47,7 @@ export default function FormExpenses({ route, navigation }) {
             <Text
               variant='titleLarge'>{nameForma} </Text>}
         />
-        <Appbar.Action icon='check' onPress={formik.handleSubmit} />
+        <Appbar.Action icon='check' onPress={() => formik.handleSubmit()} />
       </Appbar.Header>
       {loaded ?
         <KeyboardAvoidingView
@@ -77,6 +81,8 @@ export default function FormExpenses({ route, navigation }) {
     </View >
   );
 }
+
+export default FormExpenses
 
 const Styles = StyleSheet.create({
 

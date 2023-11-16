@@ -5,9 +5,13 @@ import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-pap
 import { useAppContext } from "../providers/AppContextProvider";
 import { useScrollContext } from "../providers/ScrollContextProvider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootStackParamList } from "../typesNavigation";
 import dayjs from 'dayjs';
 
-export default function Main({ navigation, route }) {
+type Props = DrawerScreenProps<RootStackParamList, 'List'>
+
+export default function Main({ navigation }: Props) {
 
   const {
     listOfItems,
@@ -16,8 +20,7 @@ export default function Main({ navigation, route }) {
 
   const { isScrolling, startScroll } = useScrollContext();
 
-  const editForm = key => {
-    //console.log(key)
+  const editForm = (key: string) => {
     navigation.navigate('FormNavigate', {
       screen: 'Form',
       initial: true,
@@ -34,8 +37,7 @@ export default function Main({ navigation, route }) {
         icon="plus"
         size="medium"
         visible={!isScrolling}
-        onPress={() => editForm('')}>
-      </FAB>
+        onPress={() => editForm('')}/>
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOfItems}

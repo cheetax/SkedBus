@@ -5,10 +5,10 @@ import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-nati
 import { scalePoint, scaleLinear, ScalePoint, ScaleLinear } from 'd3-scale'
 import { max } from "d3-array";
 
-type ItemChart = {
+export type ItemChart = {
     label: string,
     value: number,
-    rect: SkRect,
+    rect?: SkRect | any,
     isSelected?: boolean
 }
 
@@ -44,12 +44,12 @@ type BarChart<T> = (props: T) => ReactNode
 
 interface BarCharProps {
     data: ItemChart[],
-    selectColor: string,
-    color: string,
+    selectColor?: string,
+    color?: string,
     onSelect?: OnSelect<ItemChart>,
-    graph_span: number,
-    graph_bar_width: number,
-    canvasHeight: number,
+    graph_span?: number,
+    graph_bar_width?: number,
+    canvasHeight?: number,
     style?: StyleProp<ViewStyle>,
     styleLabels?: StyleProp<ViewStyle>
 }
