@@ -9,7 +9,7 @@ import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import dayjs from 'dayjs';
 
-type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+type Props = DrawerScreenProps<RootStackParamList, 'List'>
 
 export default function Main({ navigation }: Props) {
 

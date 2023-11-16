@@ -8,7 +8,7 @@ import { ZeroToString } from "../helpers";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 
-type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+type Props = DrawerScreenProps<RootStackParamList, 'FormOdometer'>
 
 export default function FormOdometer({ route, navigation }: Props) {
 

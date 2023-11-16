@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useScrollContext } from "./providers/ScrollContextProvider";
 import { RootStackParamList } from "./typesNavigation";
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator<RootStackParamList>();
 type Props = DrawerScreenProps<RootStackParamList, 'Main'>
 
 const TabNavigate = ({ navigation }: Props) => {

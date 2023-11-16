@@ -1,17 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, FlatList, Touchable } from 'react-native';;
 import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu, TouchableRipple } from 'react-native-paper';
 import { useItemContext } from "../providers/ItemContextProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 
-type Props = DrawerScreenProps<RootStackParamList, 'Form'>
+type Props = DrawerScreenProps<RootStackParamList, 'ListOdometer'>
 
 interface MenuOdometerProps {
   keyItem: string
 }
 
-export default function ListOdometer({ navigation, route }: Props) {
+export default function ListOdometer({ navigation }: Props) {
   const {
     listOdometer,
     deleteOdometer
@@ -20,9 +20,7 @@ export default function ListOdometer({ navigation, route }: Props) {
   const [isStartScroll, setIsStartScroll] = useState(false);
   const startScroll = (a: number) => setIsStartScroll(a !== 0)
 
-  const editForm = (key: string) => navigation.navigate('FormOdometer', {
-    params: { key },
-  })
+  const editForm = (key: string) => navigation.navigate('FormOdometer', { key, params: { key } })
 
 
   const MenuOdometer = (props: MenuOdometerProps) => {
@@ -30,7 +28,7 @@ export default function ListOdometer({ navigation, route }: Props) {
 
     const openMenu = () => setVisible(true)
     const closeMenu = () => setVisible(false)
-    
+
     const del = () => deleteOdometer(props.keyItem)
 
     return (
@@ -71,11 +69,11 @@ export default function ListOdometer({ navigation, route }: Props) {
         icon="plus"
         size="medium"
         visible={!isStartScroll}
-        onPress={() => editForm('')}/>
+        onPress={() => editForm('')} />
       <FlatList
         onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
         data={listOdometer}
-        
+
         renderItem={({ item }) => (
           <View>
             <TouchableRipple onPress={() => editForm(item.key)}>
