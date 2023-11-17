@@ -2,10 +2,11 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "allowJs": true
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "babel.config.js"  ]
 }
