@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, FC, ReactNode } from "react";
-import { View, ScrollView, StyleProp, ViewStyle } from 'react-native';
-import { Text as TextRN } from 'react-native-paper';
+import { View, ScrollView, StyleProp, ViewStyle, Text as TextRN, StyleSheet } from 'react-native';
+import { IconButton, FAB } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
 import { scalePoint, scaleLinear, ScalePoint, ScaleLinear } from 'd3-scale'
 import { max } from "d3-array";
@@ -81,6 +81,10 @@ export const BarChart: BarChart<BarCharProps> = ({
 
     const [selected, setSelected] = useState<Selected>({ x: 0, y: 0, selItem: undefined })
     const _myScroll = useRef<ScrollView>(null)
+    const [isStartScroll, setIsStartScroll] = useState(false);
+    const startScroll = (end: number, x: number) => {setIsStartScroll(end - x >=0)
+        console.log(end - x >=0)
+    }
 
     const paramsChart: ParamsChart<Params> = () => {
         const canvasWidth = (data.length * (graph_bar_width + graph_span))
@@ -160,40 +164,74 @@ export const BarChart: BarChart<BarCharProps> = ({
     ])
 
     return (
-        <ScrollView
-            style={[style]}
-            ref={_myScroll}
-            contentOffset={{ x: 0, y: 0 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}>
-            <View style={{
-                width: canvasWidth - graph_span,
-            }} >
-                <Canvas style={{ width: canvasWidth, height: canvasHeight, marginLeft: 0 }} onTouch={onTouch}>
-                    <GraphPathView data={dataChart} selectColor={selectColor} color={color} />
-                </Canvas>
-                <View style={
-                    [styleLabels,
-                        {
-                            flexDirection: 'row',
-                            height: 30
-                        }
-                    ]} >
-                    {dataChart.map((dataPoint) => (
-                        <TextRN
-                            key={dataPoint.label}
-                            style={{
-                                width: graph_bar_width,
-                                marginRight: graph_span,
-                                textAlign: 'center',
-                                fontSize: 12,
-                                fontWeight: dataPoint.isSelected ? "bold" : 'normal',
-                                // borderWidth: 1
-                            }}
-                        >{dataPoint.label}</TextRN>
-                    ))}
+        <View style={Styles.view} >
+            <IconButton
+                style={[Styles.iconScroll, {
+                    top: canvasHeight / 2 - graph_span,
+                    right: graph_span,
+                    display: isStartScroll ? 'none' : 'flex'
+                }]}
+                icon='chevron-right'
+            // size={24}
+            //color='rgb(179, 182, 183)'
+            //size={24}
+            //color={'grey'}
+            />
+            <ScrollView
+                style={[style]}
+                ref={_myScroll}
+                onScrollBeginDrag={() => setIsStartScroll(true)}
+                onScrollEndDrag={() => setIsStartScroll(false)}
+                contentOffset={{ x: 0, y: 0 }}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                onScroll={(e) => startScroll(e.nativeEvent.layoutMeasurement.width, e.nativeEvent.contentOffset.x)}
+            >
+
+                <View style={{
+                    width: canvasWidth - graph_span,
+                }} >
+
+                    <Canvas style={{ width: canvasWidth, height: canvasHeight, marginLeft: 0 }} onTouch={onTouch}>
+                        <GraphPathView data={dataChart} selectColor={selectColor} color={color} />
+                    </Canvas>
+                    <View style={
+                        [styleLabels,
+                            {
+                                flexDirection: 'row',
+                                height: 30
+                            }
+                        ]} >
+                        {dataChart.map((dataPoint) => (
+                            <TextRN
+                                key={dataPoint.label}
+                                style={{
+                                    width: graph_bar_width,
+                                    marginRight: graph_span,
+                                    textAlign: 'center',
+                                    fontSize: 12,
+                                    fontWeight: dataPoint.isSelected ? "bold" : 'normal',
+                                    // borderWidth: 1
+                                }}
+                            >{dataPoint.label}</TextRN>
+                        ))}
+                    </View>
                 </View>
-            </View>
-        </ScrollView >)
+            </ScrollView >
+        </View >
+    )
 }
 
+const Styles = StyleSheet.create({
+    iconScroll: {
+        position: 'absolute',
+        zIndex: 1000,
+        alignSelf: 'flex-end',
+        backgroundColor: ' rgba(179, 182, 183, 0.4)',
+    },
+    view: {
+        display: 'flex',
+        justifyContent: 'center',
+        //backgroundColor: 'grey'
+    }
+})

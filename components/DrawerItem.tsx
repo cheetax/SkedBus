@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { Drawer, Switch, Card } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 

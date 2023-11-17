@@ -2,7 +2,6 @@ import 'react-native-gesture-handler'
 import React from "react";
 import { Platform } from "react-native";
 import Main from "./TabNavigate";
-//import Main from './components/List'
 import Form from "./components/Form";
 import ListOdometer from "./components/ListOdometer";
 import FormOdometer from "./components/FormOdometer";
@@ -39,7 +38,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
-            //backgroundColor: theme.colors.surface,
+            backgroundColor: 'transparent',
             width: '85%',
             flex: 1
         },
