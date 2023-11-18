@@ -4,6 +4,7 @@ import { IconButton, FAB } from 'react-native-paper';
 import { Canvas, Skia, useTouchHandler, Rect, SkRect } from "@shopify/react-native-skia";
 import { scalePoint, scaleLinear, ScalePoint, ScaleLinear } from 'd3-scale'
 import { max } from "d3-array";
+import { Layout } from "react-native-reanimated";
 
 export type ItemChart = {
     label: string,
@@ -81,9 +82,14 @@ export const BarChart: BarChart<BarCharProps> = ({
 
     const [selected, setSelected] = useState<Selected>({ x: 0, y: 0, selItem: undefined })
     const _myScroll = useRef<ScrollView>(null)
-    const [isStartScroll, setIsStartScroll] = useState(false);
-    const startScroll = (end: number, x: number) => {setIsStartScroll(end - x >=0)
-        console.log(end - x >=0)
+    const [isStartScroll, setIsStartScroll] = useState<boolean>(false);
+    const [isEndScroll, setEndScroll] = useState<boolean>(true);
+    const [lenghtScroll, setLenghtScroll] = useState<number>(0)
+    const [lenghtView, setLenghtView] = useState<number>(0)
+
+    const startScroll = (end: number, x: number) => {
+        setEndScroll(lenghtScroll - end - x !== 0)
+       // console.log(lenghtScroll, end, x)
     }
 
     const paramsChart: ParamsChart<Params> = () => {
@@ -142,6 +148,10 @@ export const BarChart: BarChart<BarCharProps> = ({
         }
     })
 
+    const layoutView = (w: number) => {
+        if (w !== lenghtView) setLenghtView(w)
+    }
+
     useEffect(() => {
         setParams(paramsChart())
         setSelected({ x: 0, y: 0, selItem: undefined });
@@ -163,13 +173,19 @@ export const BarChart: BarChart<BarCharProps> = ({
         y,
     ])
 
+    useEffect(() => {
+        setEndScroll(lenghtScroll - lenghtView >= 0)
+       // console.log(lenghtView, lenghtScroll)
+    }, [lenghtScroll, lenghtView])
+
+   // console.log(isEndScroll, isStartScroll)
     return (
-        <View style={Styles.view} >
+        <View style={Styles.view} onLayout={(e)=> layoutView(e.nativeEvent.layout.width)}>
             <IconButton
                 style={[Styles.iconScroll, {
                     top: canvasHeight / 2 - graph_span,
                     right: graph_span,
-                    display: isStartScroll ? 'none' : 'flex'
+                    display: isStartScroll || !isEndScroll ? 'none' : 'flex'
                 }]}
                 icon='chevron-right'
             // size={24}
@@ -185,6 +201,7 @@ export const BarChart: BarChart<BarCharProps> = ({
                 contentOffset={{ x: 0, y: 0 }}
                 horizontal
                 showsHorizontalScrollIndicator={false}
+                onContentSizeChange={(w, h) => setLenghtScroll(w)}
                 onScroll={(e) => startScroll(e.nativeEvent.layoutMeasurement.width, e.nativeEvent.contentOffset.x)}
             >
 
