@@ -6,6 +6,8 @@ import Form from "./components/Form";
 import ListOdometer from "./components/ListOdometer";
 import FormOdometer from "./components/FormOdometer";
 import FormExpenses from './components/FormExpenses';
+import FormLogin from './components/Login';
+import DrawerItem from "./components/DrawerItem";
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from 'expo-navigation-bar';
@@ -16,7 +18,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { enableLayoutAnimations } from 'react-native-reanimated';
 import { RootStackParamList } from './typesNavigation';
-import DrawerItem from "./components/DrawerItem";
+
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,12 +45,17 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
             flex: 1
         },
     }}
-    drawerContent={() => <DrawerItem />}>
+    drawerContent={(props) => <DrawerItem {...props} />}>
     <Stack.Screen
         name="Main"
         component={Main}
         options={{ headerShown: false }}
     />   
+    <Stack.Screen
+        name="FormLogin"
+        component={FormLogin}
+        options={{ headerShown: false }}
+    /> 
     <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
@@ -81,7 +88,7 @@ const FormNavigate = () => <ItemContextProvider>
     </Stack.Navigator>
 </ItemContextProvider>
 
-export default function Navigate({ }) {
+export default function Navigate({}) {
     enableLayoutAnimations(false)
     const { isDarkTheme } = useAppContext();
     const theme = isDarkTheme ? MD3DarkTheme : {
@@ -98,7 +105,7 @@ export default function Navigate({ }) {
                     translucent={true}
                     hidden={false}
                 />
-                <Navigator />
+                <Navigator  />
 
             </NavigationContainer>
         </PaperProvider>)
