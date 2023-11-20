@@ -6,7 +6,7 @@ import { DrawerContentComponentProps } from "@react-navigation/drawer";
 
 const DrawerItem = ( {navigation}: DrawerContentComponentProps) => {
     const { toggleTheme, isDarkTheme } = useAppContext();
-    console.log(navigation)
+    //console.log(navigation)
     return (
         <Card
             style={{ height: '100%', paddingTop: StatusBar.currentHeight }}
