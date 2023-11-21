@@ -21,7 +21,7 @@ const userContextDefault = {
 
 const ContextUser = createContext<UserContext>(userContextDefault);
 
-export const ScrollContextProvider = ({ children }: ContextProviderProps): ReactNode => {
+export const UserContextProvider = ({ children }: ContextProviderProps): ReactNode => {
     const context = useCreateUserContext();
     return <ContextUser.Provider value={context}>{children}</ContextUser.Provider>;
 };

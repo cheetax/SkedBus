@@ -10,7 +10,7 @@ const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
     const { user } = useUserContext();
     const theme = useTheme()
     
-    const avatar = require(user.avatar)
+    const avatar = user.avatar
     console.log(avatar)
     return (
         <Card
