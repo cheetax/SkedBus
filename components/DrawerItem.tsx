@@ -9,7 +9,9 @@ const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
     const { toggleTheme, isDarkTheme } = useAppContext();
     const { user } = useUserContext();
     const theme = useTheme()
-    //console.log(navigation)
+    
+    const avatar = require(user.avatar)
+    console.log(avatar)
     return (
         <Card
             style={{ height: '100%', paddingTop: StatusBar.currentHeight }}

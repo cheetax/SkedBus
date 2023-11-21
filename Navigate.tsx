@@ -39,6 +39,11 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         component={FormNavigate}
         options={{ headerShown: false }}
     />
+    <Stack.Screen
+        name="FormLogin"
+        component={FormLogin}
+        options={{ headerShown: false }}
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
