@@ -3,20 +3,37 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFormik } from "formik";
-import { Appbar, Text, useTheme, ActivityIndicator,} from 'react-native-paper';
-import { useAppContext } from "../providers/AppContextProvider";
+import { Appbar, Text, useTheme, ActivityIndicator, Button } from 'react-native-paper';
 import { InputField } from "./InputField";
-import {  useItemContext } from "../providers/ItemContextProvider";
+import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
+import { GoogleSignin, } from "@react-native-google-signin/google-signin";
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormLogin'>
 
-const FormLogin = ({ navigation } : Props) => {
+const FormLogin = ({ navigation }: Props) => {
+
+    const { user } = useUserContext()
+
+    useEffect(() => {
+        GoogleSignin.configure()
+    }, [])
+
+    const signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices()
+            const userInfo = await GoogleSignin.signIn()
+            console.log(userInfo)
+        } catch {
+
+        }
+    }
 
     return (
-        <View>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
             <Text>Логин форма</Text>
+            <Button onPress={() => signIn()} >Войти </Button>
         </View>
     )
 }
