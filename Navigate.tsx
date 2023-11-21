@@ -21,22 +21,24 @@ import { RootStackParamList } from './typesNavigation';
 
 
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createDrawerNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
 enableLayoutAnimations(false);
 
 
-const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
+const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
+    drawerContent={(props) => <DrawerItem {...props} />}
+>
     <Stack.Screen
         name="Main"
         component={Main}
         options={{ headerShown: false }}
-    />    
+    />
     <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
         options={{ headerShown: false }}
-    />    
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
@@ -50,12 +52,12 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
         name="Main"
         component={Main}
         options={{ headerShown: false }}
-    />   
+    />
     <Stack.Screen
         name="FormLogin"
         component={FormLogin}
         options={{ headerShown: false }}
-    /> 
+    />
     <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
@@ -88,7 +90,7 @@ const FormNavigate = () => <ItemContextProvider>
     </Stack.Navigator>
 </ItemContextProvider>
 
-export default function Navigate({}) {
+export default function Navigate({ }) {
     enableLayoutAnimations(false)
     const { isDarkTheme } = useAppContext();
     const theme = isDarkTheme ? MD3DarkTheme : {
@@ -105,7 +107,7 @@ export default function Navigate({}) {
                     translucent={true}
                     hidden={false}
                 />
-                <Navigator  />
+                <Navigator />
 
             </NavigationContainer>
         </PaperProvider>)

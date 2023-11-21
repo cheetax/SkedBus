@@ -8,7 +8,7 @@ import { InputField } from "./InputField";
 import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
-import { GoogleSignin, } from "@react-native-google-signin/google-signin";
+//import { GoogleSignin, } from "@react-native-google-signin/google-signin";
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormLogin'>
 
@@ -17,14 +17,14 @@ const FormLogin = ({ navigation }: Props) => {
     const { user } = useUserContext()
 
     useEffect(() => {
-        GoogleSignin.configure()
+     //   GoogleSignin.configure()
     }, [])
 
     const signIn = async () => {
         try {
-            await GoogleSignin.hasPlayServices()
-            const userInfo = await GoogleSignin.signIn()
-            console.log(userInfo)
+           // await GoogleSignin.hasPlayServices()
+          //  const userInfo = await GoogleSignin.signIn()
+           // console.log(userInfo)
         } catch {
 
         }
