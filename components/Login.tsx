@@ -24,7 +24,6 @@ const FormLogin = ({ navigation }: Props) => {
     const [request, response, promtAsync] = Google.useAuthRequest({
         webClientId: "784049700606-8ktkaj1t7ltm49rkucs2vmja3ovl90ak.apps.googleusercontent.com",
         androidClientId: "784049700606-2rrj0q80uap40353e6m203mubl2m7vj2.apps.googleusercontent.com"
-
     })
 
     useEffect(() => {
@@ -45,7 +44,7 @@ const FormLogin = ({ navigation }: Props) => {
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
             <Text>Логин форма</Text>
-            {/* <Button onPress={() => promtAsync()} >Войти </Button> */}
+            <Button onPress={() => promtAsync()} >Войти </Button>
         </View>
     )
 }
