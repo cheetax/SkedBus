@@ -43,7 +43,7 @@ const FormLogin = ({ navigation }: Props) => {
     return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
             <Text>Логин форма</Text>
-            <Button onPress={() => promtAsync()} >Войти </Button>
+            {/* <Button onPress={() => promtAsync()} >Войти </Button> */}
         </View>
     )
 }
