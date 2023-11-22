@@ -22,7 +22,9 @@ const FormLogin = ({ navigation }: Props) => {
 
     const { user, setUser } = useUserContext()
     const [request, response, promtAsync] = Google.useAuthRequest({
-        androidClientId: '784049700606-2rrj0q80uap40353e6m203mubl2m7vj2.apps.googleusercontent.com'
+        webClientId: "784049700606-8ktkaj1t7ltm49rkucs2vmja3ovl90ak.apps.googleusercontent.com",
+        androidClientId: "784049700606-2rrj0q80uap40353e6m203mubl2m7vj2.apps.googleusercontent.com"
+
     })
 
     useEffect(() => {
