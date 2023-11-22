@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, ReactNode } from "react";
 import { ContextProviderProps, Func, User } from "./models/Models";
+import userAvatar from '../assets/userAvatar.json'
 
 interface UserContext {
     user: User,
@@ -10,7 +11,7 @@ interface UserContext {
 const userDefault = {
     name: '',
     email: '',
-    avatar: '../assets/UserAvatar.png'
+    avatar: userAvatar.image
 }
 
 const userContextDefault = {

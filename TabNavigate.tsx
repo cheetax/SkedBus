@@ -15,7 +15,7 @@ type Props = DrawerScreenProps<RootStackParamList, 'Main'>
 const TabNavigate = ({ navigation }: Props) => {
     const { isScrolling, setScreen } = useScrollContext()
     const theme = useTheme()
-    console.log(navigation)
+    //console.log(navigation)
     return (
         <View style={Styles.main} >
             <Appbar.Header
