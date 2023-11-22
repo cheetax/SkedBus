@@ -20,22 +20,23 @@ import { RootStackParamList } from './typesNavigation';
 import DrawerItem from "./components/DrawerItem";
 
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createDrawerNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
 enableLayoutAnimations(false);
 
 
-const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
+const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
+    drawerContent={() => <DrawerItem />}>
     <Stack.Screen
         name="Main"
         component={Main}
         options={{ headerShown: false }}
-    />    
+    />
     <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
         options={{ headerShown: false }}
-    />    
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
@@ -49,7 +50,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator>
         name="Main"
         component={Main}
         options={{ headerShown: false }}
-    />   
+    />
     <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
