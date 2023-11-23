@@ -1,12 +1,12 @@
 {
   "expo": {
     "name": "Accounting for taxi driver's",
-    "slug": "calccost",
+    "slug": "CalcCost",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "com.cheetax.calccost",
+    "scheme": "CalcCost",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
