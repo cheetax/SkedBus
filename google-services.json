@@ -1,0 +1,9 @@
+{
+    "installed": {
+        "client_id": "972891890305-652plr3j3rnb4r8bl7eiu8pfaup5j4s3.apps.googleusercontent.com",
+        "project_id": "calccost",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
+    }
+}
