@@ -10,6 +10,7 @@ import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google"
+import { GoogleSignin, GoogleSigninButton } from "@react-native-google-signin/google-signin";
 
 //import { GoogleSignin, } from "@react-native-google-signin/google-signin";
 
