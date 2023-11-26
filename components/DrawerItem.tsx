@@ -7,7 +7,7 @@ import { DrawerContentComponentProps } from "@react-navigation/drawer";
 
 const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
     const { toggleTheme, isDarkTheme } = useAppContext();
-    const { user } = useUserContext();
+    const { userInfo } = useUserContext();
     const theme = useTheme()
     
     return (
@@ -16,11 +16,11 @@ const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
         >
             <View style={{marginBottom: 10, paddingHorizontal: 24, paddingVertical: 16, backgroundColor: theme.colors.surfaceVariant, }} >
                 <View style={Styles.stackRow} >
-                    <Avatar.Image source={{ uri: user.avatar }} style={{ backgroundColor: theme.colors.surfaceVariant }} />
+                    <Avatar.Image source={{ uri: userInfo.user.photo || '' }} style={{ backgroundColor: theme.colors.surfaceVariant }} />
                     <Button mode="contained" onPress={() => navigation.navigate('FormLogin')} >Войти </Button>
                 </View>
-                <Text variant="bodyMedium" >{user.name}</Text>
-                <Text variant="bodyMedium" >{user.email}</Text>
+                <Text variant="bodyMedium" >{userInfo.user.name}</Text>
+                <Text variant="bodyMedium" >{userInfo.user.email}</Text>
             </View>
 
             <Drawer.Item

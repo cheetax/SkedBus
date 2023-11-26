@@ -1,21 +1,30 @@
 import React, { useEffect, useState, createContext, ReactNode } from "react";
-import { ContextProviderProps, Func, User } from "./models/Models";
+import { ContextProviderProps, Func, } from "./models/Models";
+import { User } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import userAvatar from '../assets/userAvatar.json'
 
 interface UserContext {
-    user: User,
+    userInfo: User,
     setUser: (user: User) => void,
     deleteUser: () => void
 }
 
-const userDefault = {
-    name: '',
-    email: '',
-    avatar: userAvatar.image
+const userDefault : User = {
+    user: {
+        id:'',
+        email: '',
+        familyName:'',
+        givenName: '',
+        name:'',
+        photo: userAvatar.image
+    },
+    idToken: '',
+    serverAuthCode: ''
 }
 
 const userContextDefault = {
-    user: userDefault,
+    userInfo: userDefault,
     setUser: () => {},
     deleteUser: () => {}
 }
@@ -34,14 +43,32 @@ export const useUserContext = (): UserContext => {
 }
 
 export const useCreateUserContext = (): UserContext => {
-    const [user, setUserState] = useState<User>(userDefault)
+    const [userInfo, setUserState] = useState<User>(userDefault)
 
-    const setUser: Func<User> = (user) => setUserState(user)
+    const setUser = (user: User) => setUserState(user)
 
     const deleteUser = () => setUserState(userDefault)
+
+    const readUserlocalStor = async () => {
+        const user = await AsyncStorage.getItem('userInfo')
+        if (user) setUserState(JSON.parse(user))
+    }
+
+    const saveUserLocalStor = async (user: User) => {
+        console.log('save user', userInfo)
+        await AsyncStorage.setItem('userInfo', JSON.stringify(user))
+    }
+
+    useEffect(() => {
+        readUserlocalStor()
+    }, [])
+
+    useEffect(() => {
+        saveUserLocalStor(userInfo)
+    }, [userInfo])
     
     return {
-        user,
+        userInfo,
         setUser,
         deleteUser,
     };
