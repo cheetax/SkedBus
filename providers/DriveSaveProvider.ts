@@ -11,20 +11,25 @@ GoogleSignin.configure();
 
 const GetFiles = () => {
 
-    // const signIn = async () => {
-    //     const user = await GoogleSignin.signIn();
-    //     console.log(user)
-    // }
+    const { userInfo } = useUserContext()
+    console.log(userInfo)
+
+
+     const signIn = async () => {
+        const user = await GoogleSignin.signIn();
+         console.log(user)
+    gDrive.accessToken = (await GoogleSignin.getTokens()).accessToken
+     }
 
     useEffect(() => {
-       // signIn()
+        signIn()
     }, [])
 
-}
-//const { userInfo } = useUserContext()
-//console.log(userInfo)
+    
 
-//gDrive.accessToken = (await GoogleSignin.getTokens()).accessToken
+}
+
+//
 
 
 export default GetFiles
