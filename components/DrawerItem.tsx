@@ -9,15 +9,24 @@ const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
     const { toggleTheme, isDarkTheme } = useAppContext();
     const { userInfo } = useUserContext();
     const theme = useTheme()
-    
+
     return (
         <Card
             style={{ height: '100%', paddingTop: StatusBar.currentHeight }}
         >
-            <View style={{marginBottom: 10, paddingHorizontal: 24, paddingVertical: 16, backgroundColor: theme.colors.surfaceVariant, }} >
+            <View style={{
+                marginBottom: 10,
+                paddingHorizontal: 24,
+                paddingVertical: 16,
+                backgroundColor: theme.colors.surfaceVariant,
+            }}
+            >
                 <View style={Styles.stackRow} >
-                    <Avatar.Image source={{ uri: userInfo.user.photo || '' }} style={{ backgroundColor: theme.colors.surfaceVariant }} />
-                    <Button mode="contained" onPress={() => navigation.navigate('FormLogin')} >Войти </Button>
+                    <Avatar.Image source={{ uri: userInfo.user.photo ?? '' }} style={{ backgroundColor: theme.colors.surfaceVariant }} />
+                    <Button
+                        mode="contained"
+                        onPress={() => navigation.navigate('FormProfile')}
+                    >{userInfo.idToken ? 'Профиль' : 'Войти '}</Button>
                 </View>
                 <Text variant="bodyMedium" >{userInfo.user.name}</Text>
                 <Text variant="bodyMedium" >{userInfo.user.email}</Text>

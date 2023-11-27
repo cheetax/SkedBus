@@ -6,7 +6,7 @@ import Form from "./components/Form";
 import ListOdometer from "./components/ListOdometer";
 import FormOdometer from "./components/FormOdometer";
 import FormExpenses from './components/FormExpenses';
-import FormLogin from './components/Login';
+import FormProfile from './components/Profile';
 import DrawerItem from "./components/DrawerItem";
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
@@ -40,8 +40,8 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         options={{ headerShown: false }}
     />
     <Stack.Screen
-        name="FormLogin"
-        component={FormLogin}
+        name="FormProfile"
+        component={FormProfile}
         options={{ headerShown: false }}
     />
 </Stack.Navigator> : <Drawer.Navigator
@@ -59,8 +59,8 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         options={{ headerShown: false }}
     />
     <Stack.Screen
-        name="FormLogin"
-        component={FormLogin}
+        name="FormProfile"
+        component={FormProfile}
         options={{ headerShown: false }}
     />
     <Stack.Screen

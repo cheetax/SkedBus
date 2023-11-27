@@ -19,7 +19,7 @@ const userDefault : User = {
         name:'',
         photo: userAvatar.image
     },
-    idToken: '',
+    idToken: null,
     serverAuthCode: ''
 }
 
@@ -55,7 +55,7 @@ export const useCreateUserContext = (): UserContext => {
     }
 
     const saveUserLocalStor = async (user: User) => {
-        console.log('save user', userInfo)
+        //console.log('save user', userInfo)
         await AsyncStorage.setItem('userInfo', JSON.stringify(user))
     }
 
