@@ -1,4 +1,4 @@
-//android: '784049700606-2rrj0q80uap40353e6m203mubl2m7vj2.apps.googleusercontent.com'
+//android: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com'
 
 import React, { useEffect, useState } from "react";
 import { View } from 'react-native';
@@ -37,7 +37,7 @@ const ProfileView = (props: ProfileViewProps) => {
         />
         <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
         <Text variant="bodyMedium" >{user.user.email}</Text>
-        <Button mode="contained" style={{ marginTop: 16 }} onPress={props.onPress} >Выйти </Button>
+        <Button mode="contained" style={{ marginTop: 16, marginBottom: 8 }} onPress={props.onPress} >Выйти </Button>
         <Button mode="contained" onPress={() => GetFiles()}>Синхронизировать</Button>
     </View>
 }
