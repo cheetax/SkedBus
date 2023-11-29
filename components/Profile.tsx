@@ -67,7 +67,7 @@ const FormProfile = ({ navigation }: Props) => {
             'https://www.googleapis.com/auth/drive.readonly',
             'https://www.googleapis.com/auth/drive.appdata'
         ], // what API you want to access on behalf of the user, default is email and profile
-        webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
+        webClientId: '972891890305-652plr3j3rnb4r8bl7eiu8pfaup5j4s3.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
     })
 
     const signIn = async () => {
