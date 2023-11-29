@@ -1,44 +1,28 @@
 //import React, { useEffect } from 'react'
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import {
-    GDrive,
-    MimeTypes
-} from "@robinbobin/react-native-google-drive-api-wrapper";
-//import { useUserContext } from "./UserContexProvider";
-import { createClient } from '@supabase/supabase-js'
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { User, GoogleSignin } from "@react-native-google-signin/google-signin";
+import { supabase } from './Supabase';
 
-const supabase = createClient("https://xyzcompany.supabase.co", "public-anon-key", {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-});
+//console.log(supabase)
 
-const gDrive = new GDrive()
-GoogleSignin.configure();
-
-const signIn = async () => {
-    const user = await GoogleSignin.signIn();
+const signIn = async (user: User) => {
+    //const user = await GoogleSignin.signIn();
     //console.log(user)
-    gDrive.accessToken = (await GoogleSignin.getTokens()).accessToken
-    console.log(await gDrive.files.list());
+    //gDrive.accessToken = (await GoogleSignin.getTokens()).accessToken
+    //console.log(await gDrive.files.list());
+    //const userInfo = await GoogleSignin.signIn();
+    //console.log(userInfo.idToken, "++", user.idToken)
+    if (user.idToken) {
+        const {data, error} = await supabase.auth.signInWithIdToken({
+        provider: "google",
+        token: user.idToken
+    })
+    console.log(error, data)
+} else console.log('Нет токена')
 }
 
-const GetFiles = () => {
-    console.log('Files')
-    //onst { userInfo } = useUserContext()
-
-    //console.log(userInfo)
-
-    //useEffect(() => {
-    signIn()
-   // }, [])
-
-
-
+const GetFiles = (userInfo: User) => {
+    //console.log('SupaBase', userInfo.idToken )
+    signIn(userInfo)
 }
 
 //

@@ -38,7 +38,7 @@ const ProfileView = (props: ProfileViewProps) => {
         <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
         <Text variant="bodyMedium" >{user.user.email}</Text>
         <Button mode="contained" style={{ marginTop: 16, marginBottom: 8 }} onPress={props.onPress} >Выйти </Button>
-        <Button mode="contained" onPress={() => GetFiles()}>Синхронизировать</Button>
+        <Button mode="contained" onPress={() => GetFiles(user)}>Синхронизировать</Button>
     </View>
 }
 
@@ -77,7 +77,7 @@ const FormProfile = ({ navigation }: Props) => {
             await GoogleSignin.hasPlayServices();
             const user = await GoogleSignin.signIn();
             setUser(user);
-            //console.log(user)
+            //console.log((await GoogleSignin.getTokens()).accessToken)
         } catch (error: any) {
             console.log(error)
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
