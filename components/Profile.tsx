@@ -1,15 +1,16 @@
 //android: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com'
 
 import React, { useEffect, useState } from "react";
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 //import { useFormik } from "formik";
-import { Button, Appbar, Text, useTheme, MD3Theme as Theme, Avatar } from 'react-native-paper';
+import { Button, Appbar, Text, useTheme, MD3Theme as Theme, Avatar, Switch } from 'react-native-paper';
 //import { InputField } from "./InputField";
 import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import { GoogleSignin, GoogleSigninButton, statusCodes, User } from "@react-native-google-signin/google-signin";
-import  GetFiles from '../providers/DriveSaveProvider'
+import { supabase } from '../providers/Supabase';
+
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormProfile'>
 
@@ -19,6 +20,8 @@ interface LoginViewProps {
 
 interface ProfileViewProps {
     user: User,
+    isSyncBaseOn: boolean,
+    onSyncBaseOn: () => void,
     theme?: Theme
     onPress?: () => void
 }
@@ -26,7 +29,9 @@ const ProfileView = (props: ProfileViewProps) => {
     const {
         user,
         theme = useTheme(),
-        onPress
+        onPress,
+        isSyncBaseOn,
+        onSyncBaseOn
     } = props
 
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
@@ -37,8 +42,12 @@ const ProfileView = (props: ProfileViewProps) => {
         />
         <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
         <Text variant="bodyMedium" >{user.user.email}</Text>
-        <Button mode="contained" style={{ marginTop: 16, marginBottom: 8 }} onPress={props.onPress} >Выйти </Button>
-        <Button mode="contained" onPress={() => GetFiles(user)}>Синхронизировать</Button>
+        <View style={Style.stackRow}>
+            <Text variant="bodyMedium" >Синхронизация с облаком</Text>
+            <Switch value={isSyncBaseOn} onValueChange={onSyncBaseOn} />
+        </View>
+        <Button mode="contained" style={{ marginTop: 16}} onPress={props.onPress} >Выйти </Button>
+        {/* <Button mode="contained" onPress={() => GetFiles(user)}>Синхронизировать</Button> */}
     </View>
 }
 
@@ -58,8 +67,8 @@ const LoginView = (props: LoginViewProps) => {
 
 const FormProfile = ({ navigation }: Props) => {
 
-    const { userInfo, setUser, deleteUser } = useUserContext()
-    // const [userInfo, setUserInfo] = useState<User>()
+    const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn } = useUserContext()
+    // const [userInfo, setUserInfo] = useState<User>(),
     const theme = useTheme()
 
     GoogleSignin.configure({
@@ -67,7 +76,7 @@ const FormProfile = ({ navigation }: Props) => {
             'https://www.googleapis.com/auth/drive.readonly',
             'https://www.googleapis.com/auth/drive.appdata'
         ], // what API you want to access on behalf of the user, default is email and profile
-        webClientId: '972891890305-652plr3j3rnb4r8bl7eiu8pfaup5j4s3.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
+        webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
     })
 
     const signIn = async () => {
@@ -77,7 +86,7 @@ const FormProfile = ({ navigation }: Props) => {
             await GoogleSignin.hasPlayServices();
             const user = await GoogleSignin.signIn();
             setUser(user);
-            //console.log((await GoogleSignin.getTokens()).accessToken)
+            //console.log(user.idToken)
         } catch (error: any) {
             console.log(error)
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -93,8 +102,12 @@ const FormProfile = ({ navigation }: Props) => {
     }
     const signOut = async () => {
         try {
-            await GoogleSignin.signOut();
-            deleteUser(); // Remember to remove the user from your app's state as well
+            const userSignOut = await GoogleSignin.signOut();
+            //console.log(userSignOut)
+            if (!userSignOut) {
+                if (isSyncBaseOn) setIsSyncOn()
+                deleteUser()
+            }; // Remember to remove the user from your app's state as well
         } catch (error) {
             console.error(error);
         }
@@ -116,12 +129,26 @@ const FormProfile = ({ navigation }: Props) => {
             </Appbar.Header>
 
             {userInfo.idToken ?
-                <ProfileView user={userInfo} onPress={signOut} /> :
+                <ProfileView
+                    user={userInfo}
+                    onPress={signOut}
+                    isSyncBaseOn={isSyncBaseOn}
+                    onSyncBaseOn={setIsSyncOn} /> :
                 <LoginView onPress={() => signIn()} />
             }
 
         </View>
     )
 }
+
+const Style = StyleSheet.create({
+    stackRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 16
+        //flex: 1
+    }
+})
 
 export default FormProfile

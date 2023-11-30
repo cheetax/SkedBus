@@ -3,11 +3,14 @@ import { ContextProviderProps, Func, } from "./models/Models";
 import { User } from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userAvatar from '../assets/userAvatar.json'
+import getFiles from '../providers/DriveSaveProvider'
 
 interface UserContext {
     userInfo: User,
-    setUser: (user: User) => void,
-    deleteUser: () => void
+    isSyncBaseOn: boolean
+    setUser: Func<User> ,
+    deleteUser: () => void,
+    setIsSyncOn: () => void
 }
 
 const userDefault : User = {
@@ -23,10 +26,12 @@ const userDefault : User = {
     serverAuthCode: ''
 }
 
-const userContextDefault = {
+const userContextDefault: UserContext = {
     userInfo: userDefault,
+    isSyncBaseOn: false,
     setUser: () => {},
-    deleteUser: () => {}
+    deleteUser: () => {},
+    setIsSyncOn: () => {}
 }
 
 const ContextUser = createContext<UserContext>(userContextDefault);
@@ -44,8 +49,11 @@ export const useUserContext = (): UserContext => {
 
 export const useCreateUserContext = (): UserContext => {
     const [userInfo, setUserState] = useState<User>(userDefault)
+    const [isSyncBaseOn, setIsSyncBaseOn] = useState<boolean>(false)
 
     const setUser = (user: User) => setUserState(user)
+
+    const setIsSyncOn = () => setIsSyncBaseOn(!isSyncBaseOn)
 
     const deleteUser = () => setUserState(userDefault)
 
@@ -66,11 +74,17 @@ export const useCreateUserContext = (): UserContext => {
     useEffect(() => {
         saveUserLocalStor(userInfo)
     }, [userInfo])
+
+    useEffect(() => {
+        getFiles(userInfo, isSyncBaseOn)
+    }, [isSyncBaseOn])
     
     return {
         userInfo,
         setUser,
         deleteUser,
+        isSyncBaseOn,
+        setIsSyncOn
     };
 }
 

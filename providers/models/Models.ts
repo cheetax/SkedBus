@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { Database } from './supabase'
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -6,7 +7,7 @@ export interface ContextProviderProps {
     children: ReactNode
 }
 
-export type Func<T> = (t: T) => T | void
+export type Func<T> = (t: T ) => T | void
 
 export type OdometerItem = {
     odometerStart: number  //спидометр старт
@@ -40,5 +41,10 @@ export type User = {
     email: string,
     avatar: string
 }
+
+type Tables = Database['public']['Tables']
+export type WorkingShifts = Tables['workingShifts']['Row']
+export type Odometers = Tables['odometers']['Row']
+export type OdometerItems = Tables['odometerItems']['Row']
 
 
