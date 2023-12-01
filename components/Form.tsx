@@ -19,6 +19,7 @@ import { round, ZeroToString } from "../helpers";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import type { Item } from "../providers/models/Models";
+import { insertBase } from "../providers/DriveSaveProvider";
 
 
 registerTranslation('ru', {
@@ -145,6 +146,7 @@ export default function Form({ route, navigation }: Props) {
     validateOnChange: false,
     onSubmit: values => {
       appliedListOfItems(values)
+      insertBase(values)
       navigation.navigate({
         name: 'List', key: '',
       });

@@ -13,98 +13,109 @@ export interface Database {
         Row: {
           created_at: string
           id: string
-          odometerFinish: number | null
-          odometerStart: number | null
+          odometerFinish: number
+          odometerId: string
+          odometerStart: number
         }
         Insert: {
           created_at?: string
           id?: string
-          odometerFinish?: number | null
-          odometerStart?: number | null
+          odometerFinish: number
+          odometerId: string
+          odometerStart: number
         }
         Update: {
           created_at?: string
           id?: string
-          odometerFinish?: number | null
-          odometerStart?: number | null
+          odometerFinish?: number
+          odometerId?: string
+          odometerStart?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "odometerItems_odometerId_fkey"
+            columns: ["odometerId"]
+            isOneToOne: false
+            referencedRelation: "odometers"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       odometers: {
         Row: {
           created_at: string
           id: string
-          odometers: string | null
-          resultOdometer: number | null
+          resultOdometer: number
+          shiftId: string
         }
         Insert: {
           created_at?: string
           id?: string
-          odometers?: string | null
-          resultOdometer?: number | null
+          resultOdometer: number
+          shiftId: string
         }
         Update: {
           created_at?: string
           id?: string
-          odometers?: string | null
-          resultOdometer?: number | null
+          resultOdometer?: number
+          shiftId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "odometers_odometers_fkey"
-            columns: ["odometers"]
+            foreignKeyName: "odometers_shiftId_fkey"
+            columns: ["shiftId"]
             isOneToOne: false
-            referencedRelation: "odometerItems"
+            referencedRelation: "workingShifts"
             referencedColumns: ["id"]
           }
         ]
       }
       workingShifts: {
         Row: {
-          averageFuel: number 
-          //created_at: string
-          date: string 
-          expenses: number 
-          //id: string
-          key: string 
-          odometer: string 
-          priceFuel: number 
-          proceeds: number 
-          profit: number 
-          profitPerOdometer: number | string
+          averageFuel: number
+          created_at?: string
+          date: string
+          expenses: number
+          id?: string
+          key: string
+          priceFuel: number
+          proceeds: number
+          profit: number
+          profitPerOdometer: number
+          userID?: string
         }
         Insert: {
-          averageFuel?: number | null
+          averageFuel: number
           created_at?: string
-          date?: string | null
-          expenses?: number | null
+          date: string
+          expenses: number
           id?: string
-          key?: string | null
-          odometer?: string | null
-          priceFuel?: number | null
-          proceeds?: number | null
-          profit?: number | null
-          profitPerOdometer?: number | null
+          key: string
+          priceFuel: number
+          proceeds: number
+          profit: number
+          profitPerOdometer: number
+          userId?: string
         }
         Update: {
-          averageFuel?: number | null
+          averageFuel?: number
           created_at?: string
-          date?: string | null
-          expenses?: number | null
+          date?: string
+          expenses?: number
           id?: string
-          key?: string | null
-          odometer?: string | null
-          priceFuel?: number | null
-          proceeds?: number | null
-          profit?: number | null
-          profitPerOdometer?: number | null
+          key?: string
+          priceFuel?: number
+          proceeds?: number
+          profit?: number
+          profitPerOdometer?: number
+          userId?: string
         }
         Relationships: [
           {
-            foreignKeyName: "workingShifts_odometer_fkey"
-            columns: ["odometer"]
+            foreignKeyName: "workingShifts_userId_fkey"
+            columns: ["userId"]
             isOneToOne: false
-            referencedRelation: "odometers"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Database } from './supabase'
+import { Database } from './Supabase'
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -25,7 +25,7 @@ export type Item = {
     averageFuel: number,
     proceeds: number, //выручка
     profit: number , //доход
-    profitPerOdometer: number | string, //доход на километр
+    profitPerOdometer: number, //доход на километр
     odometer: Odometer,     //Данные о пробеге
     expenses: number,     //затраты
     key: string

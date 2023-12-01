@@ -9,7 +9,7 @@ import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import { GoogleSignin, GoogleSigninButton, statusCodes, User } from "@react-native-google-signin/google-signin";
-import { supabase } from '../providers/Supabase';
+
 
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormProfile'>
@@ -47,7 +47,7 @@ const ProfileView = (props: ProfileViewProps) => {
             <Switch value={isSyncBaseOn} onValueChange={onSyncBaseOn} />
         </View>
         <Button mode="contained" style={{ marginTop: 16}} onPress={props.onPress} >Выйти </Button>
-        {/* <Button mode="contained" onPress={() => GetFiles(user)}>Синхронизировать</Button> */}
+        {/* <Button mode="contained" onPress={() => GetFiles(user)}>+</Button> */}
     </View>
 }
 

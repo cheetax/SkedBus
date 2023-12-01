@@ -23,7 +23,7 @@ const itemDefault: Item = {
     averageFuel: 0,
     proceeds: 0, //выручка
     profit: 0, //доход
-    profitPerOdometer: '-', //доход на километр
+    profitPerOdometer: 0, //доход на километр
     odometer: {
         resultOdometer: 0,
         data: []
@@ -96,7 +96,7 @@ export const useCreateItemContext = () => {
     const calcProfit = (item: Item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
         const profit = item.proceeds - expenses
-        const profitPerOdometer = item.odometer.resultOdometer !== 0 ? round(profit / item.odometer.resultOdometer) : '-'
+        const profitPerOdometer = item.odometer.resultOdometer !== 0 ? round(profit / item.odometer.resultOdometer) : 0
         return { expenses, profit, profitPerOdometer }
     }
 
