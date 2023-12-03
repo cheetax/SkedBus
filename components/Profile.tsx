@@ -73,8 +73,8 @@ const FormProfile = ({ navigation }: Props) => {
 
     GoogleSignin.configure({
         scopes: [
-            'https://www.googleapis.com/auth/drive.readonly',
-            'https://www.googleapis.com/auth/drive.appdata'
+            //'https://www.googleapis.com/auth/drive.readonly',
+           // 'https://www.googleapis.com/auth/drive.appdata'
         ], // what API you want to access on behalf of the user, default is email and profile
         webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
     })

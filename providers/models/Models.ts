@@ -28,7 +28,9 @@ export type Item = {
     profitPerOdometer: number, //доход на километр
     odometer: Odometer,     //Данные о пробеге
     expenses: number,     //затраты
-    key: string
+    key: string,
+    isUpdate: boolean
+    id: string
 }
 
 export type Settings = {

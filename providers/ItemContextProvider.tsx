@@ -29,7 +29,9 @@ const itemDefault: Item = {
         data: []
     },     //пробег
     expenses: 0,     //затраты
-    key: ''
+    key: '',
+    id: '',
+    isUpdate: false
 }
 
 const itemOdometerDefault = {
@@ -44,9 +46,9 @@ const ContextItem = createContext<ItemContext>({
     appliedItem: () => { },
     appliedSettings: () => { },
     getItem: () => { },
-    deleteOdometer: () => { }, 
-    getItemOdometer: () =>{},
-    appliedOdometer: () => {}
+    deleteOdometer: () => { },
+    getItemOdometer: () => { },
+    appliedOdometer: () => { }
 });
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
@@ -92,7 +94,6 @@ export const useCreateItemContext = () => {
         })
     }
 
-
     const calcProfit = (item: Item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
         const profit = item.proceeds - expenses
@@ -104,41 +105,55 @@ export const useCreateItemContext = () => {
 
     const appliedSettings = (i: Settings) => {
         saveSettings(i)
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                averageFuel: i.averageFuel,
-                priceFuel: i.priceFuel,
-            });
-            return {
-                ...item,
-                ...i,
-                ...calc
-            }
+        appliedItem({
+            ...item,
+            ...i
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         averageFuel: i.averageFuel,
+        //         priceFuel: i.priceFuel,
+        //     });
+        //     return {
+        //         ...item,
+        //         ...i,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
     }
 
+    const odometer = (newList: OdometerItem[]) => ({
+        resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        data: newList
+    })
 
     const appliedOdometer = (i: OdometerItem) => setListOdometer(list => {
         const newList = [
             i,
             ...list.filter(list => list.key != i.key)
         ]
-        const odometer = {
-            resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
-            data: newList
-        }
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                odometer
-            });
-            return {
-                ...item,
-                odometer,
-                ...calc
-            }
+        // const odometer = {
+        //     resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        //     data: newList
+        // }
+        appliedItem({
+            ...item,
+            odometer: odometer(newList)
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         odometer
+        //     });
+        //     return {
+        //         ...item,
+        //         odometer,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
         return newList
     })
 
@@ -146,24 +161,28 @@ export const useCreateItemContext = () => {
         const newList = [
             ...list.filter(list => list.key != key)
         ]
-        const odometer = {
-            resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
-            data: newList
-        }
-
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                averageFuel: item.averageFuel,
-                priceFuel: item.priceFuel,
-                odometer
-            });
-            return {
-                ...item,
-                odometer,
-                ...calc
-            }
+        // const odometer = {
+        //     resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        //     data: newList
+        // }
+        appliedItem({
+            ...item,
+            odometer: odometer(newList)
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         averageFuel: item.averageFuel,
+        //         priceFuel: item.priceFuel,
+        //         odometer
+        //     });
+        //     return {
+        //         ...item,
+        //         odometer,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
         return newList
     })
 
@@ -176,7 +195,8 @@ export const useCreateItemContext = () => {
         });
         return {
             ...i,
-            ...calc
+            ...calc,
+            isUpdate: true
         }
     })
 

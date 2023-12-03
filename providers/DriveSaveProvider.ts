@@ -51,7 +51,6 @@ export const insertBase = async (item: Item) => {
         .from('workingShifts')
         .select('*')
     console.log(data, error)
-
 }
 
 export default getFiles
