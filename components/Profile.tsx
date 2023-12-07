@@ -9,7 +9,7 @@ import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import { GoogleSignin, GoogleSigninButton, statusCodes, User } from "@react-native-google-signin/google-signin";
-
+import SyncBaseCloud from "./DriveSaveProvider";
 
 
 type Props = DrawerScreenProps<RootStackParamList, 'FormProfile'>
@@ -42,11 +42,12 @@ const ProfileView = (props: ProfileViewProps) => {
         />
         <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
         <Text variant="bodyMedium" >{user.user.email}</Text>
-        <View style={Style.stackRow}>
+        {/* <View style={Style.stackRow}>
             <Text variant="bodyMedium" >Синхронизация с облаком</Text>
             <Switch value={isSyncBaseOn} onValueChange={onSyncBaseOn} />
-        </View>
-        <Button mode="contained" style={{ marginTop: 16}} onPress={props.onPress} >Выйти </Button>
+        </View> */}
+        <SyncBaseCloud/>
+        <Button mode="contained" style={{ marginTop: 16 }} onPress={props.onPress} >Выйти </Button>
         {/* <Button mode="contained" onPress={() => GetFiles(user)}>+</Button> */}
     </View>
 }
@@ -74,7 +75,7 @@ const FormProfile = ({ navigation }: Props) => {
     GoogleSignin.configure({
         scopes: [
             //'https://www.googleapis.com/auth/drive.readonly',
-           // 'https://www.googleapis.com/auth/drive.appdata'
+            // 'https://www.googleapis.com/auth/drive.appdata'
         ], // what API you want to access on behalf of the user, default is email and profile
         webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
     })

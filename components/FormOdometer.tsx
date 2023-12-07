@@ -14,12 +14,15 @@ export default function FormOdometer({ route, navigation }: Props) {
 
   const { itemOdometer, getItemOdometer, appliedOdometer } = useItemContext();
   const [loaded, setLoaded] = useState(false);
-  const nameForma = route.params.key !== '' ? 'Редактирование пробега' : 'Новый пробег'
+  const key = route.params.key;
+  const nameForma = key !== '' ? 'Редактирование пробега' : 'Новый пробег'
 
   useEffect(() => {
-    getItemOdometer(route.params.key)
-    setLoaded(!loaded)
-  }, [])
+    setLoaded(false)
+    //console.log('use effect', key)
+    getItemOdometer(key)
+    setLoaded(true)
+  }, [route])
 
   const formik = useFormik({
     enableReinitialize: true,
@@ -27,11 +30,16 @@ export default function FormOdometer({ route, navigation }: Props) {
     validateOnChange: false,
     onSubmit: values => {
       appliedOdometer(values)
-      navigation.navigate('ListOdometer', {});
+      goBack();
     }
   });
 
-  //console.log(dayjs(item.date).toDate())
+  const goBack = () => {
+    setLoaded(false)
+    navigation.navigate('ListOdometer', {});
+  }
+
+  //console.log('Обновление формы', key)
   const theme = useTheme();
   return (
     <View style={{ ...Styles.main, backgroundColor: theme.colors.surface }} >
@@ -39,7 +47,7 @@ export default function FormOdometer({ route, navigation }: Props) {
       >
         <Appbar.Action
           icon='close'
-          onPress={() => navigation.goBack()}
+          onPress={() => goBack()}
         />
         <Appbar.Content
           title={
