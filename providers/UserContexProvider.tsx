@@ -15,6 +15,13 @@ interface UserContext {
     signIn: () => void
 }
 
+class UserBase {
+    constructor() {
+
+    }
+    userInfo: User
+} 
+
 const userDefault : User = {
     user: {
         id:'',
@@ -38,8 +45,6 @@ const userContextDefault: UserContext = {
 }
 
 const ContextUser = createContext<UserContext>(userContextDefault);
-
-
 
 export const UserContextProvider = ({ children }: ContextProviderProps): ReactNode => {
     const context = useCreateUserContext();
