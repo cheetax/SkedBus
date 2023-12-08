@@ -7,12 +7,12 @@ import { ContextProviderProps, Func, Item, OdometerItem, Settings } from "./mode
 
 interface ItemContext {
     item: Item,
-    getItem: Func<string>,
+    getItem: Func<{ key: string }>,
     appliedOdometer: Func<OdometerItem>,
     itemOdometer: OdometerItem,
-    getItemOdometer: Func<string>,
+    getItemOdometer: Func<{ key: string }>,
     listOdometer?: OdometerItem[],
-    deleteOdometer: Func<string>,
+    deleteOdometer: Func<{ key: string }>,
     appliedItem: Func<Item>,
     appliedSettings: Func<Settings>,
 }
@@ -85,7 +85,7 @@ export const useCreateItemContext = () => {
     const [itemOdometer, setItemOdometer] = useState<OdometerItem>(newItemOdometer())
     const [listOdometer, setListOdometer] = useState<OdometerItem[]>([])
 
-    const getItem: Func<string> = key => {
+    const getItem: Func<{ key: string }> = ({ key }) => {
         // console.log(key)
         setItem((Item) => {
             const i = key !== '' ? listOfItems?.filter(list => list.key === key)[0] : newItem()
@@ -101,7 +101,7 @@ export const useCreateItemContext = () => {
         return { expenses, profit, profitPerOdometer }
     }
 
-    const getItemOdometer = (key: string) => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
+    const getItemOdometer: Func<{ key: string }> = ({ key }) => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
     const appliedSettings = (i: Settings) => {
         saveSettings(i)
@@ -129,7 +129,7 @@ export const useCreateItemContext = () => {
         data: newList
     })
 
-    const appliedOdometer = (i: OdometerItem) => setListOdometer(list => {
+    const appliedOdometer : Func<OdometerItem> = (i) => setListOdometer(list => {
         const newList = [
             i,
             ...list.filter(list => list.key != i.key)
@@ -157,7 +157,7 @@ export const useCreateItemContext = () => {
         return newList
     })
 
-    const deleteOdometer = (key: string) => setListOdometer(list => {
+    const deleteOdometer: Func<{ key: string }> = ({ key }) => setListOdometer(list => {
         const newList = [
             ...list.filter(list => list.key != key)
         ]

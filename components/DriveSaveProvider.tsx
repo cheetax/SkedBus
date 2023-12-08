@@ -23,10 +23,11 @@ const SyncBaseCloud = () => {
     const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn, signIn } = useUserContext()
     //console.log(listOfItems)
     const signInBase = async () => {
+        if (isSyncBaseOn) return setIsSyncOn()
         await signIn()
         console.log(userInfo.idToken)
         if (userInfo.idToken) {
-            try {                
+            try {
                 const { data: session, error } = await supabase.auth.signInWithIdToken({
                     provider: "google",
                     token: userInfo.idToken
@@ -34,9 +35,9 @@ const SyncBaseCloud = () => {
                 if (!error) setIsSyncOn()
             } catch (error: any) {
                 console.log('Ошибка:', error)
-    
-            }              
-            
+
+            }
+
         } else console.log('Нет токена')
     }
     //isSyncBaseOn ? signIn(userInfo) : signOut()

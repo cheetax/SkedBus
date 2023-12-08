@@ -7,7 +7,7 @@ export interface ContextProviderProps {
     children: ReactNode
 }
 
-export type Func<T> = (t: T ) => T | void
+export type Func<T extends object> = (props: T) => any
 
 export type OdometerItem = {
     odometerStart: number  //спидометр старт
@@ -24,7 +24,7 @@ export type Item = {
     priceFuel: number,
     averageFuel: number,
     proceeds: number, //выручка
-    profit: number , //доход
+    profit: number, //доход
     profitPerOdometer: number, //доход на километр
     odometer: Odometer,     //Данные о пробеге
     expenses: number,     //затраты

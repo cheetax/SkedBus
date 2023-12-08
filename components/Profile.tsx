@@ -68,51 +68,17 @@ const LoginView = (props: LoginViewProps) => {
 
 const FormProfile = ({ navigation }: Props) => {
 
-    const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn } = useUserContext()
+    const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn, signIn, signOut } = useUserContext()
     // const [userInfo, setUserInfo] = useState<User>(),
     const theme = useTheme()
 
-    GoogleSignin.configure({
-        scopes: [
-            //'https://www.googleapis.com/auth/drive.readonly',
-            // 'https://www.googleapis.com/auth/drive.appdata'
-        ], // what API you want to access on behalf of the user, default is email and profile
-        webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
-    })
-
-    const signIn = async () => {
-        //setUser({ name: 'Дмитрий Гребенев', email: 'dmitriy.grebenev@gmail.com', avatar: 'https://photo-pict.com/wp-content/uploads/2019/05/kartinki-dlya-stima-12.jpg' })
-
-        try {
-            await GoogleSignin.hasPlayServices();
-            const user = await GoogleSignin.signIn();
-            setUser(user);
-            //console.log(user.idToken)
-        } catch (error: any) {
-            console.log(error)
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-            } else {
-                // some other error happened
-            }
-        }
-    }
-    const signOut = async () => {
-        try {
-            const userSignOut = await GoogleSignin.signOut();
-            //console.log(userSignOut)
-            if (!userSignOut) {
-                if (isSyncBaseOn) setIsSyncOn()
-                deleteUser()
-            }; // Remember to remove the user from your app's state as well
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    // GoogleSignin.configure({
+    //     scopes: [
+    //         //'https://www.googleapis.com/auth/drive.readonly',
+    //         // 'https://www.googleapis.com/auth/drive.appdata'
+    //     ], // what API you want to access on behalf of the user, default is email and profile
+    //     webClientId: '972891890305-2jf1bn92gqhg84nqq517otlscsrj29mu.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access. 
+    // })
 
     //console.log(theme.dark)
     return (
@@ -132,7 +98,7 @@ const FormProfile = ({ navigation }: Props) => {
             {userInfo.idToken ?
                 <ProfileView
                     user={userInfo}
-                    onPress={signOut}
+                    onPress={() => signOut()}
                     isSyncBaseOn={isSyncBaseOn}
                     onSyncBaseOn={setIsSyncOn} /> :
                 <LoginView onPress={() => signIn()} />
