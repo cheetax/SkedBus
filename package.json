@@ -1,5 +1,5 @@
 {
-  "name": "calccost",
+  "name": "skedbus",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^19.0.0",
-    "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-native-google-signin/google-signin": "^10.1.1",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "^6.6.3",
@@ -25,7 +25,6 @@
     "@types/jest": "^29.5.8",
     "@types/node": "^20.9.0",
     "@types/react-dom": "~18.0.10",
-    "d3": "^7.8.5",
     "eas-cli": "^5.9.0",
     "expo": "^49.0.9",
     "expo-auth-session": "~5.0.2",

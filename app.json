@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Accounting for taxi driver's",
-    "slug": "CalcCost",
+    "name": "Sked Bus",
+    "slug": "SkedBus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "CalcCost",
+    "scheme": "skedbus",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
