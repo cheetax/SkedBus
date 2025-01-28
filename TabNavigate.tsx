@@ -1,6 +1,6 @@
 import React from "react";
 import List from "./components/List";
-import ChartView from "./components/ChartView";
+// import ChartView from "./components/ChartView";
 import { Appbar, Text, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
@@ -55,7 +55,7 @@ const TabNavigate = ({ navigation }: Props) => {
                         focus: () => setScreen('main')
                     }}
                 />
-                <Tab.Screen
+                {/* <Tab.Screen
 
                     name="Chart"
                     component={ChartView}
@@ -68,7 +68,7 @@ const TabNavigate = ({ navigation }: Props) => {
                     listeners={{
                         focus: () => setScreen('chart')
                     }}
-                />
+                /> */}
             </Tab.Navigator>
         </View>
 
