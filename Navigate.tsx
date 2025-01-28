@@ -20,15 +20,16 @@ import { enableLayoutAnimations } from 'react-native-reanimated';
 import { RootStackParamList } from './typesNavigation';
 
 
-
 const Stack = createDrawerNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootStackParamList>();
 enableLayoutAnimations(false);
 
 
 const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
+
     drawerContent={(props) => <DrawerItem {...props} />}
 >
+
     <Stack.Screen
         name="Main"
         component={Main}
@@ -39,6 +40,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         component={FormNavigate}
         options={{ headerShown: false }}
     />
+
     <Stack.Screen
         name="FormProfile"
         component={FormProfile}
