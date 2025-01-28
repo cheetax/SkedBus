@@ -7,12 +7,12 @@ import { ContextProviderProps, Func, Item, OdometerItem, Settings } from "./mode
 
 interface ItemContext {
     item: Item,
-    getItem: Func<string>,
+    getItem: Func<{ key: string }>,
     appliedOdometer: Func<OdometerItem>,
     itemOdometer: OdometerItem,
-    getItemOdometer: Func<string>,
+    getItemOdometer: Func<{ key: string }>,
     listOdometer?: OdometerItem[],
-    deleteOdometer: Func<string>,
+    deleteOdometer: Func<{ key: string }>,
     appliedItem: Func<Item>,
     appliedSettings: Func<Settings>,
 }
@@ -23,13 +23,15 @@ const itemDefault: Item = {
     averageFuel: 0,
     proceeds: 0, //выручка
     profit: 0, //доход
-    profitPerOdometer: '-', //доход на километр
+    profitPerOdometer: 0, //доход на километр
     odometer: {
         resultOdometer: 0,
         data: []
     },     //пробег
     expenses: 0,     //затраты
-    key: ''
+    key: '',
+    id: '',
+    isUpdate: false
 }
 
 const itemOdometerDefault = {
@@ -44,9 +46,9 @@ const ContextItem = createContext<ItemContext>({
     appliedItem: () => { },
     appliedSettings: () => { },
     getItem: () => { },
-    deleteOdometer: () => { }, 
-    getItemOdometer: () =>{},
-    appliedOdometer: () => {}
+    deleteOdometer: () => { },
+    getItemOdometer: () => { },
+    appliedOdometer: () => { }
 });
 
 const keyGenerator = () => (Math.random() * 10000000000000000).toString();
@@ -83,7 +85,7 @@ export const useCreateItemContext = () => {
     const [itemOdometer, setItemOdometer] = useState<OdometerItem>(newItemOdometer())
     const [listOdometer, setListOdometer] = useState<OdometerItem[]>([])
 
-    const getItem: Func<string> = key => {
+    const getItem: Func<{ key: string }> = ({ key }) => {
         // console.log(key)
         setItem((Item) => {
             const i = key !== '' ? listOfItems?.filter(list => list.key === key)[0] : newItem()
@@ -92,78 +94,95 @@ export const useCreateItemContext = () => {
         })
     }
 
-
     const calcProfit = (item: Item) => {
         const expenses = Math.round(item.averageFuel * item.priceFuel / 100 * item.odometer.resultOdometer)
         const profit = item.proceeds - expenses
-        const profitPerOdometer = item.odometer.resultOdometer !== 0 ? round(profit / item.odometer.resultOdometer) : '-'
+        const profitPerOdometer = item.odometer.resultOdometer !== 0 ? round(profit / item.odometer.resultOdometer) : 0
         return { expenses, profit, profitPerOdometer }
     }
 
-    const getItemOdometer = (key: string) => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
+    const getItemOdometer: Func<{ key: string }> = ({ key }) => setItemOdometer(key !== '' ? item.odometer.data.filter(list => list.key === key)[0] : newItemOdometer())
 
     const appliedSettings = (i: Settings) => {
         saveSettings(i)
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                averageFuel: i.averageFuel,
-                priceFuel: i.priceFuel,
-            });
-            return {
-                ...item,
-                ...i,
-                ...calc
-            }
+        appliedItem({
+            ...item,
+            ...i
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         averageFuel: i.averageFuel,
+        //         priceFuel: i.priceFuel,
+        //     });
+        //     return {
+        //         ...item,
+        //         ...i,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
     }
 
+    const odometer = (newList: OdometerItem[]) => ({
+        resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        data: newList
+    })
 
-    const appliedOdometer = (i: OdometerItem) => setListOdometer(list => {
+    const appliedOdometer : Func<OdometerItem> = (i) => setListOdometer(list => {
         const newList = [
             i,
             ...list.filter(list => list.key != i.key)
         ]
-        const odometer = {
-            resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
-            data: newList
-        }
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                odometer
-            });
-            return {
-                ...item,
-                odometer,
-                ...calc
-            }
+        // const odometer = {
+        //     resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        //     data: newList
+        // }
+        appliedItem({
+            ...item,
+            odometer: odometer(newList)
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         odometer
+        //     });
+        //     return {
+        //         ...item,
+        //         odometer,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
         return newList
     })
 
-    const deleteOdometer = (key: string) => setListOdometer(list => {
+    const deleteOdometer: Func<{ key: string }> = ({ key }) => setListOdometer(list => {
         const newList = [
             ...list.filter(list => list.key != key)
         ]
-        const odometer = {
-            resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
-            data: newList
-        }
-
-        setItem(item => {
-            const calc = calcProfit({
-                ...item,
-                averageFuel: item.averageFuel,
-                priceFuel: item.priceFuel,
-                odometer
-            });
-            return {
-                ...item,
-                odometer,
-                ...calc
-            }
+        // const odometer = {
+        //     resultOdometer: newList.length !== 0 ? newList.reduce((val, item) => val + (item.odometerFinish - item.odometerStart), 0) : 0,
+        //     data: newList
+        // }
+        appliedItem({
+            ...item,
+            odometer: odometer(newList)
         })
+        // setItem(item => {
+        //     const calc = calcProfit({
+        //         ...item,
+        //         averageFuel: item.averageFuel,
+        //         priceFuel: item.priceFuel,
+        //         odometer
+        //     });
+        //     return {
+        //         ...item,
+        //         odometer,
+        //         ...calc,
+        //         isUpdate: true
+        //     }
+        // })
         return newList
     })
 
@@ -176,7 +195,8 @@ export const useCreateItemContext = () => {
         });
         return {
             ...i,
-            ...calc
+            ...calc,
+            isUpdate: true
         }
     })
 

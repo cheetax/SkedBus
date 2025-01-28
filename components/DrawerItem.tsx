@@ -1,20 +1,44 @@
 import React from "react";
-import { StatusBar } from 'react-native';
-import { Drawer, Switch, Card } from 'react-native-paper';
+import { StatusBar, View, StyleSheet, Image } from 'react-native';
+import { Drawer, Switch, Card, Avatar, useTheme, Text, Button } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
+import { useUserContext } from "../providers/UserContexProvider";
+import { DrawerContentComponentProps } from "@react-navigation/drawer";
 
-const DrawerItem = () => {
+const DrawerItem = ({ navigation }: DrawerContentComponentProps) => {
     const { toggleTheme, isDarkTheme } = useAppContext();
+    const { userInfo } = useUserContext();
+    const theme = useTheme()
+
     return (
         <Card
             style={{ height: '100%', paddingTop: StatusBar.currentHeight }}
         >
+            <View style={{
+                marginBottom: 10,
+                paddingHorizontal: 24,
+                paddingVertical: 16,
+                backgroundColor: theme.colors.surfaceVariant,
+            }}
+            >
+                <View style={Styles.stackRow} >
+                    <Avatar.Image source={{ uri: userInfo.user.photo ?? '' }} style={{ backgroundColor: theme.colors.surfaceVariant }} />
+                    <Button
+                        mode="contained"
+                        onPress={() => navigation.navigate('FormProfile')}
+                    >{userInfo.idToken ? 'Профиль' : 'Войти '}</Button>
+                </View>
+                <Text variant="bodyMedium" >{userInfo.user.name}</Text>
+                <Text variant="bodyMedium" >{userInfo.user.email}</Text>
+            </View>
+
             <Drawer.Item
                 onPress={toggleTheme}
                 label="Темная тема"
                 right={() => <Switch value={isDarkTheme} onChange={toggleTheme} />}
             >
             </Drawer.Item>
+
             <Drawer.Item
                 label="О приложении"
             />
@@ -22,3 +46,13 @@ const DrawerItem = () => {
     )
 }
 export default DrawerItem
+
+const Styles = StyleSheet.create({
+    stackRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8
+        //flex: 1
+    }
+})

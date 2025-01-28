@@ -3,12 +3,16 @@ import React, { FC } from "react";
 import MainStack from './Navigate';
 import { AppContextProvider } from "./providers/AppContextProvider";
 import { ScrollContextProvider } from "./providers/ScrollContextProvider";
+import { UserContextProvider } from './providers/UserContexProvider';
 
-const App : FC = () => {
+const App: FC = () => {
   return (
     <AppContextProvider>
       <ScrollContextProvider>
-        <MainStack />
+        <UserContextProvider>
+          <MainStack />
+        </UserContextProvider>
+
       </ScrollContextProvider>
     </AppContextProvider>
   );

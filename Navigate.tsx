@@ -2,11 +2,12 @@ import 'react-native-gesture-handler'
 import React from "react";
 import { Platform } from "react-native";
 import Main from "./TabNavigate";
-//import Main from './components/List'
 import Form from "./components/Form";
 import ListOdometer from "./components/ListOdometer";
 import FormOdometer from "./components/FormOdometer";
 import FormExpenses from './components/FormExpenses';
+import FormProfile from './components/Profile';
+import DrawerItem from "./components/DrawerItem";
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from 'expo-navigation-bar';
@@ -17,7 +18,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from "@react-navigation/native";
 import { enableLayoutAnimations } from 'react-native-reanimated';
 import { RootStackParamList } from './typesNavigation';
-import DrawerItem from "./components/DrawerItem";
 
 
 const Stack = createDrawerNavigator<RootStackParamList>();
@@ -26,7 +26,10 @@ enableLayoutAnimations(false);
 
 
 const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
-    drawerContent={() => <DrawerItem />}>
+
+    drawerContent={(props) => <DrawerItem {...props} />}
+>
+
     <Stack.Screen
         name="Main"
         component={Main}
@@ -37,18 +40,29 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         component={FormNavigate}
         options={{ headerShown: false }}
     />
+
+    <Stack.Screen
+        name="FormProfile"
+        component={FormProfile}
+        options={{ headerShown: false }}
+    />
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
-            //backgroundColor: theme.colors.surface,
+            backgroundColor: 'transparent',
             width: '85%',
             flex: 1
         },
     }}
-    drawerContent={() => <DrawerItem />}>
+    drawerContent={(props) => <DrawerItem {...props} />}>
     <Stack.Screen
         name="Main"
         component={Main}
+        options={{ headerShown: false }}
+    />
+    <Stack.Screen
+        name="FormProfile"
+        component={FormProfile}
         options={{ headerShown: false }}
     />
     <Stack.Screen

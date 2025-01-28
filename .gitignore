@@ -10,8 +10,6 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-android/
-
 # macOS
 .DS_Store
 
@@ -26,3 +24,5 @@ node_modules
 node_modules
 node_modules
 node_modules
+
+#google-services.json

@@ -19,6 +19,7 @@ import { round, ZeroToString } from "../helpers";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
 import type { Item } from "../providers/models/Models";
+import { insertBase } from "./DriveSaveProvider";
 
 
 registerTranslation('ru', {
@@ -126,17 +127,14 @@ export default function Form({ route, navigation }: Props) {
   const { item, getItem, appliedItem } = useItemContext();
   const { appliedListOfItems } = useAppContext();
   const [loaded, setLoaded] = useState(false);
-  const nameForma = route.params.key !== '' ? 'Редактирование смены' : 'Новая смена'
+  const key = route.params.key;
+  const nameForma = key !== '' ? 'Редактирование смены' : 'Новая смена'
   //const theme = useTheme()
-
-  const get = async (key: string) => {
-    //console.log(navigation)
-    await getItem(key)
-    setLoaded(true)
-  }
-
+  
   useEffect(() => {
-    get(route.params.key)
+    setLoaded(false)
+    getItem(key)
+    setLoaded(true)
   }, [route])
 
   const formik = useFormik({
@@ -145,9 +143,11 @@ export default function Form({ route, navigation }: Props) {
     validateOnChange: false,
     onSubmit: values => {
       appliedListOfItems(values)
+      insertBase(values)
       navigation.navigate({
         name: 'List', key: '',
       });
+      setLoaded(false)
     }
   });
 
@@ -165,7 +165,8 @@ export default function Form({ route, navigation }: Props) {
           icon='close'
           onPress={() => {
             getItem('')
-            navigation.goBack()
+            setLoaded(false)
+            navigation.goBack()            
           }}
         />
         <Appbar.Content

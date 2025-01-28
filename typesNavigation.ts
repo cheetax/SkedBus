@@ -7,6 +7,8 @@ export type RootStackParamList = {
   ListOdometer: {name?: string, key?: string, params?: {key: string}}
   List: {name: string,};
   Chart: {name?: string, params?: {key: string}};
+  FormProfile: {name: string};
+  DrawerItem: {name: string};
 };
 
 export type ButtonTabParamList = {
