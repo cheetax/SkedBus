@@ -5,10 +5,10 @@ import { View, StyleSheet } from 'react-native';
 //import { useFormik } from "formik";
 import { Button, Appbar, Text, useTheme, MD3Theme as Theme, Avatar, Switch } from 'react-native-paper';
 //import { InputField } from "./InputField";
-import { useUserContext } from "../providers/UserContexProvider";
+//import { useUserContext } from "../providers/UserContexProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { RootStackParamList } from "../typesNavigation";
-import { GoogleSignin, GoogleSigninButton, statusCodes, User } from "@react-native-google-signin/google-signin";
+//import { GoogleSignin, GoogleSigninButton, statusCodes, User } from "@react-native-google-signin/google-signin";
 import SyncBaseCloud from "./DriveSaveProvider";
 
 
@@ -18,57 +18,57 @@ interface LoginViewProps {
     onPress: () => void
 }
 
-interface ProfileViewProps {
-    user: User,
-    isSyncBaseOn: boolean,
-    onSyncBaseOn: () => void,
-    theme?: Theme
-    onPress?: () => void
-}
-const ProfileView = (props: ProfileViewProps) => {
-    const {
-        user,
-        theme = useTheme(),
-        onPress,
-        isSyncBaseOn,
-        onSyncBaseOn
-    } = props
+// interface ProfileViewProps {
+//     user: User,
+//     isSyncBaseOn: boolean,
+//     onSyncBaseOn: () => void,
+//     theme?: Theme
+//     onPress?: () => void
+// }
+// const ProfileView = (props: ProfileViewProps) => {
+//     const {
+//         user,
+//         theme = useTheme(),
+//         onPress,
+//         isSyncBaseOn,
+//         onSyncBaseOn
+//     } = props
 
-    return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-        <Avatar.Image
-            source={{ uri: user.user.photo ?? '' }}
-            style={{ backgroundColor: theme?.colors.surfaceVariant, marginBottom: 16 }}
-            size={160}
-        />
-        <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
-        <Text variant="bodyMedium" >{user.user.email}</Text>
-        {/* <View style={Style.stackRow}>
-            <Text variant="bodyMedium" >Синхронизация с облаком</Text>
-            <Switch value={isSyncBaseOn} onValueChange={onSyncBaseOn} />
-        </View> */}
-        <SyncBaseCloud/>
-        <Button mode="contained" style={{ marginTop: 16 }} onPress={props.onPress} >Выйти </Button>
-        {/* <Button mode="contained" onPress={() => GetFiles(user)}>+</Button> */}
-    </View>
-}
+//     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+//         <Avatar.Image
+//             source={{ uri: user.user.photo ?? '' }}
+//             style={{ backgroundColor: theme?.colors.surfaceVariant, marginBottom: 16 }}
+//             size={160}
+//         />
+//         <Text style={{ marginBottom: 4 }} variant="titleLarge" >{user.user.name}</Text>
+//         <Text variant="bodyMedium" >{user.user.email}</Text>
+//         {/* <View style={Style.stackRow}>
+//             <Text variant="bodyMedium" >Синхронизация с облаком</Text>
+//             <Switch value={isSyncBaseOn} onValueChange={onSyncBaseOn} />
+//         </View> */}
+//         <SyncBaseCloud/>
+//         <Button mode="contained" style={{ marginTop: 16 }} onPress={props.onPress} >Выйти </Button>
+//         {/* <Button mode="contained" onPress={() => GetFiles(user)}>+</Button> */}
+//     </View>
+// }
 
 const LoginView = (props: LoginViewProps) => {
 
     const theme = useTheme()
 
     return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <GoogleSigninButton
+        {/* <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={theme.dark ? GoogleSigninButton.Color.Dark : GoogleSigninButton.Color.Light}
             onPress={props.onPress}
         //disabled={this.state.isSigninInProgress}
-        />
+        /> */}
     </View>
 }
 
 const FormProfile = ({ navigation }: Props) => {
 
-    const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn, signIn, signOut } = useUserContext()
+   // const { userInfo, setUser, deleteUser, isSyncBaseOn, setIsSyncOn, signIn, signOut } = useUserContext()
     // const [userInfo, setUserInfo] = useState<User>(),
     const theme = useTheme()
 
@@ -95,14 +95,14 @@ const FormProfile = ({ navigation }: Props) => {
                 />
             </Appbar.Header>
 
-            {userInfo.idToken ?
+            {/* {userInfo.idToken ?
                 <ProfileView
                     user={userInfo}
                     onPress={() => signOut()}
                     isSyncBaseOn={isSyncBaseOn}
                     onSyncBaseOn={setIsSyncOn} /> :
                 <LoginView onPress={() => signIn()} />
-            }
+            } */}
 
         </View>
     )
