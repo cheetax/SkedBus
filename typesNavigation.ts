@@ -4,14 +4,14 @@ export type RootStackParamList = {
   FormNavigate: {name?: string, screen: string, initial: boolean, params?: {key: string}}
   FormOdometer: {name?: string, key:string}
   FormExpenses: {name: string}
-  ListOdometer: {name?: string, key?: string, params?: {key: string}}
-  List: {name: string,};
+  Maps: {name?: string, key?: string, params?: {key: string}}
+  Sheduler: {name: string,};
   Chart: {name?: string, params?: {key: string}};
   FormProfile: {name: string};
   DrawerItem: {name: string};
 };
 
 export type ButtonTabParamList = {
-  List: {name: string, key: string, component: {}};
-  Chart: {name?: string, params?: {key: string}};
+  Sheduler: {name: string, key: string, component: {}};
+  Maps: {name?: string, params?: {key: string}};
 }

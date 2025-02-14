@@ -1,25 +1,20 @@
 import React, { useState, useEffect, SetStateAction } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ContextProviderProps, Func, Item, Settings } from "./models/Models";
+import { ContextProviderProps, Func, Settings, Base, BaseType, Schedules, SelectMarker } from "./models/Models";
+import { Supabase } from "./Supabase";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
 interface AppContext {
-    listOfItems: Item[],
-    setListOfItems?: Func<Item[]>,
+    base: Base,
+    selectMarker: SelectMarker,
+    setSelectMarker: Func<SelectMarker>,
     isDarkTheme?: boolean,
     toggleTheme?: () => void,
     setIsDarkTheme?: Func<boolean>,
-    appliedListOfItems: Func<Item>,
-    deleteItemOfListOfItems: Func<string>,
+    getDataToBase: () => void,
     settings: Settings,
     saveSettings: Func<Settings>
-}
-
-type StorageData = {
-    listOfItems: Item[];
-    settings: Settings;
-    isDarkTheme: boolean;
 }
 
 const settingsDef: Settings = {
@@ -27,12 +22,19 @@ const settingsDef: Settings = {
     averageFuel: 9.5
 }
 
-const Context = React.createContext<AppContext>({ 
-    listOfItems: [], 
-    settings: settingsDef, 
-    saveSettings: (s) => {},
-    appliedListOfItems: ()=> {},
-    deleteItemOfListOfItems: () => {}
+class StorageData {
+    base: Base = new Base();
+    settings: Settings = settingsDef;
+    isDarkTheme: boolean = false;
+}
+
+const Context = React.createContext<AppContext>({
+    base: new Base,
+    selectMarker: undefined,
+    setSelectMarker: (props: SelectMarker) : void => {},
+    settings: settingsDef,
+    getDataToBase: () => { },
+    saveSettings: (s) => { }
 });
 
 export const AppContextProvider = ({ children }: ContextProviderProps) => {
@@ -47,56 +49,73 @@ export const useAppContext = () => {
 }
 
 export const useCreateAppContext = () => {
-    const [listOfItems, setListOfItems] = useState<Item[]>([]);
+
+    const [base, setBase] = useState<Base>(new Base());
     const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const [settings, setSettings] = useState<Settings>(settingsDef)
+
+    const [selectMarker, setSelectMarker] = useState<SelectMarker>(undefined)
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
 
     const showData = async () => {
-        const result = await AsyncStorage.getItem('dataCalcCost');
+        const result = await AsyncStorage.getItem('dataSkedBus');
+        const resultBase = await getDataToBase()
+        let storageData = new StorageData()
         if (result) {
-            const storageData: StorageData = JSON.parse(result)
-            setListOfItems(storageData.listOfItems.map(item => {
-                item.date = dayjs(item.date).toDate()
-                return item
-            }));
+            storageData = JSON.parse(result)
+            //setBase(storageData.base);
             setSettings(storageData.settings);
             setIsDarkTheme(storageData.isDarkTheme)
         }
+        (resultBase) ? setBase(resultBase) : setBase(storageData.base)
+    }
+
+    const getBase = async (key: string) => {
+        const { data, error } = await Supabase
+            .from(key)
+            .select(!(key === 'Schedules') ? '*' : 'id, time, routeName:Routes (name), busStopName: BusStops (name)'
+            )
+        //console.log(2, error)
+        return (!error) ? data : null
+    }
+
+    const getDataToBase = async (): Promise<Base | null> => {
+        let base = new Base()
+        let error: boolean = false
+        for (let table in base) {
+            const result = await getBase(table)
+            if (!result) return null
+            //console.log(result)
+            base = { ...base, [table]: result }
+        }
+        return base
     }
 
     useEffect(() => {
         showData();
+        getDataToBase();
     }, []);
 
     const setData = (data: StorageData) => {
-        AsyncStorage.setItem('dataCalcCost', JSON.stringify(data));
+        AsyncStorage.setItem('dataSkedBus', JSON.stringify(data));
     }
 
     useEffect(() => {
-        setData({ listOfItems, settings, isDarkTheme });
-    }, [listOfItems, isDarkTheme, settings]);
-
-    const appliedListOfItems = (i: Item) => setListOfItems(list => [
-        i,
-        ...list.filter(list => list.key != i.key)
-    ].sort((a, b) => dayjs(b.date).diff(dayjs(a.date)))
-    );
-
-    const deleteItemOfListOfItems = (key: string) => setListOfItems(list => [
-        ...list.filter(listOfItems => listOfItems.key != key)
-    ])
+        //console.log(1, base)
+        setData({ base, settings, isDarkTheme });
+    }, [base, isDarkTheme, settings]);
 
     const saveSettings = (s: Settings) => setSettings(s)
 
     return {
-        listOfItems,
+        base,
+        selectMarker,
+        setSelectMarker,
         isDarkTheme,
         toggleTheme,
-        appliedListOfItems,
-        deleteItemOfListOfItems,
         settings,
+        getDataToBase,
         saveSettings
     };
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import List from "./components/List";
-// import ChartView from "./components/ChartView";
+import Sheduler from "./components/Sheduler";
+import Maps from "./components/Maps";
 import { Appbar, Text, useTheme } from 'react-native-paper';
 import { View, StyleSheet } from "react-native";
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation'
@@ -32,44 +32,12 @@ const TabNavigate = ({ navigation }: Props) => {
                     onPress={() => navigation.openDrawer()} />
                 <Appbar.Content title={
                     <Text
-                        variant='titleLarge'>Учет работы таксиста
+                        variant='titleLarge'>Автобусы Уралхим
                     </Text>}
                 />
             </Appbar.Header>
 
-            <Tab.Navigator
-                initialRouteName="List"
-                shifting={false}
-                sceneAnimationEnabled={true}
-            >
-                <Tab.Screen
-                    name="List"
-                    component={List}
-                    options={{
-                        tabBarIcon: ({ focused, color }) => (
-                            <MaterialCommunityIcons name={focused ? "home" : 'home-outline'} color={color} size={26} />
-                        ),
-                        tabBarLabel: 'Смены',
-                    }}
-                    listeners={{
-                        focus: () => setScreen('main')
-                    }}
-                />
-                {/* <Tab.Screen
-
-                    name="Chart"
-                    component={ChartView}
-                    options={{
-                        tabBarIcon: ({ focused, color }) => (
-                            <MaterialCommunityIcons name={focused ? 'equalizer' : 'equalizer-outline'} color={color} size={26} />
-                        ),
-                        tabBarLabel: 'Статистика',
-                    }}
-                    listeners={{
-                        focus: () => setScreen('chart')
-                    }}
-                /> */}
-            </Tab.Navigator>
+            <Maps />
         </View>
 
     );

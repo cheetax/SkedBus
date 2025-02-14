@@ -2,11 +2,8 @@ import 'react-native-gesture-handler'
 import React from "react";
 import { Platform } from "react-native";
 import Main from "./TabNavigate";
-import Form from "./components/Form";
-import ListOdometer from "./components/ListOdometer";
-import FormOdometer from "./components/FormOdometer";
-import FormExpenses from './components/FormExpenses';
-import FormProfile from './components/Profile';
+//import Form from "./components/Form";
+import Maps from "./components/Maps";
 import DrawerItem from "./components/DrawerItem";
 import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
@@ -35,7 +32,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         component={Main}
         options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
         name="FormNavigate"
         component={FormNavigate}
         options={{ headerShown: false }}
@@ -45,7 +42,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         name="FormProfile"
         component={FormProfile}
         options={{ headerShown: false }}
-    />
+    /> */}
 </Stack.Navigator> : <Drawer.Navigator
     screenOptions={{
         drawerStyle: {
@@ -60,7 +57,7 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         component={Main}
         options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
         name="FormProfile"
         component={FormProfile}
         options={{ headerShown: false }}
@@ -69,12 +66,12 @@ const Navigator = () => Platform.OS === 'web' ? <Stack.Navigator
         name="FormNavigate"
         component={FormNavigate}
         options={{ headerShown: false }}
-    />
+    /> */}
 </Drawer.Navigator>
 
 const FormNavigate = () => <ItemContextProvider>
     <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
             name="Form"
             component={Form}
             options={{ headerShown: false }}
@@ -88,10 +85,10 @@ const FormNavigate = () => <ItemContextProvider>
             name="FormExpenses"
             component={FormExpenses}
             options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen
-            name="ListOdometer"
-            component={ListOdometer}
+            name="Maps"
+            component={Maps}
             options={{ headerShown: false }}
         />
     </Stack.Navigator>

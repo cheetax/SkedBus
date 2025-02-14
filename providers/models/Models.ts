@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
-import { Database } from './Supabase'
+import { Database } from './database.types'
+import { ImageSourcePropType } from 'react-native';
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
@@ -7,46 +8,41 @@ export interface ContextProviderProps {
     children: ReactNode
 }
 
-export type Func<T extends object> = (props: T) => any
-
-export type OdometerItem = {
-    odometerStart: number  //спидометр старт
-    odometerFinish: number //спидометр финиш
-    key: string
-}
-export type Odometer = {
-    resultOdometer: number
-    data: OdometerItem[]
-}
-
-export type Item = {
-    date: Date //dayjs().format('DD.MM.YY'),
-    priceFuel: number,
-    averageFuel: number,
-    proceeds: number, //выручка
-    profit: number, //доход
-    profitPerOdometer: number, //доход на километр
-    odometer: Odometer,     //Данные о пробеге
-    expenses: number,     //затраты
-    key: string,
-    isUpdate: boolean
-    id: string
-}
+export type Func<T extends object | string | boolean | number | undefined> = (props: T) => any
 
 export type Settings = {
     priceFuel: number,
     averageFuel: number
 }
 
-export type User = {
-    name: string,
-    email: string,
-    avatar: string
+export type SelectMarker = number | undefined;
+
+export type MarkerType = {
+    scale: number,
+    source: ImageSourcePropType
 }
 
+export type User = {}
+
 type Tables = Database['public']['Tables']
-export type WorkingShifts = Tables['workingShifts']['Row']
-export type Odometers = Tables['odometers']['Row']
-export type OdometerItems = Tables['odometerItems']['Row']
+export type Buses = Tables['Buses']['Row'] 
+export type BusInRoute = Tables['BusInRoute']['Row']
+export type BusStops = Tables['BusStops']['Row']
+export type Routes = Tables['Routes']['Row']
+export type Schedules = Tables['Schedules']['Row'] & { routeName: {name: string | null}, busStopName: {name: string | null}}
 
+export type BaseType = {
+    Buses: Buses[];
+    BusInRoute: BusInRoute[];
+    BusStops: BusStops[] ;
+    Routes: Routes[] ;
+    Schedules: Schedules[];
+}
 
+export class Base {
+    Buses: Buses[] = [];
+    BusInRoute: BusInRoute[] = [];
+    BusStops: BusStops[] = [];
+    Routes: Routes[] = [];
+    Schedules: Schedules[] = [];
+}
