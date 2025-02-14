@@ -8,7 +8,7 @@ import 'dayjs/locale/ru';
 interface AppContext {
     base: Base,
     selectMarker: SelectMarker,
-    setSelectMarker: Func<SelectMarker>,
+    onSelectMarker: Func<SelectMarker>,
     isDarkTheme?: boolean,
     toggleTheme?: () => void,
     setIsDarkTheme?: Func<boolean>,
@@ -31,7 +31,7 @@ class StorageData {
 const Context = React.createContext<AppContext>({
     base: new Base,
     selectMarker: undefined,
-    setSelectMarker: (props: SelectMarker) : void => {},
+    onSelectMarker: (props: SelectMarker) : void => {},
     settings: settingsDef,
     getDataToBase: () => { },
     saveSettings: (s) => { }
@@ -55,6 +55,8 @@ export const useCreateAppContext = () => {
     const [settings, setSettings] = useState<Settings>(settingsDef)
 
     const [selectMarker, setSelectMarker] = useState<SelectMarker>(undefined)
+
+    const onSelectMarker = (select : SelectMarker) => setSelectMarker((select == selectMarker) ? undefined : select)
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
 
@@ -111,7 +113,7 @@ export const useCreateAppContext = () => {
     return {
         base,
         selectMarker,
-        setSelectMarker,
+        onSelectMarker,
         isDarkTheme,
         toggleTheme,
         settings,

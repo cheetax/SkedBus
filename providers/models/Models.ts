@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import { Database } from './database.types'
 import { ImageSourcePropType } from 'react-native';
 
@@ -19,7 +19,8 @@ export type SelectMarker = number | undefined;
 
 export type MarkerType = {
     scale: number,
-    source: ImageSourcePropType
+    //source: ImageSourcePropType
+    source: ReactElement
 }
 
 export type User = {}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, NativeSyntheticEvent } from 'react-native';
+import { View, StyleSheet, FlatList, NativeSyntheticEvent, Image } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
 import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
@@ -21,13 +21,16 @@ YaMap.init(Token.ymap.key);
 
 //Geolocation.getCurrentPosition((position) => initialPosition = {lat: position.coords.latitude, lon:position.coords.longitude, zoom: 15.5 })
 
+const MarkerView = <Image source={URALCHEMLOGO} />
+
+const SelectMarkerView = <Image source={SELECTBUSSTOP} />
 
 export default function Maps({ navigation }: Props) {
 
   const {
     base,
     selectMarker,
-    setSelectMarker
+    onSelectMarker
   } = useAppContext();
 
   const [initialPosition, setInitialPosition] = useState<InitialRegion>()
@@ -54,7 +57,7 @@ export default function Maps({ navigation }: Props) {
     //map.current?.fitAllMarkers()
   }
 
-  const marker = (index: number, selectMarker: number | undefined): MarkerType => (index == selectMarker) ? { scale: 1, source: SELECTBUSSTOP } : { scale: scale, source: URALCHEMLOGO }
+  const marker = (index: number, selectMarker: number | undefined): MarkerType => (index == selectMarker) ? { scale: 1, source: SelectMarkerView } : { scale: scale, source: MarkerView }
 
   const onCameraPositionChange = (event: NativeSyntheticEvent<CameraPosition>) => {
     const zoom = event.nativeEvent.zoom
@@ -81,8 +84,9 @@ export default function Maps({ navigation }: Props) {
             key={index}
             point={point(rec.locPosition)}
             scale={source.scale}
-            source={source.source}
-            onPress={() => setSelectMarker(index)}
+            //source={source.source}
+            children={source.source}
+            onPress={() => onSelectMarker(index)}
           />
         })}
       </YaMap>
