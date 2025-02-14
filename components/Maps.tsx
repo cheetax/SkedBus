@@ -9,6 +9,7 @@ import { RootStackParamList } from "../typesNavigation";
 import { URALCHEMLOGO, SELECTBUSSTOP } from '../assets/index'
 import YaMap, { CameraPosition, InitialRegion, MapLoaded, Marker } from 'react-native-yamap';
 import { MarkerType } from "@/providers/models/Models";
+import ViewBottomSheet from "./bottomSheet";
 import Geolocation from '@react-native-community/geolocation';
 import Token from '../token.env.json'
 import dayjs from 'dayjs';
@@ -38,7 +39,7 @@ export default function Maps({ navigation }: Props) {
   const [scale, setScale] = useState<number>(0.5)
 
   useEffect(() => {
-      Geolocation.getCurrentPosition((position) => setInitialPosition({ lat: position.coords.latitude, lon: position.coords.longitude, zoom: 15.5 }))
+    Geolocation.getCurrentPosition((position) => setInitialPosition({ lat: position.coords.latitude, lon: position.coords.longitude, zoom: 15.5 }))
   }, []);
 
   //Geolocation.getCurrentPosition((position) => setInitialPosition({lat: position.coords.latitude, lon:position.coords.longitude, zoom: 15.5 }))
@@ -67,7 +68,12 @@ export default function Maps({ navigation }: Props) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <View style={[Styles.main, { backgroundColor: theme.colors.surface }]} >
+    <View style={[
+      Styles.main,
+      {
+       // backgroundColor: theme.colors.surface
+      }
+    ]} >
       <YaMap
         //userLocationIcon={{ uri: 'https://www.clipartmax.com/png/middle/180-1801760_pin-png.png' }}
         initialRegion={initialPosition}
@@ -90,7 +96,7 @@ export default function Maps({ navigation }: Props) {
           />
         })}
       </YaMap>
-
+      < ViewBottomSheet />
     </View >
   );
 }
