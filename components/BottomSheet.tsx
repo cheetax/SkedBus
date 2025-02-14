@@ -23,18 +23,17 @@ export default function ViewBottomSheet() {
     const theme = useTheme();
 
     return (
-        <View style={Styles.main} >
-            <GestureHandlerRootView style={Styles.container}>
-                <BottomSheet
-                    ref={bottomSheetRef}
-                    onChange={handleSheetChanges}
-                >
-                    <BottomSheetView style={Styles.contentContainer}>
-                        <Text>Awesome 🎉</Text>
-                    </BottomSheetView>
-                </BottomSheet>
-            </GestureHandlerRootView>
-            {/* <FlatList
+        <BottomSheet
+            ref={bottomSheetRef}
+            snapPoints={['25%', '75%', '100%']}
+            onChange={handleSheetChanges}
+        >
+            <BottomSheetView style={[Styles.contentContainer]}>
+                {(selectMarker) ? <Text>{base.BusStops[selectMarker].name} </Text> : null}
+            </BottomSheetView>
+        </BottomSheet>
+    )
+    {/* <FlatList
                 //onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
                 data={base.Schedules}
 
@@ -56,8 +55,8 @@ export default function ViewBottomSheet() {
                 }
             >
             </FlatList > */}
-        </View >
-    );
+
+
 }
 
 const Styles = StyleSheet.create({
@@ -69,7 +68,7 @@ const Styles = StyleSheet.create({
         right: 16,
     },
     main: {
-        // flex: 1,
+        flex: 1,
         flexDirection: 'column',
     },
     itemContent: {
@@ -97,5 +96,6 @@ const Styles = StyleSheet.create({
         flex: 1,
         padding: 36,
         alignItems: 'center',
+        
     },
 })

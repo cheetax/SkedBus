@@ -9,10 +9,11 @@ import { RootStackParamList } from "../typesNavigation";
 import { URALCHEMLOGO, SELECTBUSSTOP } from '../assets/index'
 import YaMap, { CameraPosition, InitialRegion, MapLoaded, Marker } from 'react-native-yamap';
 import { MarkerType } from "@/providers/models/Models";
-import ViewBottomSheet from "./bottomSheet";
+import ViewBottomSheet from "./BottomSheet";
 import Geolocation from '@react-native-community/geolocation';
 import Token from '../token.env.json'
 import dayjs from 'dayjs';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 type Props = DrawerScreenProps<RootStackParamList, 'Maps'>
 
@@ -31,7 +32,8 @@ export default function Maps({ navigation }: Props) {
   const {
     base,
     selectMarker,
-    onSelectMarker
+    onSelectMarker,
+    isDarkTheme
   } = useAppContext();
 
   const [initialPosition, setInitialPosition] = useState<InitialRegion>()
@@ -68,16 +70,12 @@ export default function Maps({ navigation }: Props) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <View style={[
-      Styles.main,
-      {
-       // backgroundColor: theme.colors.surface
-      }
-    ]} >
+    <GestureHandlerRootView style={Styles.main}>
       <YaMap
         //userLocationIcon={{ uri: 'https://www.clipartmax.com/png/middle/180-1801760_pin-png.png' }}
         initialRegion={initialPosition}
         ref={map}
+        nightMode={isDarkTheme}
         //onMapLoaded={onMapLoaded}
         onCameraPositionChange={onCameraPositionChange}
         followUser
@@ -96,8 +94,8 @@ export default function Maps({ navigation }: Props) {
           />
         })}
       </YaMap>
-      < ViewBottomSheet />
-    </View >
+      <ViewBottomSheet />
+    </GestureHandlerRootView >
   );
 }
 
@@ -112,7 +110,7 @@ const Styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    flexDirection: 'column',
+    //flexDirection: 'column',
     //backgroundColor: '#f2f2f2',
   },
   item: {
