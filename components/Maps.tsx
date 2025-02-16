@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, NativeSyntheticEvent, Image } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, useTheme, Divider } from 'react-native-paper';
+import { FAB, Text, Card, IconButton, useTheme, Divider,  } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,9 +23,13 @@ YaMap.init(Token.ymap.key);
 
 //Geolocation.getCurrentPosition((position) => initialPosition = {lat: position.coords.latitude, lon:position.coords.longitude, zoom: 15.5 })
 
-const MarkerView = <Image source={URALCHEMLOGO} />
+//const MarkerView = <Image source={URALCHEMLOGO} />
 
-const SelectMarkerView = <Image source={SELECTBUSSTOP} />
+const MarkerView = (props: {select: boolean}) => <View>
+  {(!props.select) ? <Image source={URALCHEMLOGO} /> : <Image source={SELECTBUSSTOP}  />}
+</View>
+
+const SelectMarkerView = <Image source={SELECTBUSSTOP}  />
 
 export default function Maps({ navigation }: Props) {
 
@@ -60,7 +64,7 @@ export default function Maps({ navigation }: Props) {
     //map.current?.fitAllMarkers()
   }
 
-  const marker = (index: number, selectMarker: number | undefined): MarkerType => (index == selectMarker) ? { scale: 1, source: SelectMarkerView } : { scale: scale, source: MarkerView }
+  const marker = (index: number, selectMarker: number | undefined): MarkerType => (index == selectMarker) ? { scale: 1, source: MarkerView({select: index == selectMarker}) } : { scale: scale, source: MarkerView({select: index == selectMarker}) }
 
   const onCameraPositionChange = (event: NativeSyntheticEvent<CameraPosition>) => {
     const zoom = event.nativeEvent.zoom
@@ -70,7 +74,7 @@ export default function Maps({ navigation }: Props) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <GestureHandlerRootView style={Styles.main}>
+    <View style={Styles.main} >
       <YaMap
         //userLocationIcon={{ uri: 'https://www.clipartmax.com/png/middle/180-1801760_pin-png.png' }}
         initialRegion={initialPosition}
@@ -80,7 +84,8 @@ export default function Maps({ navigation }: Props) {
         onCameraPositionChange={onCameraPositionChange}
         followUser
         showUserPosition
-        style={{ flex: 1 }}>
+        //style={{ flex: 1 }}
+        >
         {base.BusStops.map((rec, index) => {
           const source = marker(index, selectMarker)
           //console.log(source)
@@ -95,7 +100,7 @@ export default function Maps({ navigation }: Props) {
         })}
       </YaMap>
       <ViewBottomSheet />
-    </GestureHandlerRootView >
+    </View >
   );
 }
 

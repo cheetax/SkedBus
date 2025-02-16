@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, FlatList, Touchable } from 'react-native';;
 import { FAB, Text, Divider, IconButton, useTheme, Appbar, Menu, TouchableRipple } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
@@ -14,6 +14,11 @@ export default function ViewBottomSheet() {
         selectMarker
     } = useAppContext();
 
+    useEffect(() => {
+        if (selectMarker) bottomSheetRef.current?.snapToIndex(0); else bottomSheetRef.current?.close();
+
+    },[selectMarker])
+
     const bottomSheetRef = useRef<BottomSheet>(null);
 
     const handleSheetChanges = useCallback((index: number) => {
@@ -25,8 +30,9 @@ export default function ViewBottomSheet() {
     return (
         <BottomSheet
             ref={bottomSheetRef}
+            index={-1}
             snapPoints={['25%', '75%', '100%']}
-            onChange={handleSheetChanges}
+            onChange={handleSheetChanges}            
         >
             <BottomSheetView style={[Styles.contentContainer]}>
                 {(selectMarker) ? <Text>{base.BusStops[selectMarker].name} </Text> : null}

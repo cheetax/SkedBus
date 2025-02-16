@@ -19,7 +19,7 @@ export type SelectMarker = number | undefined;
 
 export type MarkerType = {
     scale: number,
-    //source: ImageSourcePropType
+    //source:
     source: ReactElement
 }
 
