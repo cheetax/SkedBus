@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, NativeSyntheticEvent, Image } from 'react-native';
 import { AccordionItem } from "react-native-accordion-list-view";
-import { FAB, Text, Card, IconButton, useTheme, Divider,  } from 'react-native-paper';
+import { FAB, Text, Card, IconButton, useTheme, Divider, } from 'react-native-paper';
 import { useAppContext } from "../providers/AppContextProvider";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -25,11 +25,12 @@ YaMap.init(Token.ymap.key);
 
 //const MarkerView = <Image source={URALCHEMLOGO} />
 
-const MarkerView = (props: {select: boolean}) => <View>
-  {(!props.select) ? <Image source={URALCHEMLOGO} /> : <Image source={SELECTBUSSTOP}  />}
+const MarkerView = (props: { select: boolean }) => <View>
+  {(!props.select) && <Image source={URALCHEMLOGO} />}
+  {(props.select) && <Image source={SELECTBUSSTOP} />}
 </View>
 
-const SelectMarkerView = <Image source={SELECTBUSSTOP}  />
+const SelectMarkerView = <Image source={SELECTBUSSTOP} />
 
 export default function Maps({ navigation }: Props) {
 
@@ -64,8 +65,9 @@ export default function Maps({ navigation }: Props) {
     //map.current?.fitAllMarkers()
   }
 
-  const marker = (index: number, selectMarker: number | undefined): MarkerType => (index == selectMarker) ? { scale: 1, source: MarkerView({select: index == selectMarker}) } : { scale: scale, source: MarkerView({select: index == selectMarker}) }
-
+  const marker = (index: number, selectMarker: number | undefined): MarkerType => 
+    ({...{source: MarkerView({ select: index == selectMarker })}, scale: (index == selectMarker) ? 1 : scale})
+   
   const onCameraPositionChange = (event: NativeSyntheticEvent<CameraPosition>) => {
     const zoom = event.nativeEvent.zoom
     setScale((zoom >= 15.5) ? 0.4 + (Math.floor(event.nativeEvent.zoom - 15.5) * 0.07) : 0)
@@ -74,18 +76,16 @@ export default function Maps({ navigation }: Props) {
   const theme = useTheme();
   //console.log(listOfItems)
   return (
-    <View style={Styles.main} >
+    <View style={{ ...Styles.main }} >
       <YaMap
-        //userLocationIcon={{ uri: 'https://www.clipartmax.com/png/middle/180-1801760_pin-png.png' }}
         initialRegion={initialPosition}
         ref={map}
         nightMode={isDarkTheme}
-        //onMapLoaded={onMapLoaded}
         onCameraPositionChange={onCameraPositionChange}
         followUser
         showUserPosition
-        //style={{ flex: 1 }}
-        >
+      //style={{ flex: 1 }}
+      >
         {base.BusStops.map((rec, index) => {
           const source = marker(index, selectMarker)
           //console.log(source)
@@ -93,7 +93,6 @@ export default function Maps({ navigation }: Props) {
             key={index}
             point={point(rec.locPosition)}
             scale={source.scale}
-            //source={source.source}
             children={source.source}
             onPress={() => onSelectMarker(index)}
           />

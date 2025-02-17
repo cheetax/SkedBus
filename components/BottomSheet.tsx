@@ -17,25 +17,38 @@ export default function ViewBottomSheet() {
     useEffect(() => {
         if (selectMarker) bottomSheetRef.current?.snapToIndex(0); else bottomSheetRef.current?.close();
 
-    },[selectMarker])
+    }, [selectMarker])
 
     const bottomSheetRef = useRef<BottomSheet>(null);
 
     const handleSheetChanges = useCallback((index: number) => {
-        console.log('handleSheetChanges', index);
+        //console.log('handleSheetChanges', index);
     }, []);
 
     const theme = useTheme();
-
+    console.log((!!selectMarker) && base.BusStops[selectMarker].name)
     return (
         <BottomSheet
+            //handleStyle
             ref={bottomSheetRef}
             index={-1}
-            snapPoints={['25%', '75%', '100%']}
-            onChange={handleSheetChanges}            
+            snapPoints={['10%', '50%', '100%']}
+            onChange={handleSheetChanges}
+            overDragResistanceFactor={0}
+            enableDynamicSizing={false}
+            backgroundStyle={{backgroundColor: theme.colors.surface}}
+            //enablePanDownToClose={true}
         >
             <BottomSheetView style={[Styles.contentContainer]}>
-                {(selectMarker) ? <Text>{base.BusStops[selectMarker].name} </Text> : null}
+                <View style={Styles.header}>
+                    {/* {(!!selectMarker) && <Text>{base.BusStops[selectMarker].name}</Text>} */}
+                    {(selectMarker) && <Text theme={theme} variant="titleLarge" ellipsizeMode="tail" numberOfLines={1}>{base.BusStops[selectMarker].name}</Text>}
+                    <IconButton 
+                        mode="contained"
+                        icon={'close'}
+                        theme={theme}
+                    />
+                </View>
             </BottomSheetView>
         </BottomSheet>
     )
@@ -73,9 +86,14 @@ const Styles = StyleSheet.create({
         bottom: 16,
         right: 16,
     },
-    main: {
+    header: {
         flex: 1,
-        flexDirection: 'column',
+        flexWrap: "wrap",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        //marginHorizontal: 16,
+        backgroundColor: 'green'
     },
     itemContent: {
         height: 72,
@@ -100,8 +118,10 @@ const Styles = StyleSheet.create({
     },
     contentContainer: {
         flex: 1,
-        padding: 36,
-        alignItems: 'center',
-        
+        //paddingHorizontal: 24,
+        //paddingTop: -24,
+        //marginTop: -24,
+        //justifyContent: 'space-between',
+        //alignItems: 'center',
     },
 })
