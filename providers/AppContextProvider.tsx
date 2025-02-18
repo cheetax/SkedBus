@@ -31,7 +31,7 @@ class StorageData {
 const Context = React.createContext<AppContext>({
     base: new Base,
     selectMarker: undefined,
-    onSelectMarker: (props: SelectMarker) : void => {},
+    onSelectMarker: (props: SelectMarker): void => { },
     settings: settingsDef,
     getDataToBase: () => { },
     saveSettings: (s) => { }
@@ -56,7 +56,10 @@ export const useCreateAppContext = () => {
 
     const [selectMarker, setSelectMarker] = useState<SelectMarker>(undefined)
 
-    const onSelectMarker = (select : SelectMarker) => setSelectMarker((select == selectMarker) ? undefined : select)
+    const onSelectMarker =  (select: SelectMarker) => {
+        if (selectMarker) setSelectMarker(undefined)
+        if (select != selectMarker) setTimeout(() => setSelectMarker(selectMarker => select), 100)
+    }
 
     const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
 

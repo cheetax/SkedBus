@@ -72,6 +72,11 @@ export default function Maps({ navigation }: Props) {
     const zoom = event.nativeEvent.zoom
     setScale((zoom >= 15.5) ? 0.4 + (Math.floor(event.nativeEvent.zoom - 15.5) * 0.07) : 0)
   }
+
+  const onPressMarker = (index: number) => {
+
+  }
+
   //const { isScrolling, startScroll } = useScrollContext();  
   const theme = useTheme();
   //console.log(listOfItems)
