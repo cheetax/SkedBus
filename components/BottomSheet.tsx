@@ -16,7 +16,7 @@ export default function ViewBottomSheet() {
     } = useAppContext();
 
     useEffect(() => {
-        if (selectMarker) bottomSheetRef.current?.snapToIndex(2); else bottomSheetRef.current?.close();
+        if (selectMarker) bottomSheetRef.current?.snapToIndex(1); else bottomSheetRef.current?.close();
     }, [selectMarker])
 
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -33,7 +33,7 @@ export default function ViewBottomSheet() {
         <BottomSheet
             //handleStyle
             ref={bottomSheetRef}
-            index={2}
+            index={-1}
             snapPoints={['10%', '50%', '100%']}
             onChange={handleSheetChanges}
             overDragResistanceFactor={0}
@@ -56,75 +56,26 @@ export default function ViewBottomSheet() {
             </BottomSheetView>
         </BottomSheet>
     )
-    {/* <FlatList
-                //onScroll={(e) => startScroll(e.nativeEvent.contentOffset.y)}
-                data={base.Schedules}
-
-                renderItem={({ item }) => (
-                    <View>
-                        <TouchableRipple onPress={() => { }}>
-                            <View style={Styles.item} >
-                                <View style={Styles.itemContent} >
-                                    <Text variant="bodyLarge" >Пробег: {item.odometerFinish - item.odometerStart}</Text>
-                                    <View style={Styles.stackRow} >
-                                        <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
-                                        <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableRipple>
-                        <Divider />
-                    </View>)
-                }
-            >
-            </FlatList > */}
-
-
 }
 
 const Styles = StyleSheet.create({
-    fab: {
-        position: 'absolute',
-        zIndex: 1000,
-        alignSelf: 'flex-end',
-        bottom: 16,
-        right: 16,
-    },
+    
     header: {
         //flex: 1,
-        flexWrap: "wrap",
+        //flexWrap: "wrap",
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        //marginBottom: 0,
         //marginHorizontal: 16,
         //backgroundColor: 'green'
     },
-    itemContent: {
-        height: 72,
-        justifyContent: 'center',
-    },
 
-    item: {
-        flexDirection: 'row',
-        margin: 0,
-        paddingHorizontal: 16,
-        justifyContent: 'space-between'
-    },
-    iconButton: {
-        margin: 0,
-    },
-    stackRow: {
-        flexDirection: 'row',
-    },
-    container: {
-        //flex: 1,
-        //backgroundColor: 'grey',
-    },
     contentContainer: {
         //flex: 1,
         paddingLeft: 16,
         paddingRight: 8,
-        justifyContent: 'flex-start',
+        //justifyContent: 'flex-start',
         //backgroundColor: 'red'
     },
 })

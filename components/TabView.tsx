@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, useWindowDimensions, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
+import { MD3Colors, MD3Theme, ThemeProp } from "react-native-paper/lib/typescript/types";
 import { TabView, SceneMap, TabBar, TabBarProps, SceneRendererProps, NavigationState } from 'react-native-tab-view';
+import Review from "./Review";
 
-const FirstRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
-);
+const FirstRoute = () => <View>
+    <Review />
+</View>
 
 const SecondRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
+    <Text variant="bodyLarge" >Test</Text>
 );
 
 const renderScene = SceneMap({
@@ -16,14 +18,20 @@ const renderScene = SceneMap({
     second: SecondRoute,
 });
 
-type RenderTabBarProps = SceneRendererProps & { navigationState: NavigationState<{ key: string; title: string; }> }
+type RenderTabBarProps = SceneRendererProps & { navigationState: NavigationState<{ key: string; title: string; }>, theme: MD3Theme }
 
 const renderTabBar = (props: RenderTabBarProps) => {
-    console.log(props)
+    //console.log(props)
+    const { theme } = props
     return <TabBar
         {...props}
-        indicatorStyle={{ backgroundColor: 'white' }}
-    //style={{ backgroundColor: 'pink' }}
+        activeColor={theme.colors?.primary}
+        inactiveColor={theme.colors?.onSurfaceVariant}
+        indicatorStyle={{
+            backgroundColor: theme.colors?.primary,
+            height: 3
+        }}
+        style={{ backgroundColor: theme.colors?.surface }}
     />
 };
 
@@ -37,17 +45,19 @@ export default function TabsView() {
     const layout = useWindowDimensions();
     const [index, setIndex] = useState(0)
 
+    const theme = useTheme()
+
     console.log(index)
     return (
         <View style={Styles.tab} >
+            {/* <Review/> */}
             <TabView
-
-                //style={{height:' 100%', margin: 8}}
+                style={{backgroundColor: 'green', }}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
                 onIndexChange={setIndex}
-                renderTabBar={renderTabBar}
-            //initialLayout={{ width: layout.width }}
+                renderTabBar={e => renderTabBar({ ...e, theme: theme })}
+                initialLayout={{ width: layout.width }}
             />
         </View>
 
@@ -56,12 +66,7 @@ export default function TabsView() {
 
 const Styles = StyleSheet.create({
     tab: {
-        //flex: 1,
-        height: '100%'
-        //justifyContent: 'flex-start',
-        //alignItems: 'flex-start',
+        height: '100%',
         //backgroundColor: 'green',
-        // flexGrow: 0
-
     },
 })

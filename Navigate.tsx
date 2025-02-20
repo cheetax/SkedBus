@@ -5,7 +5,7 @@ import Main from "./TabNavigate";
 //import Form from "./components/Form";
 import Maps from "./components/Maps";
 import DrawerItem from "./components/DrawerItem";
-import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
+import { Provider as PaperProvider, MD3DarkTheme, MD3LightTheme, MD3Colors } from 'react-native-paper';
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from 'expo-navigation-bar';
 import { useAppContext } from "./providers/AppContextProvider";
@@ -97,9 +97,11 @@ const FormNavigate = () => <ItemContextProvider>
 export default function Navigate({ }) {
     enableLayoutAnimations(false)
     const { isDarkTheme } = useAppContext();
-    const theme = isDarkTheme ? MD3DarkTheme : {
+    const theme = isDarkTheme ? {
+        ...MD3DarkTheme, colors: { ...MD3DarkTheme.colors, surfaceVariant: '#49454F' }
+    } : {
         ...MD3LightTheme,
-        colors: { ...MD3LightTheme.colors, surface: "rgba(254, 247, 255, 1)" }
+        colors: { ...MD3LightTheme.colors, surface: "#FEF7FF", surfaceVariant: '#E7E0EC' },
     };
     NavigationBar.setBackgroundColorAsync(theme.colors.background)
     NavigationBar.setButtonStyleAsync(isDarkTheme ? 'light' : 'dark')

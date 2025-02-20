@@ -79,9 +79,10 @@ export const useCreateAppContext = () => {
     const getBase = async (key: string) => {
         const { data, error } = await Supabase
             .from(key)
-            .select(!(key === 'Schedules') ? '*' : 'id, time, routeName:Routes (name), busStopName: BusStops (name)'
+            .select(!(key === 'BusStopsInRoute') ? '*' : 'id, busStop, schedules: Schedules(time, daysWork), route: Routes(name)'
             )
-        //console.log(2, error)
+        //console.log(key, data)
+        if (error) console.log(error)
         return (!error) ? data : null
     }
 
