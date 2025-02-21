@@ -66,7 +66,7 @@ export default function Maps({ navigation }: Props) {
   }
 
   const marker = (index: number, selectMarker: number | undefined): MarkerType => 
-    ({...{source: MarkerView({ select: index == selectMarker })}, scale: (index == selectMarker) ? 1 : scale})
+    ({...{source: MarkerView({ select: index == selectMarker })}, scale: (index == selectMarker) ? 0.7 : scale})
    
   const onCameraPositionChange = (event: NativeSyntheticEvent<CameraPosition>) => {
     const zoom = event.nativeEvent.zoom

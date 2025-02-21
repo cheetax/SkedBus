@@ -54,7 +54,6 @@ export default function Review() {
     return <FlatList
         data={schedulesStopBus}
         renderItem={({ item }) => (<View style={Styles.itemContent} >
-
             <TouchableRipple onPress={() => { }}>
                 <View style={Styles.stackRow} >
                     <Text variant="bodyLarge" >{item.route.name}</Text>
@@ -62,11 +61,6 @@ export default function Review() {
                         <Text variant="bodyLarge" >{item.schedules[0]?.time || 'нет рейсов'}</Text>
                         <Text variant="bodySmall" >{item.schedules.slice(1, 3).flatMap(a => ' ' + a.time).toString()}</Text>
                     </View>
-
-                    {/* <View style={Styles.stackRow} >
-                                    <Text variant="bodyMedium" >Спидометр: начало - {item.odometerStart};</Text>
-                                    <Text variant="bodyMedium" > конец - {item.odometerFinish} </Text>
-                                </View> */}
                 </View>
             </TouchableRipple>
             <Divider />
@@ -89,11 +83,14 @@ const Styles = StyleSheet.create({
         height: 72,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'flex-start',
+        paddingTop: 12,
+        paddingHorizontal: 24
     },
 
     stackColumn: {
         flexDirection: 'column',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        justifyContent: 'center'
     },
 })

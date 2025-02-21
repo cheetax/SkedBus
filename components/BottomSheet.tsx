@@ -66,6 +66,8 @@ const Styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 8,
         //marginBottom: 0,
         //marginHorizontal: 16,
         //backgroundColor: 'green'
@@ -73,8 +75,7 @@ const Styles = StyleSheet.create({
 
     contentContainer: {
         //flex: 1,
-        paddingLeft: 16,
-        paddingRight: 8,
+        
         //justifyContent: 'flex-start',
         //backgroundColor: 'red'
     },
