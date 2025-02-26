@@ -4,19 +4,15 @@ import { Divider, shadow, Text, useTheme } from "react-native-paper";
 import { MD3Colors, MD3Theme, ThemeProp } from "react-native-paper/lib/typescript/types";
 import { TabView, SceneMap, TabBar, TabBarProps, SceneRendererProps, NavigationState, TabDescriptor, TabBarItemProps } from 'react-native-tab-view';
 import Review from "./Review";
+import SchedulesView from "./SchedulersView";
 
 const FirstRoute = () => <View>
     <Review />
 </View>
 
 const SecondRoute = () => (
-    <Text variant="bodyLarge" >Test</Text>
+    <SchedulesView />
 );
-
-const TabBarItem = (props: TabBarItemProps) => {
-    console.log(props)
-    return <Text variant="bodyLarge">{props.labelText}</Text>
-}
 
 const renderScene = SceneMap({
     first: FirstRoute,
@@ -30,9 +26,7 @@ const renderTabBar = (props: RenderTabBarProps) => {
     const { theme } = props
     return <View>
         <TabBar
-            {...props}
-            //enderIndicator={}
-            
+            {...props}            
             activeColor={theme.colors?.primary}
             inactiveColor={theme.colors?.onSurfaceVariant}
             indicatorStyle={{
@@ -58,8 +52,7 @@ export default function TabsView() {
     const [index, setIndex] = useState(0)
 
     const theme = useTheme()
-
-    console.log(index)
+    
     return (
         <View style={Styles.tab} >
             {/* <Review/> */}

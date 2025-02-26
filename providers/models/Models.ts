@@ -25,23 +25,24 @@ export type MarkerType = {
 
 export type User = {}
 
-type ScheduleType = {time: string, daysWork: string}
+export type BusesGeo = Buses & {
+    lat: string
+    lon: string
+}
 
-type RouteType = {name: string}
-
-type Tables = Database['public']['Tables']
-export type Buses = Tables['Buses']['Row'] 
-export type BusInRoute = Tables['BusInRoute']['Row']
-export type BusStops = Tables['BusStops']['Row']
-export type Routes = Tables['Routes']['Row']
-export type BusStopsInRoute = Tables['BusStopsInRoute']['Row'] & {schedules: ScheduleType[], route: RouteType}
-export type Schedules = Tables['Schedules']['Row']
+type Tables = Database['public']['Views']
+export type Buses = Tables['BusesView']['Row']
+export type BusInRoute = Tables['BusInRouteView']['Row']
+export type BusStops = Tables['BusStopsView']['Row']
+export type Routes = Tables['RoutesView']['Row']
+export type BusStopsInRoute = Tables['BusStopsInRouteView']['Row']
+export type Schedules = Tables['SchedulesInBusStopView']['Row']
 
 export type BaseType = {
     Buses: Buses[];
     BusInRoute: BusInRoute[];
-    BusStops: BusStops[] ;
-    Routes: Routes[] ;
+    BusStops: BusStops[];
+    Routes: Routes[];
     BusStopsInRoute: BusStopsInRoute
     Schedules: Schedules[];
 }

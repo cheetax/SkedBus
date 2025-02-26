@@ -2,6 +2,7 @@ import React, { useState, useEffect, SetStateAction } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ContextProviderProps, Func, Settings, Base, BaseType, Schedules, SelectMarker } from "./models/Models";
 import { Supabase } from "./Supabase";
+import { GeoAPIlogin } from "./glonasAPI";
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
@@ -12,7 +13,6 @@ interface AppContext {
     isDarkTheme?: boolean,
     toggleTheme?: () => void,
     setIsDarkTheme?: Func<boolean>,
-    getDataToBase: () => void,
     settings: Settings,
     saveSettings: Func<Settings>
 }
@@ -33,7 +33,6 @@ const Context = React.createContext<AppContext>({
     selectMarker: undefined,
     onSelectMarker: (props: SelectMarker): void => { },
     settings: settingsDef,
-    getDataToBase: () => { },
     saveSettings: (s) => { }
 });
 
@@ -56,8 +55,8 @@ export const useCreateAppContext = () => {
 
     const [selectMarker, setSelectMarker] = useState<SelectMarker>(undefined)
 
-    const onSelectMarker =  (select: SelectMarker) => {
-        if (selectMarker) setSelectMarker(undefined)
+    const onSelectMarker = (select: SelectMarker) => {
+        if (selectMarker != undefined) setSelectMarker(undefined)
         if (select != selectMarker) setTimeout(() => setSelectMarker(selectMarker => select), 100)
     }
 
@@ -65,7 +64,7 @@ export const useCreateAppContext = () => {
 
     const showData = async () => {
         const result = await AsyncStorage.getItem('dataSkedBus');
-        const resultBase = await getDataToBase()
+        const resultBase = await getBase()
         let storageData = new StorageData()
         if (result) {
             storageData = JSON.parse(result)
@@ -76,31 +75,26 @@ export const useCreateAppContext = () => {
         (resultBase) ? setBase(resultBase) : setBase(storageData.base)
     }
 
-    const getBase = async (key: string) => {
-        const { data, error } = await Supabase
-            .from(key)
-            .select(!(key === 'BusStopsInRoute') ? '*' : 'id, busStop, schedules: Schedules(time, daysWork), route: Routes(name)'
-            )
-        //console.log(key, data)
-        if (error) console.log(error)
+    const getBase = async () : Promise<Base> => {
+        const {data, error} = await Supabase.rpc('Base')
+        if (error) console.log(error) 
         return (!error) ? data : null
     }
 
-    const getDataToBase = async (): Promise<Base | null> => {
-        let base = new Base()
-        let error: boolean = false
-        for (let table in base) {
-            const result = await getBase(table)
-            if (!result) return null
-            //console.log(result)
-            base = { ...base, [table]: result }
-        }
-        return base
+    // const getDataToBase = async (): Promise<Base> => {
+    //     const result =  
+    //     //return result || new Base()
+    // }
+
+    const getBaseTest = async () => {
+        const {data, error} = await Supabase.rpc('Base')
+        //console.log(data)
     }
 
     useEffect(() => {
         showData();
-        getDataToBase();
+        GeoAPIlogin();
+        //getDataToBase();        
     }, []);
 
     const setData = (data: StorageData) => {
@@ -121,7 +115,6 @@ export const useCreateAppContext = () => {
         isDarkTheme,
         toggleTheme,
         settings,
-        getDataToBase,
         saveSettings
     };
 }
